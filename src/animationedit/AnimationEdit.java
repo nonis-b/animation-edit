@@ -43,8 +43,9 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	 * Setup app.
 	 * 
 	 * @param configFilePath Config file path.
+	 * @param animationSequenceFile File to open.
 	 */
-	public AnimationEdit(String configFilePath) {
+	public AnimationEdit(String configFilePath, String animationSequenceFile) {
 		super("AnimationEdit");
 
 		config = new Config(configFilePath);	
@@ -63,6 +64,8 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 		
 		animationPreview.revalidate();
 		animationPreview.repaint();
+		
+		loadAnimationSequence(animationSequenceFile);
 	}
 
 	
@@ -306,27 +309,35 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 			// MENU -> open
 			if (event.getSource() == menu.openItem) {
 				String path = getOpenLevelPath();
-				if (path != null) {
-					String dir = new File(path).getParent();
-					animationSequence = new AnimationSequence(dir, path);
-					animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
-				}
+				loadAnimationSequence(path);
 			}
 
 			animationFrameView.repaint();
 		}
 	}
 
+	
+	private void loadAnimationSequence(String path) {
+		if (path != null) {
+			String dir = new File(path).getParent();
+			animationSequence = new AnimationSequence(dir, path);
+			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+		}
+	}
+ 	
+	
 	/**
 	 * App main entry.
 	 * 
 	 * Args: 
 	 *   arg0: path to a config file.
+	 *   arg1: path to animation sequence to open.
 	 * 
 	 * @param args arg 0 
 	 */
 	public static void main(String[] args) {
 		String configFile;
+		String animationSequenceFile = null;
 		
 		if (args.length < 1) {
 			System.out.println("No config specified, using default.");
@@ -335,8 +346,12 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 			configFile = args[0];
 		}
 		
+		if (args.length >= 2) {
+			animationSequenceFile = args[1];
+		}
+		
 		try {
-			AnimationEdit app = new AnimationEdit(configFile);
+			AnimationEdit app = new AnimationEdit(configFile, animationSequenceFile);
 			app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {
