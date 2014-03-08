@@ -22,32 +22,40 @@ public class AnimationPreview extends JPanel {
     private float scale = 1.0f;
     private Timer timer;
     private TimerTask timerTask;
+    private int currentAnimationFrameIndex = 0;
     
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     
-    /**
-     * Constructor.
-     * @param componentsAccessor
-     */
+
     public AnimationPreview(AnimationEditComponentsAccessor componentsAccessor, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
     	this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(Color.WHITE);
         timer = new Timer();
-        timerTask = new TimerTask() {
+        setUpdateSpeed(1000, 100);
+    }
+
+
+    private void onTimer() {
+    	currentAnimationFrameIndex = (currentAnimationFrameIndex+1) 
+    			% (animationFrameSequenceInfoProvider.getNumAnimationFrames());
+    	repaint();
+    }
+    
+    
+    public void setUpdateSpeed(long delay, long millis) {
+    	if (timerTask != null) {
+    		timerTask.cancel();
+    	}
+    	timerTask = new TimerTask() {
 			@Override
 			public void run() {
 				onTimer();
 			}
 		};
-        timer.schedule(timerTask, 1000, 20);
-    }
-
-
-    public void onTimer() {
-    	repaint();
+		timer.schedule(timerTask, delay, millis);
     }
     
     
@@ -115,7 +123,7 @@ public class AnimationPreview extends JPanel {
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore != null) {
-        	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+        	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrameIndex(currentAnimationFrameIndex);
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
