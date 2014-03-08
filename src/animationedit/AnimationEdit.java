@@ -55,20 +55,20 @@ public class AnimationEdit extends JFrame
 		
 		toolSelector = new ToolSelector();
 
-		animationFrameSelector = new AnimationFrameSelector();
 		animationFrameView = new AnimationFrameView(this, this);
 		animationPreview = new AnimationPreview(this, this);
+		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
 		
 		Container container = getContentPane();
 		createGui(container);
 
+		loadAnimationSequence(animationSequenceFile);
+		
 		animationFrameView.revalidate();
 		animationFrameView.repaint();
 		
 		animationPreview.revalidate();
 		animationPreview.repaint();
-		
-		loadAnimationSequence(animationSequenceFile);
 	}
 
 	

@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class AnimationFrameView
         extends JPanel
-        implements MouseListener, MouseMotionListener {
+        implements MouseListener, MouseMotionListener, SelectedAnimationChangeListener {
 
     private int scrollX = 0;
     private int scrollY = 0; 
@@ -330,5 +330,9 @@ public class AnimationFrameView
 //                - g.getFontMetrics().getHeight());
         
     }
-   
+
+	@Override
+	public void onSelectedAnimationChanged() {
+		repaint();
+	}
 }
