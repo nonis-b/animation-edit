@@ -23,15 +23,17 @@ public class AnimationPreview extends JPanel {
     private Timer timer;
     private TimerTask timerTask;
     
-    /** for accessing the gui components state */
-    AnimationEditComponentsAccessor componentsAccessor;
+    private AnimationEditComponentsAccessor componentsAccessor;
+    private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     
     /**
      * Constructor.
      * @param componentsAccessor
      */
-    public AnimationPreview(AnimationEditComponentsAccessor componentsAccessor) {
-        this.componentsAccessor = componentsAccessor;
+    public AnimationPreview(AnimationEditComponentsAccessor componentsAccessor, 
+    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
+    	this.componentsAccessor = componentsAccessor;
+        this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(Color.WHITE);
         timer = new Timer();
         timerTask = new TimerTask() {
@@ -113,7 +115,7 @@ public class AnimationPreview extends JPanel {
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore != null) {
-        	AnimationFrame frame = componentsAccessor.getSelectedAnimationFrame();
+        	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {

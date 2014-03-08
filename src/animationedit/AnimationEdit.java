@@ -24,7 +24,10 @@ import animationedit.ToolSelector.Tool;
  * and stuff in the main window.
  * 
  */
-public class AnimationEdit extends JFrame implements AnimationEditComponentsAccessor {
+public class AnimationEdit extends JFrame 
+	implements AnimationEditComponentsAccessor,
+				AnimationFrameSequenceInfoProvider
+	{
 
 	private static final String HELP_TEXT = 
 			  "TODO";
@@ -36,7 +39,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
 	private File currentAnimationSequenceFile = null;
-	private AnimationSequence animationSequence = null;
+	private AnimationFrameSequence animationSequence = null;
 
 	
 	/**
@@ -53,8 +56,8 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 		toolSelector = new ToolSelector();
 
 		animationFrameSelector = new AnimationFrameSelector();
-		animationFrameView = new AnimationFrameView(this);
-		animationPreview = new AnimationPreview(this);
+		animationFrameView = new AnimationFrameView(this, this);
+		animationPreview = new AnimationPreview(this, this);
 		
 		Container container = getContentPane();
 		createGui(container);
@@ -320,7 +323,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	private void loadAnimationSequence(String path) {
 		if (path != null) {
 			String dir = new File(path).getParent();
-			animationSequence = new AnimationSequence(dir, path);
+			animationSequence = new AnimationFrameSequence(dir, path);
 			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 		}
 	}
@@ -380,5 +383,17 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	@Override
 	public AnimationFrame getSelectedAnimationFrame() {
 		return animationFrameSelector.getSelected();
+	}
+
+
+	@Override
+	public int getNumAnimationFrames() {
+		return animationSequence.getAnimationFrames().size();
+	}
+
+
+	@Override
+	public AnimationFrame getAnimationFrameIndex(int i) {
+		return animationSequence.getAnimationFrames().get(i);
 	}
 }

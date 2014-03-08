@@ -1,17 +1,14 @@
 package animationedit;
 
 import framemodel.AnimationFrame;
-import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MediaTracker;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 /**
@@ -23,42 +20,24 @@ import javax.swing.JPanel;
 public class AnimationFrameView
         extends JPanel
         implements MouseListener, MouseMotionListener {
-    
-    /** Scroll of map. */
+
     private int scrollX = 0;
-    
-    /** Scroll of map. */
     private int scrollY = 0; 
-
-    /** Layer currently edited. */
     private int editlayer = 0;
-
-    /** Last edited tile, used to draw lines. */
-    private int lastEditedTileX = 0;
-
-    /** Last edited tile, used to draw lines. */
-    private int lastEditedTileY = 0;
-        
-    /** Want second click to draw the line. */
-    private boolean lineToolFirstClick = true;
-    
-    /** For saving undo state while press. */
-    private long lastMousePressStateSaveTime = 0;
-    
-    /** Scale of view */
     private float scale = 1.0f;
-    
-    /** for accessing the gui components state */
+
     AnimationEditComponentsAccessor componentsAccessor;
-    
+    private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     /**
      * Constructor.
-     * @param componentsAccessor.getConfig()
+     * @param componentsAccessor
      * @param toolSelector
      * @param componentsAccessor
      */
-    public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor) {
+    public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
+    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
         this.componentsAccessor = componentsAccessor;
+        this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(componentsAccessor.getConfig().bgCol);
     }
 
@@ -318,7 +297,7 @@ public class AnimationFrameView
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore != null) {
-        	AnimationFrame frame = componentsAccessor.getSelectedAnimationFrame();
+        	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
