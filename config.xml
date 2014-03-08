@@ -1,5 +1,5 @@
 <animationEditConfig>
-	<projectPath>./..</projectPath>
+	<projectPath>./sandbox_anim</projectPath>
 	<exportPath>./..</exportPath>
 	<editorBackgroundColor>000033</editorBackgroundColor>
 </animationEditConfig>

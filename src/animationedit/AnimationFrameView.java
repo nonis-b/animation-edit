@@ -1,6 +1,8 @@
 package animationedit;
 
+import framemodel.AnimationFrame;
 import graphicsutils.GridDrawingUtil;
+import graphicsutils.ImageStore;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -314,10 +316,16 @@ public class AnimationFrameView
 
         super.paint(g);
 
-        Image image = componentsAccessor.getImageStore().getImage(componentsAccessor.getSelectedAnimationFrame().getImage());
-        
-        if (image != null) {
-        	g.drawImage(image, 0, 0, Color.BLACK, this);
+        ImageStore imageStore = componentsAccessor.getImageStore();
+        if (imageStore != null) {
+        	AnimationFrame frame = componentsAccessor.getSelectedAnimationFrame();
+        	if (frame != null) {
+        		Image image = imageStore.getImage(frame.getImage());
+	        	if (image != null) {
+	            	g.drawImage(image, 0, 0, Color.BLACK, this);
+	            }
+        	}
+        	
         }
         
 //        // draw tiles

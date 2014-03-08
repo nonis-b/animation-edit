@@ -23,6 +23,9 @@ public class ImageStore {
 	
 	private boolean loadImage(String imageName) {
 		String imageToLoad = imageDirectory + imageName + ".png";
+		if (imageName.endsWith(".png")) {
+			imageToLoad = imageDirectory + imageName;
+		}
 		System.out.print("Load image " + imageToLoad);
 		ImageIcon imageIcon = new ImageIcon(imageToLoad);
 		if (imageIcon.getImageLoadStatus() != MediaTracker.COMPLETE) {

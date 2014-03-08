@@ -7,8 +7,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -35,9 +33,8 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	private AnimationFrameSelector animationFrameSelector;
 	private Menu menu;
 	private Config config;
-	private String configFilePath;
 	private AnimationFrameView animationFrameView;
-	private File currentAnimationDirectory = null;
+	private File currentAnimationSequenceFile = null;
 	private AnimationSequence animationSequence = null;
 
 	
@@ -48,7 +45,6 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	 */
 	public AnimationEdit(String configFilePath) {
 		super("AnimationEdit");
-		this.configFilePath = configFilePath;
 
 		config = new Config(configFilePath);	
 		
@@ -108,7 +104,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	 */
 	public void newLevel() {
 		animationSequence = null;
-		currentAnimationDirectory = null;
+		currentAnimationSequenceFile = null;
 		setTitle("AnimationEdit - untitled");
 	}
 
@@ -121,6 +117,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 		fc.showSaveDialog(this);
 		return fc.getSelectedFile().getAbsolutePath();
 	}
+
 	
 	/**
 	 * Show a "save" dialog to get path.
@@ -133,14 +130,14 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 		
 		File selFile = null;
 		if (useCurrent) {
-			selFile = currentAnimationDirectory;
+			selFile = currentAnimationSequenceFile;
 		}
 		
-		if (!useCurrent || currentAnimationDirectory == null) {
+		if (!useCurrent || currentAnimationSequenceFile == null) {
 			
 			JFileChooser fc;
-			if (currentAnimationDirectory != null) {
-				fc = new JFileChooser(currentAnimationDirectory);
+			if (currentAnimationSequenceFile != null) {
+				fc = new JFileChooser(currentAnimationSequenceFile);
 			} else {
 				fc = new JFileChooser(new File(config.projectPath));
 			}
@@ -148,9 +145,9 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 			selFile = fc.getSelectedFile();			
 
 			if (selFile != null && updateCurrent) {
-				currentAnimationDirectory = selFile;				
+				currentAnimationSequenceFile = selFile;				
 			}
-
+			
 		} else {
 			System.out.println("Save to file " + selFile.getAbsolutePath());
 		}
@@ -166,8 +163,8 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	public String getOpenLevelPath() {
 
 		JFileChooser fc;
-		if (currentAnimationDirectory != null) {
-			fc = new JFileChooser(currentAnimationDirectory);
+		if (currentAnimationSequenceFile != null) {
+			fc = new JFileChooser(currentAnimationSequenceFile);
 		} else {
 			fc = new JFileChooser(new File(config.projectPath));
 		}
@@ -175,9 +172,9 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 
-			currentAnimationDirectory = fc.getSelectedFile();
-			setTitle("AnimationEdit - " + currentAnimationDirectory.getAbsolutePath());
-			return currentAnimationDirectory.getAbsolutePath();
+			currentAnimationSequenceFile = fc.getSelectedFile();
+			setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath());
+			return currentAnimationSequenceFile.getAbsolutePath();
 		}
 		return null;
 	}
@@ -299,14 +296,15 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 				newLevel();
 			}
 
-//			// MENU -> open
-//			if (event.getSource() == menu.openItem) {
-//				String path = getOpenLevelPath();
-//				if (path != null) {
-//					level.initFromFile(new InternalLevelFile(path),
-//							config.dummyDefinitions.toArray(new DummyObject[0]));
-//				}
-//			}
+			// MENU -> open
+			if (event.getSource() == menu.openItem) {
+				String path = getOpenLevelPath();
+				if (path != null) {
+					String dir = new File(path).getParent();
+					animationSequence = new AnimationSequence(dir, path);
+					animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+				}
+			}
 
 			animationFrameView.repaint();
 		}
@@ -353,6 +351,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 
 	@Override
 	public ImageStore getImageStore() {
+		if (animationSequence == null) return null;
 		return animationSequence.getImageStore();
 	}
 

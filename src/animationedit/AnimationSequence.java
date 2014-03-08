@@ -13,13 +13,17 @@ public class AnimationSequence {
 	ImageStore imageStore;
 	ArrayList<AnimationFrame> animationFrames;
 	
-	public AnimationSequence(String workingDirectory) {
+	public AnimationSequence(String workingDirectory, String animationSequenceFile) {
 		imageStore = new ImageStore(workingDirectory);
-		animationFrames = AnimationFrameSequenceCreator.createAnimtionFrameSequenceFromXml(workingDirectory + "/frames.xml");
+		animationFrames = AnimationFrameSequenceCreator.createAnimtionFrameSequenceFromXml(animationSequenceFile);
 	}
 
 	public ImageStore getImageStore() {
 		return imageStore;
+	}
+	
+	public ArrayList<AnimationFrame> getAnimationFrames() {
+		return animationFrames;
 	}
 	
 }
