@@ -34,6 +34,7 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 	private Menu menu;
 	private Config config;
 	private AnimationFrameView animationFrameView;
+	private AnimationPreview animationPreview;
 	private File currentAnimationSequenceFile = null;
 	private AnimationSequence animationSequence = null;
 
@@ -52,13 +53,16 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 
 		animationFrameSelector = new AnimationFrameSelector();
 		animationFrameView = new AnimationFrameView(this);
+		animationPreview = new AnimationPreview(this);
 		
 		Container container = getContentPane();
 		createGui(container);
 
-
 		animationFrameView.revalidate();
 		animationFrameView.repaint();
+		
+		animationPreview.revalidate();
+		animationPreview.repaint();
 	}
 
 	
@@ -74,21 +78,24 @@ public class AnimationEdit extends JFrame implements AnimationEditComponentsAcce
 		setJMenuBar(menu);
 
 		JPanel leftPanel = new JPanel();
-		leftPanel.setLayout(new GridLayout(2, 1));
-		JPanel bottomPanel = new JPanel();
+		leftPanel.setLayout(new GridLayout(3, 1));
+		//JPanel bottomPanel = new JPanel();
 		
 		leftPanel.add(toolSelector);
 
 		JToolBar dummyToolBar = new JToolBar();
 		dummyToolBar.add(animationFrameSelector);
 		leftPanel.add(dummyToolBar);
-
+		
 		container.add(leftPanel, BorderLayout.WEST);
-		container.add(bottomPanel, BorderLayout.SOUTH);
-
+		//container.add(bottomPanel, BorderLayout.SOUTH);
+		leftPanel.add(animationPreview);
+		
 		animationFrameView.addMouseListener(animationFrameView);
 		animationFrameView.addMouseMotionListener(animationFrameView);
 		container.add(animationFrameView, BorderLayout.CENTER);
+		
+		
 		
 		// init main window
 		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, Toolkit
