@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import framemodel.AnimationFrame;
 import graphicsutils.ImageStore;
 
 import animationedit.ToolSelector.Tool;
@@ -38,7 +37,7 @@ public class AnimationEdit extends JFrame
 	private ToolSelector toolSelector;
 	private AnimationFrameSelector animationFrameSelector;
 	private Menu menu;
-	private Config config;
+	private ApplicationConfig config;
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
 	private File currentAnimationSequenceFile = null;
@@ -54,7 +53,7 @@ public class AnimationEdit extends JFrame
 	public AnimationEdit(String configFilePath, String animationSequenceFile) {
 		super("AnimationEdit");
 
-		config = new Config(configFilePath);	
+		config = new ApplicationConfig(configFilePath);	
 		
 		toolSelector = new ToolSelector();
 
@@ -321,7 +320,7 @@ public class AnimationEdit extends JFrame
 		if (path != null) {
 			File file = new File(path);
 			if (!file.exists() && !file.isDirectory()) {
-				AnimationFrameSequenceCreator.writeAnimtionFrameSequenceToXml(path, new ArrayList<AnimationFrame>());
+				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, new ArrayList<AnimationFrame>());
 				file = new File(path);
 			}
 			String dir = file.getParent();
@@ -339,7 +338,7 @@ public class AnimationEdit extends JFrame
 	 *   arg0: path to a config file.
 	 *   arg1: path to animation sequence to open.
 	 * 
-	 * @param args arg 0 
+	 * @param args 
 	 */
 	public static void main(String[] args) {
 		String configFile;
@@ -375,7 +374,7 @@ public class AnimationEdit extends JFrame
 	}
 	
 	@Override 
-	public Config getConfig() {
+	public ApplicationConfig getConfig() {
 		return config;
 	}
 
@@ -398,7 +397,7 @@ public class AnimationEdit extends JFrame
 
 
 	@Override
-	public AnimationFrame getAnimationFrameIndex(int i) {
+	public AnimationFrame getAnimationFrame(int i) {
 		return animationSequence.getAnimationFrames().get(i);
 	}
 }

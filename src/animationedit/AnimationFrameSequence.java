@@ -2,7 +2,6 @@ package animationedit;
 
 import java.util.ArrayList;
 
-import framemodel.AnimationFrame;
 import graphicsutils.ImageStore;
 
 /**
@@ -16,7 +15,7 @@ public class AnimationFrameSequence {
 	
 	public AnimationFrameSequence(String workingDirectory, String animationSequenceFile) {
 		imageStore = new ImageStore(workingDirectory);
-		animationFrames = AnimationFrameSequenceCreator.createAnimtionFrameSequenceFromXml(animationSequenceFile);
+		animationFrames = AnimationFrameSequenceFile.createAnimtionFrameSequenceFromXml(animationSequenceFile);
 	}
 	
 	public void addChangeListener(AnimationFrameSequenceChangedListener listener) {
@@ -24,7 +23,7 @@ public class AnimationFrameSequence {
 	}
 
 	public boolean writeToFile(String path) {
-		return AnimationFrameSequenceCreator.writeAnimtionFrameSequenceToXml(path, animationFrames);
+		return AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, animationFrames);
 	}
 	
 	public ImageStore getImageStore() {

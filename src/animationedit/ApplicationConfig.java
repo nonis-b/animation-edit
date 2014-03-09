@@ -13,14 +13,14 @@ import org.xml.sax.SAXException;
 /**
  * Represents the current project configuration from a file.
  */
-public class Config {
+public class ApplicationConfig {
 
 	// Values read from file.
 	public Color bgCol;
 	public String projectPath = ".";
 	public String exportPath = ".";
 
-	public Config(String path) {
+	public ApplicationConfig(String path) {
 		System.out.println("Loading config file " + path);
 		
 		if (path.endsWith(".xml")) {

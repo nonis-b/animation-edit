@@ -5,6 +5,6 @@ import graphicsutils.ImageStore;
 
 public interface AnimationEditComponentsAccessor {
 	public ToolSelector.Tool getSelectedTool();
-	public Config getConfig();
+	public ApplicationConfig getConfig();
 	public ImageStore getImageStore();
 }

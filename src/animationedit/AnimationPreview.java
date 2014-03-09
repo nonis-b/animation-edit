@@ -1,6 +1,5 @@
 package animationedit;
 
-import framemodel.AnimationFrame;
 import graphicsutils.ImageStore;
 
 import java.awt.Color;
@@ -139,7 +138,7 @@ public class AnimationPreview extends JPanel {
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore != null) {
-        	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrameIndex(currentAnimationFrameIndex);
+        	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {

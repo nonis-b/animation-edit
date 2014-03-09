@@ -1,4 +1,4 @@
-package framemodel;
+package animationedit;
 
 public class AnimationFrame {
 	private String image;

@@ -21,9 +21,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import framemodel.AnimationFrame;
 
-public class AnimationFrameSequenceCreator {
+public class AnimationFrameSequenceFile {
 	
 	public static ArrayList<AnimationFrame> createAnimtionFrameSequenceFromXml(String path) {
 		if (!path.endsWith(".xml")) {

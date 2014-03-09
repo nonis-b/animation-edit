@@ -1,6 +1,5 @@
 package animationedit;
 
-import framemodel.AnimationFrame;
 import graphicsutils.ImageStore;
 
 import java.awt.Color;
@@ -19,7 +18,7 @@ import javax.swing.JPanel;
  */
 public class AnimationFrameView
         extends JPanel
-        implements MouseListener, MouseMotionListener, SelectedAnimationChangeListener {
+        implements MouseListener, MouseMotionListener, SelectedAnimationFrameChangeListener {
 
     private int scrollX = 0;
     private int scrollY = 0; 
@@ -316,7 +315,7 @@ public class AnimationFrameView
     }
 
 	@Override
-	public void onSelectedAnimationChanged() {
+	public void onSelectedAnimationFrameChanged() {
 		repaint();
 	}
 }

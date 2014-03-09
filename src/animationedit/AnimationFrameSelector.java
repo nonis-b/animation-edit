@@ -8,7 +8,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import framemodel.AnimationFrame;
 
 /**
  * Linear list of AnimationFrames.
@@ -18,11 +17,11 @@ public class AnimationFrameSelector extends JScrollPane
 				AnimationFrameSequenceChangedListener {
 
 	private JList guiList;
-	private SelectedAnimationChangeListener listener;
+	private SelectedAnimationFrameChangeListener listener;
 	private AnimationFrame selectedFrame;
 	private ArrayList<AnimationFrame> animationFrames;
 	
-	public AnimationFrameSelector(SelectedAnimationChangeListener listener) {
+	public AnimationFrameSelector(SelectedAnimationFrameChangeListener listener) {
 		guiList = new JList();
 		guiList.setVisibleRowCount(3);
 		guiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -54,7 +53,7 @@ public class AnimationFrameSelector extends JScrollPane
 	public void valueChanged(ListSelectionEvent e) {
 		selectedFrame = getSelected();
 		if (listener != null) {
-			listener.onSelectedAnimationChanged();
+			listener.onSelectedAnimationFrameChanged();
 		}
 	}
 	
