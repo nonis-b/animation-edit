@@ -18,6 +18,10 @@ public class AnimationFrameSequence {
 		animationFrames = AnimationFrameSequenceCreator.createAnimtionFrameSequenceFromXml(animationSequenceFile);
 	}
 
+	public boolean writeToFile(String path) {
+		return AnimationFrameSequenceCreator.writeAnimtionFrameSequenceToXml(path, animationFrames);
+	}
+	
 	public ImageStore getImageStore() {
 		return imageStore;
 	}

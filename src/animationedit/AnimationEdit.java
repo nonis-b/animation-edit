@@ -7,6 +7,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -110,16 +113,7 @@ public class AnimationEdit extends JFrame
 		setVisible(true);
 		setResizable(true);
 	}
-	
-	
-	/**
-	 * Create new blank level. Ask for size.
-	 */
-	public void newLevel() {
-		animationSequence = null;
-		currentAnimationSequenceFile = null;
-		setTitle("AnimationEdit - untitled");
-	}
+
 
 	/**
 	 * Show "export" dialog.
@@ -191,6 +185,7 @@ public class AnimationEdit extends JFrame
 		}
 		return null;
 	}
+	
 
 	/**
 	 * Shows help window.
@@ -262,37 +257,31 @@ public class AnimationEdit extends JFrame
 				animationFrameView.zoom(0.5f);
 			}
 
-//			// MENU -> "Save" (AnimationEdit format)
-//			if (event.getSource() == menu.saveItem) {
-//				String path = getSaveLevelPath(true, true);
-//				level.writeToFile(new InternalLevelFile(path));
-//				if (path != null) {
-//					setTitle("AnimationEdit - " + currentAnimationDirectory.getAbsolutePath() 
-//							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-//				}
-//			}
+			// MENU -> "Save" (AnimationEdit format)
+			if (event.getSource() == menu.saveItem) {
+				String path = getSaveLevelPath(true, true);
+				animationSequence.writeToFile(path);
+				if (path != null) {
+					setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath() 
+							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+				}
+			}
 
-//			// MENU -> "Save as" AnimationEdit format
-//			if (event.getSource() == menu.saveAsItem) {
-//				String path = getSaveLevelPath(false, true);
-//				level.writeToFile(new InternalLevelFile(path));
-//				if (path != null) {
-//					setTitle("AnimationEdit - " + currentAnimationDirectory.getAbsolutePath() 
-//							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-//				}
-//			}
-//
-//			// MENU -> Export as comma separated
-//			if (event.getSource() == menu.exportAsCommaSeparatedItem) {
-//				level.writeToFile(new CommaSeparatedTileMapLevelFile(
-//						getExportLevelPath()));
-//			}
-//
-//			// MENU -> Export as XML object list
-//			if (event.getSource() == menu.exportAsXmlObjectListItem) {
-//				level.writeToFile(new XmlObjectListLevelFile(
-//						getExportLevelPath()));
-//			}
+			// MENU -> "Save as" AnimationEdit format
+			if (event.getSource() == menu.saveAsItem) {
+				String path = getSaveLevelPath(false, true);
+				animationSequence.writeToFile(path);
+				if (path != null) {
+					setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath() 
+							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+				}
+			}
+
+			// MENU -> New
+			if (event.getSource() == menu.newItem) {
+				String path = getSaveLevelPath(false, true);
+				loadAnimationSequence(path);
+			}
 
 			if (event.getSource() == menu.reloadImagesItem) {
 				animationSequence.getImageStore().reloadAll();
@@ -305,11 +294,6 @@ public class AnimationEdit extends JFrame
 			// HELP
 			if (event.getSource() == menu.helpItem) {
 				showHelp();
-			}
-
-			// MENU -> New map
-			if (event.getSource() == menu.newMapItem) {
-				newLevel();
 			}
 
 			// MENU -> open
@@ -325,7 +309,12 @@ public class AnimationEdit extends JFrame
 	
 	private void loadAnimationSequence(String path) {
 		if (path != null) {
-			String dir = new File(path).getParent();
+			File file = new File(path);
+			if (!file.exists() && !file.isDirectory()) {
+				AnimationFrameSequenceCreator.writeAnimtionFrameSequenceToXml(path, new ArrayList<AnimationFrame>());
+				file = new File(path);
+			}
+			String dir = file.getParent();
 			animationSequence = new AnimationFrameSequence(dir, path);
 			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 		}

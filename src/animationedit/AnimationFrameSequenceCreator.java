@@ -1,12 +1,19 @@
 package animationedit;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -60,5 +67,39 @@ public class AnimationFrameSequenceCreator {
             System.err.println(ioe.getMessage());
         }
         return frames;
+	}
+	
+	public static boolean writeAnimtionFrameSequenceToXml(final String path, final ArrayList<AnimationFrame> animationFrames) {
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			Document doc = docBuilder.newDocument();
+			Element rootElement = doc.createElement("frames");
+			doc.appendChild(rootElement);
+
+			for (AnimationFrame animationFrame : animationFrames) {
+				Element frameElement = doc.createElement("AnimationFrame");
+				rootElement.appendChild(frameElement);
+				Attr attr = doc.createAttribute("image");
+				attr.setValue(animationFrame.getImage());
+				frameElement.setAttributeNode(attr);
+			}
+
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File(path));
+
+			transformer.transform(source, result);
+			
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+			return false;
+		} catch (TransformerException tfe) {
+			tfe.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
