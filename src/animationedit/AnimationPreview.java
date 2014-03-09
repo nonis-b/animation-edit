@@ -127,7 +127,7 @@ public class AnimationPreview extends JPanel {
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image, 0, 0, Color.BLUE, this);
+	            	g.drawImage(image, 0, 0, this);
 	            }
         	}
         	

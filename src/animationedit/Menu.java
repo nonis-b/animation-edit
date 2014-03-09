@@ -24,7 +24,7 @@ public class Menu extends JMenuBar {
 	protected JMenuItem exportAsCommaSeparatedItem;
 	protected JMenuItem exportAsXmlObjectListItem;
 	protected JMenuItem exportAsXmlObjectListAndCommaSeparatedItem;
-	protected JMenuItem reloadConfigItem;
+	protected JMenuItem reloadImagesItem;
 	protected JMenuItem quitItem;
 	protected JMenuItem helpItem;
 	protected JMenuItem undoItem;
@@ -87,7 +87,7 @@ public class Menu extends JMenuBar {
 		exportAsCommaSeparatedItem = addMenuItem(fileMenu, handler, "Export as comma separated");
 		exportAsXmlObjectListItem = addMenuItem(fileMenu, handler, "Export as XML object list");
 		exportAsXmlObjectListAndCommaSeparatedItem = addMenuItem(fileMenu, handler, "Export as XML object list and comma separated");
-		reloadConfigItem = addMenuItem(fileMenu, handler, "Reload config");
+		reloadImagesItem = addMenuItem(fileMenu, handler, "Reload images", KeyEvent.VK_R, ActionEvent.CTRL_MASK);
 		quitItem = addMenuItem(fileMenu, handler, "Quit");
 
 		helpItem = addMenuItem(helpMenu, handler, "Help");

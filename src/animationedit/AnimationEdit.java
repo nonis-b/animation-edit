@@ -294,6 +294,9 @@ public class AnimationEdit extends JFrame
 //						getExportLevelPath()));
 //			}
 
+			if (event.getSource() == menu.reloadImagesItem) {
+				animationSequence.getImageStore().reloadAll();
+			}
 
 			if (event.getSource() == menu.quitItem) {
 				System.exit(0);

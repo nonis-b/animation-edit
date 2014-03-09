@@ -3,9 +3,12 @@ package graphicsutils;
 
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class ImageStore {
@@ -21,20 +24,29 @@ public class ImageStore {
 		images = new HashMap<String, Image>();
 	}
 	
+	/**
+	 * Force reloading of all resources.
+	 */
+	public void reloadAll() {
+		images = new HashMap<String, Image>();
+	}
+	
 	private boolean loadImage(String imageName) {
 		String imageToLoad = imageDirectory + imageName + ".png";
 		if (imageName.endsWith(".png")) {
 			imageToLoad = imageDirectory + imageName;
 		}
 		System.out.print("Load image " + imageToLoad);
-		ImageIcon imageIcon = new ImageIcon(imageToLoad);
-		if (imageIcon.getImageLoadStatus() != MediaTracker.COMPLETE) {
+		Image loadedImage = null;
+		try {
+		    loadedImage = ImageIO.read(new File(imageToLoad));
+		} catch (IOException e) {
 			images.put(imageName, null);
 			System.out.println(" - fail.");
 			return false;
 		}
-		Image image = CompatibleImageCreator.createCompatibleImage(imageIcon.getImage());
-		images.put(imageName, image);
+		Image compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
+		images.put(imageName, compatibleImage);
 		System.out.println(" - OK.");
 		return true;
 	}

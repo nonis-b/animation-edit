@@ -301,7 +301,7 @@ public class AnimationFrameView
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image, 0, 0, Color.BLACK, this);
+	            	g.drawImage(image, 0, 0, this);
 	            }
         	}
         	
