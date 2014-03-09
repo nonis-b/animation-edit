@@ -22,20 +22,24 @@ public class Menu extends JMenuBar {
 	protected JMenuItem quitItem;
 	protected JMenuItem helpItem;
 	protected JMenuItem undoItem;
-	protected JMenuItem moveLeftItem;
-	protected JMenuItem moveRightItem;
-	protected JMenuItem moveUpItem;
-	protected JMenuItem moveDownItem;
-	protected JMenuItem nudgeLeftItem;
-	protected JMenuItem nudgeRightItem;
-	protected JMenuItem nudgeUpItem;
-	protected JMenuItem nudgeDownItem;
+	protected JMenuItem zoomInItem;
+	protected JMenuItem zoomOutItem;
 	protected JMenuItem scrollLeftItem;
 	protected JMenuItem scrollRightItem;
 	protected JMenuItem scrollUpItem;
 	protected JMenuItem scrollDownItem;
-	protected JMenuItem zoomInItem;
-	protected JMenuItem zoomOutItem;
+	protected JMenuItem preview1FpsItem;
+	protected JMenuItem preview2FpsItem;
+	protected JMenuItem preview10FpsItem;
+	protected JMenuItem preview30FpsItem;
+	protected JMenuItem preview60FpsItem;
+	protected JMenuItem previewStopItem;
+	protected JMenuItem previewNextFrameItem;
+	protected JMenuItem previewPreviousFrameItem;
+	protected JMenuItem newFrameItem;
+	protected JMenuItem moveFrameUpItem;
+	protected JMenuItem moveFrameDownItem;
+	
 
 	private JMenuItem addMenuItem(JMenu menu, ActionListener handler, String text) {
 		JMenuItem item = new JMenuItem(text);
@@ -57,9 +61,9 @@ public class Menu extends JMenuBar {
 
 		JMenu fileMenu = new JMenu("File");
 		JMenu editMenu = new JMenu("Edit");
-		JMenu levelMenu = new JMenu("Level");
-		JMenu dummyMenu = new JMenu("Dummy");
-		JMenu tileMenu = new JMenu("Tilemap");
+		JMenu framesMenu = new JMenu("Frames");
+		JMenu previewMenu = new JMenu("Preview");
+		JMenu imageMenu = new JMenu("Image");
 		JMenu helpMenu = new JMenu("Help");
 
 		newItem = addMenuItem(fileMenu, handler, "New", KeyEvent.VK_N, ActionEvent.CTRL_MASK);
@@ -73,28 +77,31 @@ public class Menu extends JMenuBar {
 
 		undoItem = addMenuItem(editMenu, handler, "Undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK);
 
-		moveLeftItem = addMenuItem(dummyMenu, handler, "Move left", KeyEvent.VK_LEFT, 0);
-		moveRightItem = addMenuItem(dummyMenu, handler, "Move right", KeyEvent.VK_RIGHT, 0);
-		moveUpItem = addMenuItem(dummyMenu, handler, "Move up", KeyEvent.VK_UP, 0);
-		moveDownItem = addMenuItem(dummyMenu, handler, "Move down", KeyEvent.VK_DOWN, 0);
-
-		nudgeLeftItem = addMenuItem(dummyMenu, handler, "Nudge left", KeyEvent.VK_LEFT, ActionEvent.ALT_MASK);
-		nudgeRightItem = addMenuItem(dummyMenu, handler, "Nudge right", KeyEvent.VK_RIGHT, ActionEvent.ALT_MASK);
-		nudgeUpItem = addMenuItem(dummyMenu, handler, "Nudge up", KeyEvent.VK_UP, ActionEvent.ALT_MASK);
-		nudgeDownItem = addMenuItem(dummyMenu, handler, "Nudge down", KeyEvent.VK_DOWN, ActionEvent.ALT_MASK);
+		preview1FpsItem = addMenuItem(previewMenu, handler, "1 FPS", KeyEvent.VK_1, 0);
+		preview2FpsItem = addMenuItem(previewMenu, handler, "2 FPS", KeyEvent.VK_2, 0);
+		preview10FpsItem = addMenuItem(previewMenu, handler, "10 FPS", KeyEvent.VK_3, 0);
+		preview30FpsItem = addMenuItem(previewMenu, handler, "30 FPS", KeyEvent.VK_4, 0);
+		preview60FpsItem = addMenuItem(previewMenu, handler, "60 FPS", KeyEvent.VK_5, 0);
+		previewStopItem = addMenuItem(previewMenu, handler, "Stop", KeyEvent.VK_0, 0);
+		previewNextFrameItem = addMenuItem(previewMenu, handler, "Next frame", KeyEvent.VK_N, 0);
+		previewPreviousFrameItem = addMenuItem(previewMenu, handler, "Previous frame", KeyEvent.VK_B, 0);
 		
-		scrollLeftItem = addMenuItem(levelMenu, handler, "Scroll left", KeyEvent.VK_A, 0);
-		scrollRightItem = addMenuItem(levelMenu, handler, "Scroll right", KeyEvent.VK_D, 0);
-		scrollUpItem = addMenuItem(levelMenu, handler, "Scroll up", KeyEvent.VK_W, 0);
-		scrollDownItem = addMenuItem(levelMenu, handler, "Scroll down", KeyEvent.VK_S, 0);
-		zoomInItem = addMenuItem(levelMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
-		zoomOutItem = addMenuItem(levelMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);
-
+		newFrameItem = addMenuItem(framesMenu, handler, "New frame", KeyEvent.VK_N, KeyEvent.ALT_MASK);
+		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);;
+		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);;
+		
+		scrollLeftItem = addMenuItem(imageMenu, handler, "Scroll left", KeyEvent.VK_A, 0);
+		scrollRightItem = addMenuItem(imageMenu, handler, "Scroll right", KeyEvent.VK_D, 0);
+		scrollUpItem = addMenuItem(imageMenu, handler, "Scroll up", KeyEvent.VK_W, 0);
+		scrollDownItem = addMenuItem(imageMenu, handler, "Scroll down", KeyEvent.VK_S, 0);
+		zoomInItem = addMenuItem(imageMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
+		zoomOutItem = addMenuItem(imageMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);
+	
 		add(fileMenu);
 		add(editMenu);
-		add(levelMenu);
-		add(dummyMenu);
-		add(tileMenu);
+		add(framesMenu);
+		add(previewMenu);
+		add(imageMenu);
 		add(helpMenu);
 	}
 

@@ -207,35 +207,6 @@ public class AnimationEdit extends JFrame
 //				level.undo();
 			}
 
-
-			// move
-//			if (event.getSource() == menu.moveUpItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(0, -config.representationTileSize);
-//			} else if (event.getSource() == menu.moveDownItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(0, config.representationTileSize);
-//			} else if (event.getSource() == menu.moveLeftItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(-config.representationTileSize, 0);
-//			} else if (event.getSource() == menu.moveRightItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(config.representationTileSize, 0);
-//			} // nudge
-//			else if (event.getSource() == menu.nudgeUpItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(0, -1);
-//			} else if (event.getSource() == menu.nudgeDownItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(0, 1);
-//			} else if (event.getSource() == menu.nudgeLeftItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(-1, 0);
-//			} else if (event.getSource() == menu.nudgeRightItem) {
-//				level.isAboutToAlterState();
-//				level.getDummyObjects().moveSelectedDummy(1, 0);
-//			}
-
 			// scroll
 			if (event.getSource() == menu.scrollUpItem) {
 				animationFrameView.scrollY(-10);
@@ -249,7 +220,6 @@ public class AnimationEdit extends JFrame
 			if (event.getSource() == menu.scrollRightItem) {
 				animationFrameView.scrollX(10);
 			}
-			
 			if (event.getSource() == menu.zoomInItem) {
 				animationFrameView.zoom(2.0f);
 			}
@@ -257,6 +227,42 @@ public class AnimationEdit extends JFrame
 				animationFrameView.zoom(0.5f);
 			}
 
+			if (event.getSource() == menu.newFrameItem) {
+				
+			}
+			if (event.getSource() == menu.moveFrameUpItem) {
+				
+			}
+			if (event.getSource() == menu.moveFrameDownItem) {
+	
+			}
+			if (event.getSource() == menu.preview1FpsItem) {
+				animationPreview.setUpdateSpeed(100, 1000);
+			}
+			if (event.getSource() == menu.preview2FpsItem) {
+				animationPreview.setUpdateSpeed(100, 1000/2);
+			}
+			if (event.getSource() == menu.preview10FpsItem) {
+				animationPreview.setUpdateSpeed(100, 1000/10);
+			}
+			if (event.getSource() == menu.preview30FpsItem) {
+				animationPreview.setUpdateSpeed(100, 1000/30);
+			}
+			if (event.getSource() == menu.preview60FpsItem) {
+				animationPreview.setUpdateSpeed(100, 1000/60);
+			}
+			if (event.getSource() == menu.previewStopItem) {
+				animationPreview.setUpdateSpeed(100000000, 100000000);
+			}
+			if (event.getSource() == menu.previewNextFrameItem) {
+				animationPreview.setUpdateSpeed(100000000, 100000000);
+				animationPreview.nextFrame();
+			}
+			if (event.getSource() == menu.previewPreviousFrameItem) {
+				animationPreview.setUpdateSpeed(100000000, 100000000);
+				animationPreview.previousFrame();
+			}
+			
 			// MENU -> "Save" (AnimationEdit format)
 			if (event.getSource() == menu.saveItem) {
 				String path = getSaveLevelPath(true, true);
@@ -291,12 +297,10 @@ public class AnimationEdit extends JFrame
 				System.exit(0);
 			}
 
-			// HELP
 			if (event.getSource() == menu.helpItem) {
 				showHelp();
 			}
 
-			// MENU -> open
 			if (event.getSource() == menu.openItem) {
 				String path = getOpenLevelPath();
 				loadAnimationSequence(path);

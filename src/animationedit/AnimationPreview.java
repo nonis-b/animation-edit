@@ -45,6 +45,22 @@ public class AnimationPreview extends JPanel {
     }
     
     
+    public void nextFrame() {
+    	currentAnimationFrameIndex = (currentAnimationFrameIndex+1) 
+    			% (animationFrameSequenceInfoProvider.getNumAnimationFrames());
+    	repaint();
+    	
+    }
+    
+    public void previousFrame() {
+    	currentAnimationFrameIndex--; 
+    	if (currentAnimationFrameIndex < 0) {
+    		currentAnimationFrameIndex = animationFrameSequenceInfoProvider.getNumAnimationFrames() - 1;
+    	}
+    	repaint();
+    }
+    
+    
     public void setUpdateSpeed(long delay, long millis) {
     	if (timerTask != null) {
     		timerTask.cancel();
