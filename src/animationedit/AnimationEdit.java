@@ -228,14 +228,20 @@ public class AnimationEdit extends JFrame
 			}
 
 			if (event.getSource() == menu.newFrameItem) {
-				
+				animationSequence.addAnimationFrame(JOptionPane.showInputDialog(
+						"Image for frame? (Should be a png image in the working directory)",
+						""));
+				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 			}
 			if (event.getSource() == menu.moveFrameUpItem) {
-				
+				animationSequence.moveAnimationFrameEarlier(animationFrameSelector.getSelected());
+				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 			}
 			if (event.getSource() == menu.moveFrameDownItem) {
-	
+				animationSequence.moveAnimationFrameLater(animationFrameSelector.getSelected());
+				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 			}
+			
 			if (event.getSource() == menu.preview1FpsItem) {
 				animationPreview.setUpdateSpeed(100, 1000);
 			}
@@ -320,6 +326,7 @@ public class AnimationEdit extends JFrame
 			}
 			String dir = file.getParent();
 			animationSequence = new AnimationFrameSequence(dir, path);
+			animationSequence.addChangeListener(animationFrameSelector);
 			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 		}
 	}
@@ -354,7 +361,9 @@ public class AnimationEdit extends JFrame
 			app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Error while initializing app.");
+			System.exit(1);
 		}
 	}
 

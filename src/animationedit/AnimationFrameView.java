@@ -302,33 +302,15 @@ public class AnimationFrameView
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
 	            	g.drawImage(image, 0, 0, this);
-	            }
+	            } else {
+					g.setColor(Color.WHITE);
+					String failText = "No image with found with name " + frame.getImage();
+					g.drawString(failText,
+							getWidth()/2 - (int)g.getFontMetrics().getStringBounds(failText, g).getWidth()/2, 
+							getHeight()/2 - g.getFontMetrics().getHeight()/2);
+				}
         	}
-        	
-        }
-        
-//        // draw tiles
-//        for (int i = 0; i < componentsAccessor.getLevelModel().getTileMap().getNumLayers(); i++) {
-//            paintMap(g, componentsAccessor.getLevelModel().getTileMap().getMap(i));
-//        }
-//
-//        drawDummyObjects(g);
-//
-//        // show tile map borders
-//        GridDrawingUtil.drawBoundingBox(Color.CYAN, g, 
-//        		modelToScreenCoord(-getScrollX()),
-//        		modelToScreenCoord(-getScrollY()), 
-//        		modelToScreenCoord(componentsAccessor.getLevelModel().getTileMap().getWidth() * componentsAccessor.getConfig().representationTileSize - getScrollX()),
-//        		modelToScreenCoord(componentsAccessor.getLevelModel().getTileMap().getHeight() * componentsAccessor.getConfig().representationTileSize - getScrollY()));
-//
-//        drawSelectedDummyIndicator(g);
-//        
-//        // show tile map layer
-//        g.setColor(Color.BLACK);
-//        g.drawString("Editing tilemap layer " + (editlayer+1) + "/" + 
-//        		componentsAccessor.getLevelModel().getTileMap().getNumLayers(), 5, getHeight() 
-//                - g.getFontMetrics().getHeight());
-        
+        } 
     }
 
 	@Override
