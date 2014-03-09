@@ -40,7 +40,15 @@ public class Menu extends JMenuBar {
 	protected JMenuItem moveFrameUpItem;
 	protected JMenuItem moveFrameDownItem;
 	
-
+	protected JMenuItem offsetXPlus1PixItem;
+	protected JMenuItem offsetXMinus1PixItem;
+	protected JMenuItem offsetYPlus1PixItem;
+	protected JMenuItem offsetYMinus1PixItem;
+	protected JMenuItem offsetXPlus10PixItem;
+	protected JMenuItem offsetXMinus10PixItem;
+	protected JMenuItem offsetYPlus10PixItem;
+	protected JMenuItem offsetYMinus10PixItem;
+	
 	private JMenuItem addMenuItem(JMenu menu, ActionListener handler, String text) {
 		JMenuItem item = new JMenuItem(text);
 		item.addActionListener(handler);
@@ -89,6 +97,15 @@ public class Menu extends JMenuBar {
 		newFrameItem = addMenuItem(framesMenu, handler, "New frame", KeyEvent.VK_N, KeyEvent.ALT_MASK);
 		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);;
 		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);;
+		
+		offsetXPlus1PixItem = addMenuItem(framesMenu, handler, "Offset X +1", KeyEvent.VK_L, 0);
+		offsetXMinus1PixItem = addMenuItem(framesMenu, handler, "Offset X -1", KeyEvent.VK_J, 0);
+		offsetYPlus1PixItem = addMenuItem(framesMenu, handler, "Offset Y +1", KeyEvent.VK_K, 0);
+		offsetYMinus1PixItem = addMenuItem(framesMenu, handler, "Offset Y -1", KeyEvent.VK_I, 0);
+		offsetXPlus10PixItem = addMenuItem(framesMenu, handler, "Offset X +10", KeyEvent.VK_L, KeyEvent.CTRL_MASK);
+		offsetXMinus10PixItem = addMenuItem(framesMenu, handler, "Offset X -10", KeyEvent.VK_J, KeyEvent.CTRL_MASK);
+		offsetYPlus10PixItem = addMenuItem(framesMenu, handler, "Offset Y +10", KeyEvent.VK_K, KeyEvent.CTRL_MASK);
+		offsetYMinus10PixItem = addMenuItem(framesMenu, handler, "Offset Y -10", KeyEvent.VK_I, KeyEvent.CTRL_MASK);
 		
 		scrollLeftItem = addMenuItem(imageMenu, handler, "Scroll left", KeyEvent.VK_A, 0);
 		scrollRightItem = addMenuItem(imageMenu, handler, "Scroll right", KeyEvent.VK_D, 0);

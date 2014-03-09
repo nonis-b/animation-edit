@@ -46,6 +46,8 @@ public class AnimationFrameSequenceFile {
     	    	Node frameElement = frameElementList.item(i);
     	    	NamedNodeMap attributes = frameElement.getAttributes();
     	    	String image = null;
+    	    	int offsetX = 0;
+    	    	int offsetY = 0;
 	    		
     	    	for (int j = 0; j < attributes.getLength(); j++) {
     	    		String attribute = attributes.item(j).getNodeName();
@@ -53,9 +55,13 @@ public class AnimationFrameSequenceFile {
     	    		
     	    		if (attribute.equals("image")) {
     	    			image = value;
-    	    		}
+    	    		} else if (attribute.equals("offsetX")) {
+    	    			offsetX = Integer.parseInt(value);
+    	    		} else if (attribute.equals("offsetY")) {
+    	    			offsetY = Integer.parseInt(value);
+    	    		} 
     	    	}
-    	    	frames.add(new AnimationFrame(image));
+    	    	frames.add(new AnimationFrame(image, offsetX, offsetY));
     	    }
     	    
         } catch (ParserConfigurationException pce) {
@@ -80,9 +86,18 @@ public class AnimationFrameSequenceFile {
 			for (AnimationFrame animationFrame : animationFrames) {
 				Element frameElement = doc.createElement("AnimationFrame");
 				rootElement.appendChild(frameElement);
-				Attr attr = doc.createAttribute("image");
-				attr.setValue(animationFrame.getImage());
-				frameElement.setAttributeNode(attr);
+				
+				Attr imageAttr = doc.createAttribute("image");
+				imageAttr.setValue(animationFrame.getImage());
+				frameElement.setAttributeNode(imageAttr);
+
+				Attr offsetXAttr = doc.createAttribute("offsetX");
+				offsetXAttr.setValue(new Integer(animationFrame.getOffsetX()).toString());
+				frameElement.setAttributeNode(offsetXAttr);
+				
+				Attr offsetYAttr = doc.createAttribute("offsetY");
+				offsetYAttr.setValue(new Integer(animationFrame.getOffsetY()).toString());
+				frameElement.setAttributeNode(offsetYAttr);
 			}
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();

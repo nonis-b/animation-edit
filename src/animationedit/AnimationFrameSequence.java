@@ -42,7 +42,7 @@ public class AnimationFrameSequence {
 	
 	public void addAnimationFrame(String image) {
 		if (image == null || image.isEmpty()) return;
-		animationFrames.add(new AnimationFrame(image));
+		animationFrames.add(new AnimationFrame(image, 0, 0));
 		notifyChangeListeners();
 	}
 	

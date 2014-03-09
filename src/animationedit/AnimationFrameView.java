@@ -300,8 +300,8 @@ public class AnimationFrameView
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
 	            	g.drawImage(image, 
-	            			getWidth()/2 - imageStore.getMaxWidthOfImage()/2, 
-	            			getHeight()/2 - imageStore.getMaxHeightOfImage()/2, 
+	            			getWidth()/2 - imageStore.getMaxWidthOfImage()/2 + frame.getOffsetX(), 
+	            			getHeight()/2 - imageStore.getMaxHeightOfImage()/2 + frame.getOffsetY(), 
 	            			this);
 	            } else {
 					g.setColor(Color.WHITE);

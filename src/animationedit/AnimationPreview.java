@@ -142,7 +142,7 @@ public class AnimationPreview extends JPanel {
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image, 0, 0, this);
+	            	g.drawImage(image,  frame.getOffsetX(), frame.getOffsetY(), this);
 	            }
         	}
         	
