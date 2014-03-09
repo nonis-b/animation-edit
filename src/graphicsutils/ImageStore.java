@@ -2,19 +2,20 @@ package graphicsutils;
 
 
 import java.awt.Image;
-import java.awt.MediaTracker;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class ImageStore {
 	
 	private Map<String, Image> images;
 	private final String imageDirectory;
+	private int maxImageWidth = 1;
+	private int maxImageHeight = 1;
 	
 	public ImageStore(String imageDirectory) {
 		if (!imageDirectory.endsWith("/")) {
@@ -29,6 +30,31 @@ public class ImageStore {
 	 */
 	public void reloadAll() {
 		images = new HashMap<String, Image>();
+	}
+	
+	private void calculateImageSizes() {
+		maxImageWidth = 1;
+		for (Map.Entry<String, Image> entry : images.entrySet()) {
+			int val = entry.getValue().getWidth(null);
+			if (val > maxImageWidth) {
+				maxImageWidth = val;
+			}
+		}
+		maxImageHeight = 1;
+		for (Map.Entry<String, Image> entry : images.entrySet()) {
+			int val = entry.getValue().getHeight(null);
+			if (val > maxImageHeight) {
+				maxImageHeight = val;
+			}
+		}
+	}
+	
+	public int getMaxWidthOfImage() {
+		return maxImageWidth;
+	}
+	
+	public int getMaxHeightOfImage() {
+		return maxImageHeight;
 	}
 	
 	private boolean loadImage(String imageName) {
@@ -48,6 +74,7 @@ public class ImageStore {
 		Image compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
 		images.put(imageName, compatibleImage);
 		System.out.println(" - OK.");
+		calculateImageSizes();
 		return true;
 	}
 	

@@ -25,14 +25,13 @@ public class AnimationFrameView
     private int scrollY = 0; 
     private int editlayer = 0;
     private float scale = 1.0f;
-
-    AnimationEditComponentsAccessor componentsAccessor;
+    private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
+    
     /**
      * Constructor.
      * @param componentsAccessor
      * @param toolSelector
-     * @param componentsAccessor
      */
     public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
@@ -40,7 +39,7 @@ public class AnimationFrameView
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(componentsAccessor.getConfig().bgCol);
     }
-
+    
     @Override
     public void mousePressed(MouseEvent e) {    	
         click(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), true);
@@ -301,7 +300,10 @@ public class AnimationFrameView
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image, 0, 0, this);
+	            	g.drawImage(image, 
+	            			getWidth()/2 - imageStore.getMaxWidthOfImage()/2, 
+	            			getHeight()/2 - imageStore.getMaxHeightOfImage()/2, 
+	            			this);
 	            } else {
 					g.setColor(Color.WHITE);
 					String failText = "No image with found with name " + frame.getImage();
