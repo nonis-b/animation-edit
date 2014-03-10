@@ -142,7 +142,19 @@ public class AnimationPreview extends JPanel {
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image,  frame.getOffsetX(), frame.getOffsetY(), this);
+	        		float scaleToFit = 1.0f;
+	        		if (imageStore.getMaxWidthOfImage() > getWidth()) {
+	        			scaleToFit = (float)getWidth() / (float)imageStore.getMaxWidthOfImage();
+	        		}
+	        		if (imageStore.getMaxHeightOfImage()*scaleToFit > getHeight()) {
+	        			scaleToFit = (float)getHeight() / (float)imageStore.getMaxHeightOfImage();
+	        		}
+	        		g.drawImage(image, 
+	            			getWidth()/2 - ((int)(imageStore.getMaxWidthOfImage()*scaleToFit))/2 + (int)(frame.getOffsetX()*scaleToFit), 
+	            			getHeight()/2 - ((int)(imageStore.getMaxHeightOfImage()*scaleToFit))/2 + (int)(frame.getOffsetY()*scaleToFit),
+	            			(int)(image.getWidth(null)*scaleToFit),
+	            			(int)(image.getHeight(null)*scaleToFit),
+	            			this);
 	            }
         	}
         	
