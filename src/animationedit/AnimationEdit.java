@@ -345,8 +345,15 @@ public class AnimationEdit extends JFrame
 		if (path != null) {
 			File file = new File(path);
 			if (!file.exists() && !file.isDirectory()) {
-				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, new ArrayList<AnimationFrame>());
 				file = new File(path);
+				ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
+				for (String dirFileName : file.getParentFile().list()) {
+					if (dirFileName.endsWith(".png")) {
+						System.out.println("Auto-included png file in directory: " + dirFileName);
+						createdFrames.add(new AnimationFrame(dirFileName, 0, 0));
+					}
+				}
+				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);
 			}
 			String dir = file.getParent();
 			animationSequence = new AnimationFrameSequence(dir, path);
@@ -417,6 +424,7 @@ public class AnimationEdit extends JFrame
 
 	@Override
 	public int getNumAnimationFrames() {
+		if (animationSequence.getAnimationFrames() == null) return 0;
 		return animationSequence.getAnimationFrames().size();
 	}
 
