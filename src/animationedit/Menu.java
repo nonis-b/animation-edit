@@ -37,6 +37,7 @@ public class Menu extends JMenuBar {
 	protected JMenuItem previewNextFrameItem;
 	protected JMenuItem previewPreviousFrameItem;
 	protected JMenuItem newFrameItem;
+	protected JMenuItem deleteFrameItem;
 	protected JMenuItem moveFrameUpItem;
 	protected JMenuItem moveFrameDownItem;
 	
@@ -95,6 +96,7 @@ public class Menu extends JMenuBar {
 		previewPreviousFrameItem = addMenuItem(previewMenu, handler, "Previous frame", KeyEvent.VK_B, 0);
 		
 		newFrameItem = addMenuItem(framesMenu, handler, "New frame", KeyEvent.VK_N, KeyEvent.ALT_MASK);
+		deleteFrameItem = addMenuItem(framesMenu, handler, "Delete frame", KeyEvent.VK_BACK_SPACE, 0);
 		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);;
 		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);;
 		

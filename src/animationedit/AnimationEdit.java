@@ -227,6 +227,9 @@ public class AnimationEdit extends JFrame
 						""));
 				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 			}
+			if (event.getSource() == menu.deleteFrameItem) {
+				animationSequence.deleteAnimationFrame(animationFrameSelector.getSelected());
+			}
 			if (event.getSource() == menu.moveFrameUpItem) {
 				animationSequence.moveAnimationFrameEarlier(animationFrameSelector.getSelected());
 				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
@@ -420,6 +423,6 @@ public class AnimationEdit extends JFrame
 
 	@Override
 	public AnimationFrame getAnimationFrame(int i) {
-		return animationSequence.getAnimationFrames().get(i);
+		return animationSequence.getAnimationFrame(i);
 	}
 }

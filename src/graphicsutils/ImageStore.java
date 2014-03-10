@@ -4,7 +4,6 @@ package graphicsutils;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,16 +34,20 @@ public class ImageStore {
 	private void calculateImageSizes() {
 		maxImageWidth = 1;
 		for (Map.Entry<String, Image> entry : images.entrySet()) {
-			int val = entry.getValue().getWidth(null);
-			if (val > maxImageWidth) {
-				maxImageWidth = val;
+			if (entry.getValue() != null) {
+				int val = entry.getValue().getWidth(null);
+				if (val > maxImageWidth) {
+					maxImageWidth = val;
+				}
 			}
 		}
 		maxImageHeight = 1;
 		for (Map.Entry<String, Image> entry : images.entrySet()) {
-			int val = entry.getValue().getHeight(null);
-			if (val > maxImageHeight) {
-				maxImageHeight = val;
+			if (entry.getValue() != null) {
+				int val = entry.getValue().getHeight(null);
+				if (val > maxImageHeight) {
+					maxImageHeight = val;
+				}
 			}
 		}
 	}

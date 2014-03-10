@@ -31,22 +31,22 @@ public class AnimationPreview extends JPanel {
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
     	this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
-        setBackground(Color.WHITE);
+        setBackground(Color.LIGHT_GRAY);
         timer = new Timer();
         setUpdateSpeed(1000, 100);
     }
 
 
     private void onTimer() {
-    	currentAnimationFrameIndex = (currentAnimationFrameIndex+1) 
-    			% (animationFrameSequenceInfoProvider.getNumAnimationFrames());
-    	repaint();
+    	nextFrame();
     }
     
     
     public void nextFrame() {
-    	currentAnimationFrameIndex = (currentAnimationFrameIndex+1) 
-    			% (animationFrameSequenceInfoProvider.getNumAnimationFrames());
+    	currentAnimationFrameIndex++; 
+    	if (currentAnimationFrameIndex >= animationFrameSequenceInfoProvider.getNumAnimationFrames()) {
+    		currentAnimationFrameIndex = 0;
+    	}
     	repaint();
     	
     }
@@ -143,11 +143,12 @@ public class AnimationPreview extends JPanel {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
 	        		float scaleToFit = 1.0f;
-	        		if (imageStore.getMaxWidthOfImage() > getWidth()) {
-	        			scaleToFit = (float)getWidth() / (float)imageStore.getMaxWidthOfImage();
-	        		}
-	        		if (imageStore.getMaxHeightOfImage()*scaleToFit > getHeight()) {
-	        			scaleToFit = (float)getHeight() / (float)imageStore.getMaxHeightOfImage();
+        			float scaleToFitX = (float)getWidth() / (float)imageStore.getMaxWidthOfImage();
+        			float scaleToFitY = (float)getHeight() / (float)imageStore.getMaxHeightOfImage();
+	        		if (scaleToFitX > 1.0f || scaleToFitY > 1.0f) {
+	        			scaleToFit = Math.min(scaleToFitX, scaleToFitY);
+	        		} else {
+	        			scaleToFit = Math.max(scaleToFitX, scaleToFitY);
 	        		}
 	        		g.drawImage(image, 
 	            			getWidth()/2 - ((int)(imageStore.getMaxWidthOfImage()*scaleToFit))/2 + (int)(frame.getOffsetX()*scaleToFit), 

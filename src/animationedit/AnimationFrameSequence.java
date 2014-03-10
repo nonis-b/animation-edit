@@ -34,10 +34,24 @@ public class AnimationFrameSequence {
 		return animationFrames;
 	}
 	
+	public void deleteAnimationFrame(AnimationFrame frameToDelete) {
+		for (AnimationFrame frame : animationFrames) {
+			if (frame.equals(frameToDelete)) {
+				animationFrames.remove(frameToDelete);
+				notifyChangeListeners();
+			}
+		}
+	}
+	
 	private void notifyChangeListeners() {
 		for (AnimationFrameSequenceChangedListener listener : listeners) {
 			listener.onAnimationFrameSequenceChanged();
 		}
+	}
+	
+	public AnimationFrame getAnimationFrame(int i) {
+		if (i >= animationFrames.size()) return null;
+		return animationFrames.get(i);
 	}
 	
 	public void addAnimationFrame(String image) {
