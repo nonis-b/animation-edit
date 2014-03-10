@@ -85,29 +85,24 @@ public class AnimationEdit extends JFrame
 		menu = new Menu(handler);
 		setJMenuBar(menu);
 
-		JPanel leftPanel = new JPanel();
-		leftPanel.setLayout(new GridLayout(3, 1));
-		//JPanel bottomPanel = new JPanel();
-		
-		leftPanel.add(toolSelector);
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 3));
 
-		JToolBar dummyToolBar = new JToolBar();
-		dummyToolBar.add(animationFrameSelector);
-		leftPanel.add(dummyToolBar);
-		
-		container.add(leftPanel, BorderLayout.WEST);
-		//container.add(bottomPanel, BorderLayout.SOUTH);
-		leftPanel.add(animationPreview);
-		
+		JToolBar animationFrameSelectorToolBar = new JToolBar();
+		animationFrameSelectorToolBar.add(animationFrameSelector);
+		panel.add(animationFrameSelectorToolBar);
+
 		animationFrameView.addMouseListener(animationFrameView);
 		animationFrameView.addMouseMotionListener(animationFrameView);
-		container.add(animationFrameView, BorderLayout.CENTER);
+		panel.add(animationFrameView);
 		
+		panel.add(animationPreview);
 		
+		container.add(panel);
 		
 		// init main window
 		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, Toolkit
-				.getDefaultToolkit().getScreenSize().height - 60);
+				.getDefaultToolkit().getScreenSize().height/2 - 60);
 		setLocation(20, 20);
 		setVisible(true);
 		setResizable(true);
