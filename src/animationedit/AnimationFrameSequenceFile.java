@@ -49,6 +49,8 @@ public class AnimationFrameSequenceFile {
     	    	int offsetX = 0;
     	    	int offsetY = 0;
     	    	int tics = 1;
+    	    	String tag = "";
+    	    	String next = "";
 	    		
     	    	for (int j = 0; j < attributes.getLength(); j++) {
     	    		String attribute = attributes.item(j).getNodeName();
@@ -62,9 +64,13 @@ public class AnimationFrameSequenceFile {
     	    			offsetY = Integer.parseInt(value);
     	    		} else if (attribute.equals("tics")) {
     	    			tics = Integer.parseInt(value);
+    	    		} else if (attribute.equals("tag")) {
+    	    			tag = value;
+    	    		} else if (attribute.equals("next")) {
+    	    			next = value;
     	    		} 
     	    	}
-    	    	frames.add(new AnimationFrame(image, offsetX, offsetY, tics));
+    	    	frames.add(new AnimationFrame(image, offsetX, offsetY, tics, tag, next));
     	    }
     	    
         } catch (ParserConfigurationException pce) {
@@ -105,6 +111,18 @@ public class AnimationFrameSequenceFile {
 				Attr ticsAttr = doc.createAttribute("tics");
 				ticsAttr.setValue(new Integer(animationFrame.getTics()).toString());
 				frameElement.setAttributeNode(ticsAttr);
+				
+				if (!animationFrame.getTag().isEmpty()) {
+					Attr tagAttr = doc.createAttribute("tag");
+					tagAttr.setValue(animationFrame.getTag());
+					frameElement.setAttributeNode(tagAttr);
+				}
+				
+				if (!animationFrame.getNext().isEmpty()) {
+					Attr nextAttr = doc.createAttribute("next");
+					nextAttr.setValue(animationFrame.getNext());
+					frameElement.setAttributeNode(nextAttr);
+				}
 			}
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();

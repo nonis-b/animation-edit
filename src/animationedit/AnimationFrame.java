@@ -5,16 +5,23 @@ public class AnimationFrame {
 	private int offsetX;
 	private int offsetY;
 	private int tics;
+	private String next = "";
+
+	private String tag = "";
 	
-	public AnimationFrame(String image, int offsetX, int offsetY, int tics) {
+	public AnimationFrame(String image, int offsetX, int offsetY, int tics, String tag, String next) {
 		this.image = image;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.tics = tics;
+		this.tag = tag;
+		this.next = next;
+		if (tag == null) tag = "";
+		if (next == null) next = "";
 	}
 	
 	public String toString() {
-		return image + " (" + tics + ")";
+		return image + " (tics: " + tics + ") (tag: " + tag + ") (next: " + next + ")";
 	}
 	
 	public String getImage() {
@@ -35,6 +42,22 @@ public class AnimationFrame {
 
 	public int getOffsetY() {
 		return offsetY;
+	}
+	
+	public String getNext() {
+		return next;
+	}
+
+	public void setNext(String next) {
+		this.next = next;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 	
 	public void addToOffsetX(int delta) {

@@ -49,6 +49,15 @@ public class AnimationFrameSequence {
 		}
 	}
 	
+	public int getFrameIndexOfTag(String tag) {
+		AnimationFrame frame;
+		for (int i = 0; i < animationFrames.size(); i++) {
+			frame = animationFrames.get(i);
+			if (frame.getTag().equals(tag)) return i;
+		}
+		return -1;
+	}
+	
 	public AnimationFrame getAnimationFrame(int i) {
 		if (i >= animationFrames.size()) return null;
 		return animationFrames.get(i);
@@ -56,7 +65,7 @@ public class AnimationFrameSequence {
 	
 	public void addAnimationFrame(String image) {
 		if (image == null || image.isEmpty()) return;
-		animationFrames.add(new AnimationFrame(image, 0, 0, 1));
+		animationFrames.add(new AnimationFrame(image, 0, 0, 1, "", ""));
 		notifyChangeListeners();
 	}
 	

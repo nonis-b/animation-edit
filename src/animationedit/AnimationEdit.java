@@ -306,10 +306,27 @@ public class AnimationEdit extends JFrame
 			}
 			
 			if (event.getSource() == menu.editFrameTicsItem) {
-				animationFrameSelector.getSelected().setTics(
-						Integer.parseInt(JOptionPane.showInputDialog("Set tics for frame",
-						animationFrameSelector.getSelected().getTics())));
-				
+				String val = JOptionPane.showInputDialog("Set tics for frame",
+						animationFrameSelector.getSelected().getTics());
+				if (val != null) {
+					animationFrameSelector.getSelected().setTics(Integer.parseInt(val));
+				}
+			}
+			
+			if (event.getSource() == menu.editFrameTagItem) {
+				String val = JOptionPane.showInputDialog("Set tag for frame",
+						animationFrameSelector.getSelected().getTag());
+				if (val != null) {
+					animationFrameSelector.getSelected().setTag(val);
+				}
+			}
+			
+			if (event.getSource() == menu.editFrameNextItem) {
+				String val = JOptionPane.showInputDialog("Set next tag for frame",
+						animationFrameSelector.getSelected().getNext());
+				if (val != null) {
+					animationFrameSelector.getSelected().setNext(val);
+				}
 			}
 			
 			// MENU -> "Save" (AnimationEdit format)
@@ -383,7 +400,7 @@ public class AnimationEdit extends JFrame
 				for (String dirFileName : file.getParentFile().list()) {
 					if (dirFileName.endsWith(".png")) {
 						System.out.println("Auto-included png file in directory: " + dirFileName);
-						createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1));
+						createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
 					}
 				}
 				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);
@@ -466,5 +483,11 @@ public class AnimationEdit extends JFrame
 	@Override
 	public AnimationFrame getAnimationFrame(int i) {
 		return animationSequence.getAnimationFrame(i);
+	}
+
+
+	@Override
+	public int getIndexOfAnimationFrameWithTag(String tag) {
+		return animationSequence.getFrameIndexOfTag(tag);
 	}
 }

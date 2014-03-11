@@ -50,6 +50,8 @@ public class Menu extends JMenuBar {
 	protected JMenuItem offsetYPlus10PixItem;
 	protected JMenuItem offsetYMinus10PixItem;
 	protected JMenuItem editFrameTicsItem;
+	protected JMenuItem editFrameTagItem;
+	protected JMenuItem editFrameNextItem;
 	
 	private JMenuItem addMenuItem(JMenu menu, ActionListener handler, String text) {
 		JMenuItem item = new JMenuItem(text);
@@ -110,6 +112,8 @@ public class Menu extends JMenuBar {
 		offsetYPlus10PixItem = addMenuItem(imageMenu, handler, "Offset Y +10", KeyEvent.VK_K, KeyEvent.CTRL_MASK);
 		offsetYMinus10PixItem = addMenuItem(imageMenu, handler, "Offset Y -10", KeyEvent.VK_I, KeyEvent.CTRL_MASK);
 		editFrameTicsItem = addMenuItem(imageMenu, handler, "Edit frame tics", KeyEvent.VK_T, KeyEvent.CTRL_MASK);
+		editFrameTagItem = addMenuItem(imageMenu, handler, "Edit frame tag", KeyEvent.VK_G, KeyEvent.CTRL_MASK);
+		editFrameNextItem = addMenuItem(imageMenu, handler, "Edit frame next tag", KeyEvent.VK_F, KeyEvent.CTRL_MASK);
 		
 		scrollLeftItem = addMenuItem(imageMenu, handler, "Scroll left", KeyEvent.VK_A, 0);
 		scrollRightItem = addMenuItem(imageMenu, handler, "Scroll right", KeyEvent.VK_D, 0);

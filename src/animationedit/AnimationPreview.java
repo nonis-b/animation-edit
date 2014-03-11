@@ -41,14 +41,30 @@ public class AnimationPreview extends JPanel {
     private void onTimer() {
     	currentFrameTics--;
     	if (currentFrameTics <= 0) {
-    		nextFrame();
-    		AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
-        	if (frame != null) {
-        		currentFrameTics = frame.getTics();
+    		AnimationFrame oldFrame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
+    		String next = "";
+        	if (oldFrame != null) {
+        		next = oldFrame.getNext();
+        	}
+        	if (next.isEmpty()) {
+        		nextFrame();
+        	} else {
+        		gotoFrame(next);
+        	}
+    		AnimationFrame newFrame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
+        	if (newFrame != null) {
+        		currentFrameTics = newFrame.getTics();
         	}
     	}
     }
     
+    private void gotoFrame(String tag) {
+    	int nextIndex = animationFrameSequenceInfoProvider.getIndexOfAnimationFrameWithTag(tag);
+		if (nextIndex >= 0) {
+			currentAnimationFrameIndex = nextIndex;
+		}
+		repaint();
+    }
     
     public void nextFrame() {
     	currentAnimationFrameIndex++; 
