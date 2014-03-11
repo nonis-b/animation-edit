@@ -21,7 +21,11 @@ public class AnimationFrame {
 	}
 	
 	public String toString() {
-		return image + " (tics: " + tics + ") (tag: " + tag + ") (next: " + next + ")";
+		String ret = image;
+		if (tics > 1) ret += " (tics: " + tics + ")";
+		if (!tag.isEmpty()) ret += " (tag: " + tag + ")";
+		if (!next.isEmpty()) ret += " (next: " + next + ")";
+		return ret;
 	}
 	
 	public String getImage() {
