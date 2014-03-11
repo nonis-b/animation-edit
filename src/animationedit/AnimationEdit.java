@@ -10,6 +10,8 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -42,7 +44,8 @@ public class AnimationEdit extends JFrame
 	private AnimationPreview animationPreview;
 	private File currentAnimationSequenceFile = null;
 	private AnimationFrameSequence animationSequence = null;
-
+	private final int filePollInterval = 1000;
+	private Timer filePollTimer;
 	
 	/**
 	 * Setup app.
@@ -54,6 +57,14 @@ public class AnimationEdit extends JFrame
 		super("AnimationEdit");
 
 		config = new ApplicationConfig(configFilePath);	
+		
+		filePollTimer = new Timer();
+		filePollTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				updateChangedImageFiles();
+			}
+		}, filePollInterval, filePollInterval);
 		
 		toolSelector = new ToolSelector();
 
@@ -172,12 +183,14 @@ public class AnimationEdit extends JFrame
 		int returnVal = fc.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-			currentAnimationSequenceFile = fc.getSelectedFile();
-			setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath());
-			return currentAnimationSequenceFile.getAbsolutePath();
+			fc.getSelectedFile().getAbsolutePath();
 		}
 		return null;
+	}
+	
+	private void setCurrentAnimationSequenceFile(String path) {
+		currentAnimationSequenceFile = new File(path);
+		setTitle("AnimationEdit - " + path);
 	}
 	
 
@@ -341,6 +354,20 @@ public class AnimationEdit extends JFrame
 	}
 
 	
+	private void updateChangedImageFiles() {
+		if (currentAnimationSequenceFile == null) return;
+		File dir = currentAnimationSequenceFile.getParentFile();
+		for (File dirFileName : dir.listFiles()) {
+			// TODO: a bit ugly, using 1.5 times polling interval to find changed files.
+			if (dirFileName.getName().endsWith(".png") && 
+					dirFileName.lastModified() > System.currentTimeMillis() - (filePollInterval+filePollInterval/2)) {
+				animationSequence.getImageStore().reloadImage(dirFileName.getName());
+				System.out.println("Found changed file " + dirFileName.getName() + ". Reloading.");
+			}
+		}
+	}
+	
+	
 	private void loadAnimationSequence(String path) {
 		if (path != null) {
 			File file = new File(path);
@@ -359,6 +386,7 @@ public class AnimationEdit extends JFrame
 			animationSequence = new AnimationFrameSequence(dir, path);
 			animationSequence.addChangeListener(animationFrameSelector);
 			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+			setCurrentAnimationSequenceFile(path);
 		}
 	}
  	

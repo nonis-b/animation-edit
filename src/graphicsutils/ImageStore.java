@@ -25,6 +25,18 @@ public class ImageStore {
 	}
 	
 	/**
+	 * Forget about image.
+	 * @param imageToReload File name of image, eg. "myimage.png".
+	 */
+	public void reloadImage(String imageToReload) {
+		if (images.containsKey(imageToReload)) {
+			images.remove(imageToReload);
+		} else if (imageToReload.contains(imageToReload + ".png")) {
+			images.remove(imageToReload + ".png");
+		}
+	}
+	
+	/**
 	 * Force reloading of all resources.
 	 */
 	public void reloadAll() {
