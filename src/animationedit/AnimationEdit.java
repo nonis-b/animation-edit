@@ -305,6 +305,12 @@ public class AnimationEdit extends JFrame
 				animationFrameSelector.getSelected().addToOffsetY(-10);
 			}
 			
+			if (event.getSource() == menu.editFrameTicsItem) {
+				animationFrameSelector.getSelected().setTics(
+						Integer.parseInt(JOptionPane.showInputDialog("Set tics for frame",
+						animationFrameSelector.getSelected().getTics())));
+				
+			}
 			
 			// MENU -> "Save" (AnimationEdit format)
 			if (event.getSource() == menu.saveItem) {
@@ -377,7 +383,7 @@ public class AnimationEdit extends JFrame
 				for (String dirFileName : file.getParentFile().list()) {
 					if (dirFileName.endsWith(".png")) {
 						System.out.println("Auto-included png file in directory: " + dirFileName);
-						createdFrames.add(new AnimationFrame(dirFileName, 0, 0));
+						createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1));
 					}
 				}
 				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);

@@ -48,6 +48,7 @@ public class AnimationFrameSequenceFile {
     	    	String image = null;
     	    	int offsetX = 0;
     	    	int offsetY = 0;
+    	    	int tics = 1;
 	    		
     	    	for (int j = 0; j < attributes.getLength(); j++) {
     	    		String attribute = attributes.item(j).getNodeName();
@@ -59,9 +60,11 @@ public class AnimationFrameSequenceFile {
     	    			offsetX = Integer.parseInt(value);
     	    		} else if (attribute.equals("offsetY")) {
     	    			offsetY = Integer.parseInt(value);
+    	    		} else if (attribute.equals("tics")) {
+    	    			tics = Integer.parseInt(value);
     	    		} 
     	    	}
-    	    	frames.add(new AnimationFrame(image, offsetX, offsetY));
+    	    	frames.add(new AnimationFrame(image, offsetX, offsetY, tics));
     	    }
     	    
         } catch (ParserConfigurationException pce) {
@@ -98,6 +101,10 @@ public class AnimationFrameSequenceFile {
 				Attr offsetYAttr = doc.createAttribute("offsetY");
 				offsetYAttr.setValue(new Integer(animationFrame.getOffsetY()).toString());
 				frameElement.setAttributeNode(offsetYAttr);
+				
+				Attr ticsAttr = doc.createAttribute("tics");
+				ticsAttr.setValue(new Integer(animationFrame.getTics()).toString());
+				frameElement.setAttributeNode(ticsAttr);
 			}
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();

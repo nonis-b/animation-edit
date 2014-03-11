@@ -22,6 +22,7 @@ public class AnimationPreview extends JPanel {
     private Timer timer;
     private TimerTask timerTask;
     private int currentAnimationFrameIndex = 0;
+    private int currentFrameTics = 1;
     
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
@@ -38,7 +39,14 @@ public class AnimationPreview extends JPanel {
 
 
     private void onTimer() {
-    	nextFrame();
+    	currentFrameTics--;
+    	if (currentFrameTics <= 0) {
+    		nextFrame();
+    		AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
+        	if (frame != null) {
+        		currentFrameTics = frame.getTics();
+        	}
+    	}
     }
     
     
