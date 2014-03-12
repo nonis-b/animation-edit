@@ -20,6 +20,7 @@ public class AnimationFrame {
 		if (next == null) next = "";
 	}
 	
+	@Override
 	public String toString() {
 		String ret = image;
 		if (tics > 1) ret += " (tics: " + tics + ")";

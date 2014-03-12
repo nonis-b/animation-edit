@@ -11,14 +11,11 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 /**
- * Preview animation.
+ * Shows the animation played back.
  *
  */
 public class AnimationPreview extends JPanel {
     
-    private int scrollX = 0;
-    private int scrollY = 0; 
-    private float scale = 1.0f;
     private Timer timer;
     private TimerTask timerTask;
     private int currentAnimationFrameIndex = 0;
@@ -95,59 +92,6 @@ public class AnimationPreview extends JPanel {
 			}
 		};
 		timer.schedule(timerTask, delay, millis);
-    }
-    
-    
-    /**
-     * Scroll position x
-     * @return scrollX
-     */
-    public int getScrollX() {
-        return scrollX;
-    }
- 
-    /**
-     * Scroll position y
-     * @return scrollY
-     */
-    public int getScrollY() {
-        return scrollY;
-    }
-    
-    /**
-     * Scroll in x direction.
-     * @param length Pixels to scroll.
-     */
-    public void scrollX(int length) {
-        scrollX += length/scale;
-    }
-    
-    /**
-     * Scroll in y direction.
-     * @param length Pixels to scroll.
-     */
-    public void scrollY(int length) {
-        scrollY += length/scale;
-    }
-
-    
-    /**
-     * Zoom view.
-     * @param scaleFactor Positive will zoom in, negative out.
-     */
-    public void zoom(float scaleFactor) {
-    	scale *= scaleFactor;
-    	System.out.println("Change zoom to " + scale);
-    }
-    
-    
-    private int screenToModelCoord(int screenCoord) {
-    	return (int)(screenCoord / scale);
-    }
-
-    
-    private int modelToScreenCoord(int modelCoord) {
-    	return (int)(modelCoord * scale);
     }
     
     

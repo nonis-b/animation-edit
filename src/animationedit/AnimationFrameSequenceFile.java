@@ -25,8 +25,7 @@ import org.xml.sax.SAXException;
 public class AnimationFrameSequenceFile {
 	
 	public static ArrayList<AnimationFrame> createAnimtionFrameSequenceFromXml(String path) {
-		
-		// frames
+
         ArrayList<AnimationFrame> frames = new ArrayList<AnimationFrame>();
 		
 		Document dom;

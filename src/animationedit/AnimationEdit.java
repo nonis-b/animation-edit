@@ -1,40 +1,42 @@
 package animationedit;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
 
 import graphicsutils.ImageStore;
 
 import animationedit.ToolSelector.Tool;
 
 /**
- * The GUI class of the AnimationEdit application. Sets up all the buttons, menus
- * and stuff in the main window.
+ * Main window.
  * 
  */
 public class AnimationEdit extends JFrame 
 	implements AnimationEditComponentsAccessor,
 				AnimationFrameSequenceInfoProvider
 	{
-
-	private static final String HELP_TEXT = 
-			  "TODO";
 
 	private ToolSelector toolSelector;
 	private AnimationFrameSelector animationFrameSelector;
@@ -198,10 +200,35 @@ public class AnimationEdit extends JFrame
 	 * Shows help window.
 	 */
 	public void showHelp() {
-		JOptionPane.showMessageDialog(this, HELP_TEXT);
-		System.out.println(HELP_TEXT);
+	    JEditorPane editorPane = new JEditorPane("text/html", "<html><body>"
+	    		+ "<p>Help content TODO.</p>"
+	    		+ "<p>This application is free software.</p>"
+	    		+ "<p>Get the source code: "
+	            + "<a href=\"https://github.com/jonath0000/animation-edit/\">" 
+	    		+ "https://github.com/jonath0000/animation-edit</a>"
+	            + "</body></html> </p>");
+
+		editorPane.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent event) {
+				
+				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED 
+						&& Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().browse(event.getURL().toURI());
+					} catch (IOException exception) { 
+						System.out.println("Couldn't open URL.");
+					} catch (URISyntaxException exception) {
+						System.out.println("Couldn't open URL.");
+					}
+				} else { 
+					System.out.println("Couldn't open URL.");
+				}
+			}
+		});
+	    editorPane.setEditable(false);
+	    JOptionPane.showMessageDialog(this, editorPane);
 	}
-	
 
 	/**
 	 * Handle all actions in main window.
@@ -473,11 +500,6 @@ public class AnimationEdit extends JFrame
 	@Override
 	public Tool getSelectedTool() {
 		return toolSelector.getTool();
-	}
-	
-	@Override 
-	public ApplicationConfig getConfig() {
-		return config;
 	}
 
 	@Override

@@ -40,7 +40,6 @@ public class AnimationFrameView
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
         this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
-        setBackground(componentsAccessor.getConfig().bgCol);
     }
     
     public void setOnionSkinDepth(int depth) {

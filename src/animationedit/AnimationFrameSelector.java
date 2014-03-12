@@ -10,7 +10,7 @@ import javax.swing.event.ListSelectionListener;
 
 
 /**
- * Linear list of AnimationFrames.
+ * Linear list of AnimationFrames where one can be selected.
  */
 public class AnimationFrameSelector extends JScrollPane 
 	implements ListSelectionListener, 
