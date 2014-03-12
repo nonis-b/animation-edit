@@ -25,9 +25,6 @@ import org.xml.sax.SAXException;
 public class AnimationFrameSequenceFile {
 	
 	public static ArrayList<AnimationFrame> createAnimtionFrameSequenceFromXml(String path) {
-		if (!path.endsWith(".xml")) {
-			return null;
-		}
 		
 		// frames
         ArrayList<AnimationFrame> frames = new ArrayList<AnimationFrame>();
@@ -83,7 +80,10 @@ public class AnimationFrameSequenceFile {
         return frames;
 	}
 	
-	public static boolean writeAnimtionFrameSequenceToXml(final String path, final ArrayList<AnimationFrame> animationFrames) {
+	public static boolean writeAnimtionFrameSequenceToXml(String path, final ArrayList<AnimationFrame> animationFrames) {
+		if (!path.endsWith(".xml")) {
+			path = path + ".xml";
+		}
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();

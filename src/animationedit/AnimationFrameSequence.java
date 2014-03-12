@@ -59,6 +59,7 @@ public class AnimationFrameSequence {
 	}
 	
 	public AnimationFrame getAnimationFrame(int i) {
+		if (i < 0) return null;
 		if (i >= animationFrames.size()) return null;
 		return animationFrames.get(i);
 	}

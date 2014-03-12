@@ -490,4 +490,10 @@ public class AnimationEdit extends JFrame
 	public int getIndexOfAnimationFrameWithTag(String tag) {
 		return animationSequence.getFrameIndexOfTag(tag);
 	}
+
+
+	@Override
+	public int getSelectedAnimationFrameIndex() {
+		return animationFrameSelector.getSelectedIndex();
+	}
 }

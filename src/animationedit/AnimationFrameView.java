@@ -4,11 +4,13 @@ import graphicsutils.ImageStore;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
@@ -86,6 +88,7 @@ public class AnimationFrameView
 						BufferedImage bufImage = (BufferedImage)image;
 						int drawX = screenToModelCoord(e.getX()) - scrollX;
 						int drawY = screenToModelCoord(e.getY()) - scrollY;
+
 						if (drawX >= 0 && drawX < bufImage.getWidth() && drawY >= 0 && drawY < bufImage.getHeight()) {
 							bufImage.setRGB(drawX, drawY, 0xFF000000);
 						}
@@ -295,32 +298,59 @@ public class AnimationFrameView
     }
     
     
-    /**
-     * Paint.
-     * @param g
-     */
+    private void drawImage(Graphics g, Image image, int x, int y, float alpha, String failName) {
+    	if (image != null) {
+    		if (alpha < 0.00001f) alpha = 0.01f;
+    		float[] scales = { alpha, alpha, alpha, 1.0f };
+			float[] offsets = new float[4];
+			RescaleOp rop = new RescaleOp(scales, offsets, null);
+			((Graphics2D)g).drawImage((BufferedImage)image, rop, x, y);
+        } else {
+			g.setColor(Color.WHITE);
+			String failText = "No image with found with name " + failName;
+			g.drawString(failText,
+					getWidth()/2 - (int)g.getFontMetrics().getStringBounds(failText, g).getWidth()/2, 
+					getHeight()/2 - g.getFontMetrics().getHeight()/2);
+		}
+    }
+    
+    
     @Override
     public void paint(Graphics g) {
-
         super.paint(g);
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         ImageStore imageStore = componentsAccessor.getImageStore();
-        if (imageStore != null) {
-        	updateImageScrollFromMaxSize(imageStore.getMaxWidthOfImage(), imageStore.getMaxHeightOfImage());
-        	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
-        	if (frame != null) {
-        		Image image = imageStore.getImage(frame.getImage());
-	        	if (image != null) {
-	            	g.drawImage(image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), this);
-	            } else {
-					g.setColor(Color.WHITE);
-					String failText = "No image with found with name " + frame.getImage();
-					g.drawString(failText,
-							getWidth()/2 - (int)g.getFontMetrics().getStringBounds(failText, g).getWidth()/2, 
-							getHeight()/2 - g.getFontMetrics().getHeight()/2);
-				}
-        	}
-        } 
+        if (imageStore == null) return;
+    	updateImageScrollFromMaxSize(imageStore.getMaxWidthOfImage(), imageStore.getMaxHeightOfImage());
+    	
+    	int numOnionSkin = 5;
+    	for (int i = -numOnionSkin; i < 0; i++) {
+		    	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(
+		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
+	    	if (frame != null) {
+	    		Image image = imageStore.getImage(frame.getImage());
+	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
+	    				0.7f - ((float)Math.abs(i))/(numOnionSkin), frame.getImage());
+	    	}
+    	}
+    	for (int i = numOnionSkin; i > 0; i--) {
+	    	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(
+	    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
+	    	if (frame != null) {
+	    		Image image = imageStore.getImage(frame.getImage());
+	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
+	    				0.7f - ((float)Math.abs(i))/(numOnionSkin), frame.getImage());
+	    	}
+    	}
+    	
+    	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+    	if (frame != null) {
+    		Image image = imageStore.getImage(frame.getImage());
+    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 1.0f, frame.getImage());
+    	}
+    
     }
 
 	@Override

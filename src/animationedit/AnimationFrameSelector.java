@@ -43,6 +43,10 @@ public class AnimationFrameSelector extends JScrollPane
 		return (AnimationFrame)guiList.getSelectedValue();
 	}
 	
+	public int getSelectedIndex() {
+		return guiList.getSelectedIndex();
+	}
+	
 	@Override
 	public void onAnimationFrameSequenceChanged() {
 		if (animationFrames == null) return;
