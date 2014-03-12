@@ -2,6 +2,7 @@ package graphicsutils;
 
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class ImageStore {
 			imageToLoad = imageDirectory + imageName;
 		}
 		System.out.print("Load image " + imageToLoad);
-		Image loadedImage = null;
+		BufferedImage loadedImage = null;
 		try {
 		    loadedImage = ImageIO.read(new File(imageToLoad));
 		} catch (IOException e) {

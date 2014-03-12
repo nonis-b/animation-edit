@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 /**
@@ -71,18 +73,29 @@ public class AnimationFrameView
         e.consume();
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        // called during motion with buttons down
-        if (componentsAccessor.getSelectedTool() == ToolSelector.Tool.SET_TILE
-                || componentsAccessor.getSelectedTool() == ToolSelector.Tool.DELETE_TILE) {
-            click(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), true);
-            repaint();
-            e.consume();
-        }
-    }
-    
-    
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// called during motion with buttons down
+		ImageStore imageStore = componentsAccessor.getImageStore();
+		if (imageStore != null) {
+			AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+			if (frame != null) {
+				Image image = imageStore.getImage(frame.getImage());
+				if (image != null) {
+					if (image instanceof BufferedImage) {
+						BufferedImage bufImage = (BufferedImage)image;
+						int drawX = screenToModelCoord(e.getX()) - scrollX;
+						int drawY = screenToModelCoord(e.getY()) - scrollY;
+						if (drawX >= 0 && drawX < bufImage.getWidth() && drawY >= 0 && drawY < bufImage.getHeight()) {
+							bufImage.setRGB(drawX, drawY, 0xFF000000);
+						}
+					}
+				}
+			}
+		}
+		repaint();
+		e.consume();
+	}
     
 	/**
 	 * Map click to tool action.
@@ -209,14 +222,6 @@ public class AnimationFrameView
 //    }
 
     /**
-     * Select next layer in tilemap for editing.
-     */
-    public void selectNextLayer() {
-//        if (editlayer + 1 >= componentsAccessor.getLevelModel().getTileMap().getNumLayers()) return;
-//        editlayer ++ ;
-    }
-    
-    /**
      * Select previous layer in tilemap for editing.
      */
     public void selectPrevLayer() {
@@ -284,6 +289,12 @@ public class AnimationFrameView
     }
     
     
+    private void updateImageScrollFromMaxSize(int frameImagesMaxX, int frameImagesMaxy) {
+    	scrollX = getWidth()/2 - frameImagesMaxX/2;
+    	scrollY = getHeight()/2 - frameImagesMaxy/2;
+    }
+    
+    
     /**
      * Paint.
      * @param g
@@ -295,14 +306,12 @@ public class AnimationFrameView
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore != null) {
+        	updateImageScrollFromMaxSize(imageStore.getMaxWidthOfImage(), imageStore.getMaxHeightOfImage());
         	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
         	if (frame != null) {
         		Image image = imageStore.getImage(frame.getImage());
 	        	if (image != null) {
-	            	g.drawImage(image, 
-	            			getWidth()/2 - imageStore.getMaxWidthOfImage()/2 + frame.getOffsetX(), 
-	            			getHeight()/2 - imageStore.getMaxHeightOfImage()/2 + frame.getOffsetY(), 
-	            			this);
+	            	g.drawImage(image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), this);
 	            } else {
 					g.setColor(Color.WHITE);
 					String failText = "No image with found with name " + frame.getImage();
