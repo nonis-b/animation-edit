@@ -26,7 +26,6 @@ public class AnimationFrameView
 
     private int scrollX = 0;
     private int scrollY = 0; 
-    private int editlayer = 0;
     private float scale = 1.0f;
     private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
@@ -229,20 +228,6 @@ public class AnimationFrameView
 //        }
 //    }
 
-    /**
-     * Select previous layer in tilemap for editing.
-     */
-    public void selectPrevLayer() {
-        if (editlayer <= 0) return;
-        editlayer -- ;
-    }
-    
-    /**
-     * Get currently edited layer. 
-     */
-    public int getSelectedLayer() {
-        return editlayer;
-    }
     
     /**
      * Scroll position x
@@ -328,8 +313,7 @@ public class AnimationFrameView
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore == null) return;
-    	updateImageScrollFromMaxSize(imageStore.getMaxWidthOfImage(), imageStore.getMaxHeightOfImage());
-    	
+
     	for (int i = -numOnionSkin; i < 0; i++) {
 		    	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(
 		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
