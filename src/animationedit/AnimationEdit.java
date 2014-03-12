@@ -305,6 +305,25 @@ public class AnimationEdit extends JFrame
 				animationFrameSelector.getSelected().addToOffsetY(-10);
 			}
 			
+			if (event.getSource() == menu.onionSkinOffItem) {
+				animationFrameView.setOnionSkinDepth(0);
+			}
+			if (event.getSource() == menu.onionSkin1DepthItem) {
+				animationFrameView.setOnionSkinDepth(1);
+			}
+			if (event.getSource() == menu.onionSkin2DepthItem) {
+				animationFrameView.setOnionSkinDepth(2);
+			}
+			if (event.getSource() == menu.onionSkin3DepthItem) {
+				animationFrameView.setOnionSkinDepth(3);
+			}
+			if (event.getSource() == menu.onionSkin4DepthItem) {
+				animationFrameView.setOnionSkinDepth(4);
+			}
+			if (event.getSource() == menu.onionSkin5DepthItem) {
+				animationFrameView.setOnionSkinDepth(5);
+			}
+			
 			if (event.getSource() == menu.editFrameTicsItem) {
 				String val = JOptionPane.showInputDialog("Set tics for frame",
 						animationFrameSelector.getSelected().getTics());

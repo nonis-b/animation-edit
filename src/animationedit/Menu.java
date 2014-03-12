@@ -41,6 +41,13 @@ public class Menu extends JMenuBar {
 	protected JMenuItem moveFrameUpItem;
 	protected JMenuItem moveFrameDownItem;
 	
+	protected JMenuItem onionSkinOffItem;
+	protected JMenuItem onionSkin1DepthItem;
+	protected JMenuItem onionSkin2DepthItem;
+	protected JMenuItem onionSkin3DepthItem;
+	protected JMenuItem onionSkin4DepthItem;
+	protected JMenuItem onionSkin5DepthItem;
+	
 	protected JMenuItem offsetXPlus1PixItem;
 	protected JMenuItem offsetXMinus1PixItem;
 	protected JMenuItem offsetYPlus1PixItem;
@@ -122,6 +129,13 @@ public class Menu extends JMenuBar {
 		zoomInItem = addMenuItem(imageMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
 		zoomOutItem = addMenuItem(imageMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);
 	
+		onionSkinOffItem = addMenuItem(imageMenu, handler, "Onion skin off", KeyEvent.VK_0, KeyEvent.ALT_MASK);
+		onionSkin1DepthItem = addMenuItem(imageMenu, handler, "Onion skin 1 frame", KeyEvent.VK_1, KeyEvent.ALT_MASK);
+		onionSkin2DepthItem = addMenuItem(imageMenu, handler, "Onion skin 2 frame", KeyEvent.VK_2, KeyEvent.ALT_MASK);
+		onionSkin3DepthItem = addMenuItem(imageMenu, handler, "Onion skin 3 frame", KeyEvent.VK_3, KeyEvent.ALT_MASK);
+		onionSkin4DepthItem = addMenuItem(imageMenu, handler, "Onion skin 4 frame", KeyEvent.VK_4, KeyEvent.ALT_MASK);
+		onionSkin5DepthItem = addMenuItem(imageMenu, handler, "Onion skin 5 frame", KeyEvent.VK_5, KeyEvent.ALT_MASK);
+		
 		add(fileMenu);
 		//add(editMenu);
 		add(framesMenu);

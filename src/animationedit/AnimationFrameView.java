@@ -28,6 +28,7 @@ public class AnimationFrameView
     private int scrollY = 0; 
     private int editlayer = 0;
     private float scale = 1.0f;
+    private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     
@@ -41,6 +42,10 @@ public class AnimationFrameView
         this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(componentsAccessor.getConfig().bgCol);
+    }
+    
+    public void setOnionSkinDepth(int depth) {
+    	numOnionSkin = depth;
     }
     
     @Override
@@ -325,14 +330,13 @@ public class AnimationFrameView
         if (imageStore == null) return;
     	updateImageScrollFromMaxSize(imageStore.getMaxWidthOfImage(), imageStore.getMaxHeightOfImage());
     	
-    	int numOnionSkin = 5;
     	for (int i = -numOnionSkin; i < 0; i++) {
 		    	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(
 		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
 	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
-	    				0.7f - ((float)Math.abs(i))/(numOnionSkin), frame.getImage());
+	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
 	    	}
     	}
     	for (int i = numOnionSkin; i > 0; i--) {
@@ -341,7 +345,7 @@ public class AnimationFrameView
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
 	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
-	    				0.7f - ((float)Math.abs(i))/(numOnionSkin), frame.getImage());
+	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
 	    	}
     	}
     	
