@@ -309,28 +309,36 @@ public class AnimationEdit extends JFrame
 			
 			if (event.getSource() == menu.offsetXPlus1PixItem) {
 				animationFrameSelector.getSelected().addToOffsetX(1);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetXMinus1PixItem) {
 				animationFrameSelector.getSelected().addToOffsetX(-1);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetYPlus1PixItem) {
 				animationFrameSelector.getSelected().addToOffsetY(1);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetYMinus1PixItem) {
 				animationFrameSelector.getSelected().addToOffsetY(-1);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			
 			if (event.getSource() == menu.offsetXPlus10PixItem) {
 				animationFrameSelector.getSelected().addToOffsetX(10);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetXMinus10PixItem) {
 				animationFrameSelector.getSelected().addToOffsetX(-10);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetYPlus10PixItem) {
 				animationFrameSelector.getSelected().addToOffsetY(10);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			if (event.getSource() == menu.offsetYMinus10PixItem) {
 				animationFrameSelector.getSelected().addToOffsetY(-10);
+				animationFrameSelector.onAnimationFrameSequenceChanged();
 			}
 			
 			if (event.getSource() == menu.onionSkinOffItem) {

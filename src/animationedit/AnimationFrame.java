@@ -26,6 +26,8 @@ public class AnimationFrame {
 		if (tics > 1) ret += " (tics: " + tics + ")";
 		if (!tag.isEmpty()) ret += " (tag: " + tag + ")";
 		if (!next.isEmpty()) ret += " (next: " + next + ")";
+		if (offsetX != 0) ret += " (offsetX: " + offsetX + ")";
+		if (offsetY != 0) ret += " (offsetY: " + offsetY + ")";
 		return ret;
 	}
 	
