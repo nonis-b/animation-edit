@@ -166,6 +166,7 @@ public class AnimationEdit extends JFrame
 			System.out.println("Save to file " + selFile.getAbsolutePath());
 		}
 
+		if (selFile == null) return null;
 		return selFile.getAbsolutePath();
 	}
 
@@ -185,7 +186,7 @@ public class AnimationEdit extends JFrame
 		int returnVal = fc.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			fc.getSelectedFile().getAbsolutePath();
+			return fc.getSelectedFile().getAbsolutePath();
 		}
 		return null;
 	}
@@ -441,6 +442,9 @@ public class AnimationEdit extends JFrame
 		if (path != null) {
 			File file = new File(path);
 			if (!file.exists() && !file.isDirectory()) {
+				if (!path.endsWith(".xml")) {
+					path = path + ".xml";
+				}
 				file = new File(path);
 				ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
 				for (String dirFileName : file.getParentFile().list()) {

@@ -80,9 +80,6 @@ public class AnimationFrameSequenceFile {
 	}
 	
 	public static boolean writeAnimtionFrameSequenceToXml(String path, final ArrayList<AnimationFrame> animationFrames) {
-		if (!path.endsWith(".xml")) {
-			path = path + ".xml";
-		}
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
