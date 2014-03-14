@@ -34,11 +34,6 @@ public class AnimationFrameView
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     
-    /**
-     * Constructor.
-     * @param componentsAccessor
-     * @param toolSelector
-     */
     public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
         this.componentsAccessor = componentsAccessor;
@@ -52,7 +47,6 @@ public class AnimationFrameView
     
     @Override
     public void mousePressed(MouseEvent e) {    	
-        click(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), true);
         repaint();
     }
 
@@ -70,7 +64,6 @@ public class AnimationFrameView
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        click(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), false);
         repaint();
     }
 
@@ -95,7 +88,6 @@ public class AnimationFrameView
 						BufferedImage bufImage = (BufferedImage)image;
 						int drawX = screenToModelCoord(e.getX());
 						int drawY = screenToModelCoord(e.getY());
-
 						if (drawX >= 0 && drawX < bufImage.getWidth() && drawY >= 0 && drawY < bufImage.getHeight()) {
 							bufImage.setRGB(drawX, drawY, 0xFF000000);
 						}
@@ -106,130 +98,7 @@ public class AnimationFrameView
 		repaint();
 		e.consume();
 	}
-    
-	/**
-	 * Map click to tool action.
-	 * 
-	 * @param x
-	 *            Mouse pos x (model coords)
-	 * @param y
-	 *            Mouse pos y (model coords)
-	 * @param repeated
-	 *            If the click event is from a "press down".
-	 */
-	public void click(int x, int y, boolean repeated) {
 
-		switch (componentsAccessor.getSelectedTool()) {
-
-		case NEW_DUMMY:
-//			if (!repeated) {
-//				componentsAccessor.getLevelModel().isAboutToAlterState();
-//				DummyObject d = componentsAccessor.createNewDummyFromSelectedType();
-//				componentsAccessor.getLevelModel().getDummyObjects().newDummy(x + scrollX, y + scrollY, d);
-//			}
-			break;
-
-		case SELECT_DUMMY:
-//			componentsAccessor.getLevelModel().getDummyObjects().selectDummy(x + scrollX, y + scrollY);
-			break;
-
-		case DELETE_DUMMY:
-//			componentsAccessor.getLevelModel().isAboutToAlterState();
-//			componentsAccessor.getLevelModel().getDummyObjects().deleteDummy(x + scrollX, y + scrollY);
-			break;
-
-		case SET_TILE:
-		case DELETE_TILE:
-//			if (!repeated || System.currentTimeMillis() - lastMousePressStateSaveTime > 500) {
-//				lastMousePressStateSaveTime = System.currentTimeMillis();
-//				componentsAccessor.getLevelModel().isAboutToAlterState();
-//			}
-//			if (componentsAccessor.getSelectedTileIndex() != -1) {
-//				setTileVal(x, y, componentsAccessor.getSelectedTileIndex());
-//			}
-			break;
-			
-		case FILL_TILE:
-		case LINE_TILE:
-//			if (!repeated || System.currentTimeMillis() - lastMousePressStateSaveTime > 500) {
-//				lastMousePressStateSaveTime = System.currentTimeMillis();
-//				componentsAccessor.getLevelModel().isAboutToAlterState();
-//			}
-//			if (componentsAccessor.getSelectedTileIndex() != -1) {
-//				setTileVal(x, y, componentsAccessor.getSelectedTileIndex());
-//			}
-			break;
-			
-		case PICKUP_TILE:
-//			if (componentsAccessor.getSelectedTileIndex() != -1) {
-//				setTileVal(x, y, componentsAccessor.getSelectedTileIndex());
-//			}
-			break;
-		}
-		requestFocusInWindow();
-	}
-    
-    
-    /**
-     * Sets tile at mouse click, decides how to behave dependent on selected 
-     * tool.
-     * @param x Mouse x (model coords)
-     * @param y Mouse y (model coords)
-     * @param tileIndex Tile index number
-     */
-//    public void setTileVal(int x, int y, int tileIndex) {
-//		// to tile index
-//        int tX = (x + getScrollX()) / componentsAccessor.getConfig().representationTileSize;
-//		int tY = (y + getScrollY()) / componentsAccessor.getConfig().representationTileSize;
-//
-//        // tiles are 1 indexed.
-//        tileIndex++;
-//        
-//        // set tile
-//        switch (componentsAccessor.getSelectedTool()) {
-//            case SET_TILE:
-//            	componentsAccessor.getLevelModel().getTileMap().setTileVal(tX, tY, editlayer, tileIndex);
-//                break;
-//            case DELETE_TILE:
-//            	componentsAccessor.getLevelModel().getTileMap().setTileVal(tX, tY, editlayer, 0);
-//                break;
-//            case PICKUP_TILE:
-//            	componentsAccessor.setSelectedTileIndex(tileIndex);
-//                break;
-//            case FILL_TILE:
-//            	componentsAccessor.getLevelModel().getTileMap().fill(editlayer, tX, tY,
-//            			componentsAccessor.getLevelModel().getTileMap().getTileVal(tX, tY, editlayer),
-//                    tileIndex);
-//                break;
-//            case LINE_TILE:
-//                    
-//                
-//                if (lineToolFirstClick) {
-//                    lineToolFirstClick = false;
-//                    componentsAccessor.getLevelModel().getTileMap().setTileVal(tX, tY, editlayer, tileIndex);
-//                }
-//                else {
-//                	componentsAccessor.getLevelModel().isAboutToAlterState();
-//                	componentsAccessor.getLevelModel().getTileMap().drawLine(editlayer, lastEditedTileX,
-//                        lastEditedTileY, tX, tY, tileIndex);
-//                }
-//                break;
-//		case DELETE_DUMMY:
-//			break;
-//		case NEW_DUMMY:
-//			break;
-//		case SELECT_DUMMY:
-//			break;
-//		default:
-//			break;
-//        }
-//
-//        lastEditedTileX = tX;
-//        lastEditedTileY = tY;
-//        if (componentsAccessor.getSelectedTool() != ToolSelector.Tool.LINE_TILE) {
-//            lineToolFirstClick = true;
-//        }
-//    }
     
     /**
      * Zoom view.
