@@ -26,9 +26,7 @@ import javax.swing.Scrollable;
 public class AnimationFrameView
         extends JPanel
         implements MouseListener, MouseMotionListener, SelectedAnimationFrameChangeListener, Scrollable {
-
-    private int scrollX = 0;
-    private int scrollY = 0; 
+	
     private float scale = 1.0f;
     private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
@@ -92,8 +90,8 @@ public class AnimationFrameView
 				if (image != null) {
 					if (image instanceof BufferedImage) {
 						BufferedImage bufImage = (BufferedImage)image;
-						int drawX = screenToModelCoord(e.getX()) - scrollX;
-						int drawY = screenToModelCoord(e.getY()) - scrollY;
+						int drawX = screenToModelCoord(e.getX());
+						int drawY = screenToModelCoord(e.getY());
 
 						if (drawX >= 0 && drawX < bufImage.getWidth() && drawY >= 0 && drawY < bufImage.getHeight()) {
 							bufImage.setRGB(drawX, drawY, 0xFF000000);
@@ -229,40 +227,6 @@ public class AnimationFrameView
 //            lineToolFirstClick = true;
 //        }
 //    }
-
-    
-    /**
-     * Scroll position x
-     * @return scrollX
-     */
-    public int getScrollX() {
-        return scrollX;
-    }
- 
-    /**
-     * Scroll position y
-     * @return scrollY
-     */
-    public int getScrollY() {
-        return scrollY;
-    }
-    
-    /**
-     * Scroll in x direction.
-     * @param length Pixels to scroll.
-     */
-    public void scrollX(int length) {
-        scrollX += length/scale;
-    }
-    
-    /**
-     * Scroll in y direction.
-     * @param length Pixels to scroll.
-     */
-    public void scrollY(int length) {
-        scrollY += length/scale;
-    }
-
     
     /**
      * Zoom view.
@@ -285,7 +249,7 @@ public class AnimationFrameView
     
     
     public void maxSizeChanged(int maxX, int maxY) {
-    	setPreferredSize(new Dimension(maxX, maxY));
+    	setPreferredSize(new Dimension(maxX*5, maxY*5));
     	revalidate();
     }
     
@@ -321,7 +285,7 @@ public class AnimationFrameView
 		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
+	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
 	    	}
     	}
@@ -330,7 +294,7 @@ public class AnimationFrameView
 	    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 
+	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
 	    	}
     	}
@@ -338,7 +302,7 @@ public class AnimationFrameView
     	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
     	if (frame != null) {
     		Image image = imageStore.getImage(frame.getImage());
-    		drawImage(g, image, scrollX + frame.getOffsetX(), scrollY + frame.getOffsetY(), 1.0f, frame.getImage());
+    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
     	}
     
     }

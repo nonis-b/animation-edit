@@ -113,9 +113,7 @@ public class AnimationEdit extends JFrame
 		animationFrameView.addMouseMotionListener(animationFrameView);
 		
 		JScrollPane scrollPane = new JScrollPane(animationFrameView);
-		scrollPane.setPreferredSize(new Dimension(300, 250));
 		panel.add(scrollPane);
-		//panel.add(animationFrameView);
 		
 		panel.add(animationPreview);
 		
@@ -246,23 +244,6 @@ public class AnimationEdit extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			if (event.getSource() == menu.undoItem) {
-//				level.undo();
-			}
-
-			// scroll
-			if (event.getSource() == menu.scrollUpItem) {
-				animationFrameView.scrollY(-10);
-			}
-			if (event.getSource() == menu.scrollDownItem) {
-				animationFrameView.scrollY(10);
-			}
-			if (event.getSource() == menu.scrollLeftItem) {
-				animationFrameView.scrollX(-10);
-			}
-			if (event.getSource() == menu.scrollRightItem) {
-				animationFrameView.scrollX(10);
-			}
 			if (event.getSource() == menu.zoomInItem) {
 				animationFrameView.zoom(2.0f);
 			}

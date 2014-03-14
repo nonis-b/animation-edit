@@ -24,10 +24,6 @@ public class Menu extends JMenuBar {
 	protected JMenuItem undoItem;
 	protected JMenuItem zoomInItem;
 	protected JMenuItem zoomOutItem;
-	protected JMenuItem scrollLeftItem;
-	protected JMenuItem scrollRightItem;
-	protected JMenuItem scrollUpItem;
-	protected JMenuItem scrollDownItem;
 	protected JMenuItem preview1FpsItem;
 	protected JMenuItem preview2FpsItem;
 	protected JMenuItem preview10FpsItem;
@@ -122,10 +118,6 @@ public class Menu extends JMenuBar {
 		editFrameTagItem = addMenuItem(imageMenu, handler, "Edit frame tag", KeyEvent.VK_G, KeyEvent.CTRL_MASK);
 		editFrameNextItem = addMenuItem(imageMenu, handler, "Edit frame next tag", KeyEvent.VK_F, KeyEvent.CTRL_MASK);
 		
-		scrollLeftItem = addMenuItem(imageMenu, handler, "Scroll left", KeyEvent.VK_A, 0);
-		scrollRightItem = addMenuItem(imageMenu, handler, "Scroll right", KeyEvent.VK_D, 0);
-		scrollUpItem = addMenuItem(imageMenu, handler, "Scroll up", KeyEvent.VK_W, 0);
-		scrollDownItem = addMenuItem(imageMenu, handler, "Scroll down", KeyEvent.VK_S, 0);
 		zoomInItem = addMenuItem(imageMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
 		zoomOutItem = addMenuItem(imageMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);
 	
