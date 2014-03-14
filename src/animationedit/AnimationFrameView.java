@@ -1,5 +1,6 @@
 package animationedit;
 
+import graphicsutils.CompatibleImageCreator;
 import graphicsutils.ImageStore;
 
 import java.awt.Color;
@@ -27,6 +28,7 @@ public class AnimationFrameView
         extends JPanel
         implements MouseListener, MouseMotionListener, SelectedAnimationFrameChangeListener, Scrollable {
 	
+	private Image offscreenBufferImage;
     private float scale = 1.0f;
     private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
@@ -41,6 +43,7 @@ public class AnimationFrameView
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
         this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
+        offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
     }
     
     public void setOnionSkinDepth(int depth) {
@@ -234,6 +237,8 @@ public class AnimationFrameView
      */
     public void zoom(float scaleFactor) {
     	scale *= scaleFactor;
+    	setPreferredSize(new Dimension((int)(getWidth()*scale), (int)(getHeight()*scale)));
+    	revalidate();
     	System.out.println("Change zoom to " + scale);
     }
     
@@ -243,13 +248,8 @@ public class AnimationFrameView
     }
 
     
-    private int modelToScreenCoord(int modelCoord) {
-    	return (int)(modelCoord * scale);
-    }
-    
-    
     public void maxSizeChanged(int maxX, int maxY) {
-    	setPreferredSize(new Dimension(maxX*5, maxY*5));
+    	setPreferredSize(new Dimension((int)(maxX*scale), (int)(maxY*scale)));
     	revalidate();
     }
     
@@ -260,7 +260,11 @@ public class AnimationFrameView
     		float[] scales = { alpha, alpha, alpha, 1.0f };
 			float[] offsets = new float[4];
 			RescaleOp rop = new RescaleOp(scales, offsets, null);
-			((Graphics2D)g).drawImage((BufferedImage)image, rop, x, y);
+			((Graphics2D)(offscreenBufferImage.getGraphics())).drawImage((BufferedImage)image, rop, x, y);
+			g.drawImage(offscreenBufferImage, (int)(x*scale), (int)(y*scale), 
+					(int)(image.getWidth(null)*scale), (int)(image.getHeight(null)*scale), 
+					0, 0, image.getWidth(null), image.getHeight(null), null);
+			
         } else {
 			g.setColor(Color.WHITE);
 			String failText = "No image with found with name " + failName;

@@ -34,4 +34,27 @@ public class CompatibleImageCreator {
         
         return compatibleImage;
 	}
+	
+	/**
+	 * Create image optimized for drawing on current system.
+	 * @param w Width.
+	 * @param h Height.
+	 * @return Optimized image.
+	 */
+	public static Image createCompatibleImage(int w, int h) {
+
+        GraphicsConfiguration graphicsConfiguration
+                = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration();
+         
+        BufferedImage compatibleImage
+                = graphicsConfiguration.createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+
+        Graphics g = compatibleImage.getGraphics();
+        g.dispose();
+        
+        return compatibleImage;
+	}
 }
