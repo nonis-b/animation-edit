@@ -2,6 +2,7 @@ package animationedit;
 
 import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -20,12 +21,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 
 import graphicsutils.ImageStore;
+import graphicsutils.ImageStoreMaxSizeChangedListener;
 
 import animationedit.ToolSelector.Tool;
 
@@ -35,7 +38,8 @@ import animationedit.ToolSelector.Tool;
  */
 public class AnimationEdit extends JFrame 
 	implements AnimationEditComponentsAccessor,
-				AnimationFrameSequenceInfoProvider
+				AnimationFrameSequenceInfoProvider,
+				ImageStoreMaxSizeChangedListener
 	{
 
 	private ToolSelector toolSelector;
@@ -104,10 +108,14 @@ public class AnimationEdit extends JFrame
 		JToolBar animationFrameSelectorToolBar = new JToolBar();
 		animationFrameSelectorToolBar.add(animationFrameSelector);
 		panel.add(animationFrameSelectorToolBar);
-
+		
 		animationFrameView.addMouseListener(animationFrameView);
 		animationFrameView.addMouseMotionListener(animationFrameView);
-		panel.add(animationFrameView);
+		
+		JScrollPane scrollPane = new JScrollPane(animationFrameView);
+		scrollPane.setPreferredSize(new Dimension(300, 250));
+		panel.add(scrollPane);
+		//panel.add(animationFrameView);
 		
 		panel.add(animationPreview);
 		
@@ -467,6 +475,7 @@ public class AnimationEdit extends JFrame
 			animationSequence = new AnimationFrameSequence(dir, path);
 			animationSequence.addChangeListener(animationFrameSelector);
 			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+			animationSequence.getImageStore().addMaxSizeChangedListener(this);
 			setCurrentAnimationSequenceFile(path);
 		}
 	}
@@ -548,5 +557,11 @@ public class AnimationEdit extends JFrame
 	@Override
 	public int getSelectedAnimationFrameIndex() {
 		return animationFrameSelector.getSelectedIndex();
+	}
+
+
+	@Override
+	public void maxSizeChanged(int maxX, int maxY) {
+		animationFrameView.maxSizeChanged(maxX, maxY);
 	}
 }

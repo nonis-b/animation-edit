@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class ImageStore {
 	private final String imageDirectory;
 	private int maxImageWidth = 1;
 	private int maxImageHeight = 1;
+	private ArrayList<ImageStoreMaxSizeChangedListener> listeners = new ArrayList<ImageStoreMaxSizeChangedListener>();
 	
 	public ImageStore(String imageDirectory) {
 		if (!imageDirectory.endsWith("/")) {
@@ -23,6 +25,14 @@ public class ImageStore {
 		}
 		this.imageDirectory = imageDirectory;
 		images = new HashMap<String, Image>();
+	}
+	
+	public void addMaxSizeChangedListener(ImageStoreMaxSizeChangedListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeMaxSizeChangedListener(ImageStoreMaxSizeChangedListener listener) {
+		listeners.remove(listener);
 	}
 	
 	/**
@@ -45,6 +55,7 @@ public class ImageStore {
 	}
 	
 	private void calculateImageSizes() {
+		int oldMaxImageWidth = maxImageWidth;
 		maxImageWidth = 1;
 		for (Map.Entry<String, Image> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
@@ -54,6 +65,7 @@ public class ImageStore {
 				}
 			}
 		}
+		int oldMaxImageHeight = maxImageHeight;
 		maxImageHeight = 1;
 		for (Map.Entry<String, Image> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
@@ -61,6 +73,11 @@ public class ImageStore {
 				if (val > maxImageHeight) {
 					maxImageHeight = val;
 				}
+			}
+		}
+		if (oldMaxImageWidth != maxImageWidth || oldMaxImageHeight != maxImageHeight) {
+			for (ImageStoreMaxSizeChangedListener listener : listeners) {
+				listener.maxSizeChanged(maxImageWidth, maxImageHeight);
 			}
 		}
 	}

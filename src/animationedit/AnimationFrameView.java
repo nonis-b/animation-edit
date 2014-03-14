@@ -3,9 +3,11 @@ package animationedit;
 import graphicsutils.ImageStore;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
+import javax.swing.Scrollable;
 
 /**
  * Panel showing the currently selected frame.
@@ -22,7 +25,7 @@ import javax.swing.JPanel;
  */
 public class AnimationFrameView
         extends JPanel
-        implements MouseListener, MouseMotionListener, SelectedAnimationFrameChangeListener {
+        implements MouseListener, MouseMotionListener, SelectedAnimationFrameChangeListener, Scrollable {
 
     private int scrollX = 0;
     private int scrollY = 0; 
@@ -281,9 +284,9 @@ public class AnimationFrameView
     }
     
     
-    private void updateImageScrollFromMaxSize(int frameImagesMaxX, int frameImagesMaxy) {
-    	scrollX = getWidth()/2 - frameImagesMaxX/2;
-    	scrollY = getHeight()/2 - frameImagesMaxy/2;
+    public void maxSizeChanged(int maxX, int maxY) {
+    	setPreferredSize(new Dimension(maxX, maxY));
+    	revalidate();
     }
     
     
@@ -343,5 +346,30 @@ public class AnimationFrameView
 	@Override
 	public void onSelectedAnimationFrameChanged() {
 		repaint();
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return super.getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
+		return 100;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
+		return 5;
 	}
 }
