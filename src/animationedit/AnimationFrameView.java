@@ -2,6 +2,7 @@ package animationedit;
 
 import graphicsutils.CompatibleImageCreator;
 import graphicsutils.ImageStore;
+import graphicsutils.PenDrawingTool;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,6 +34,7 @@ public class AnimationFrameView
     private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
+    private PenDrawingTool penDrawingTool = new PenDrawingTool();
     
     public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
@@ -46,12 +48,23 @@ public class AnimationFrameView
     }
     
     @Override
-    public void mousePressed(MouseEvent e) {    	
-        repaint();
+    public void mousePressed(MouseEvent e) {    
+    	BufferedImage image = getCurrentFrameBufferedImage();
+		if (image != null) {
+			penDrawingTool.onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			repaint();
+		}
+        e.consume();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+    	BufferedImage image = getCurrentFrameBufferedImage();
+		if (image != null) {
+			penDrawingTool.onMouseRelease(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			repaint();
+		}
+        e.consume();
     }
 
     @Override
@@ -78,6 +91,16 @@ public class AnimationFrameView
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// called during motion with buttons down
+		BufferedImage image = getCurrentFrameBufferedImage();
+		if (image != null) {
+			penDrawingTool.onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			repaint();
+		}
+		e.consume();
+	}
+
+	
+	private BufferedImage getCurrentFrameBufferedImage() {
 		ImageStore imageStore = componentsAccessor.getImageStore();
 		if (imageStore != null) {
 			AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
@@ -85,20 +108,14 @@ public class AnimationFrameView
 				Image image = imageStore.getImage(frame.getImage());
 				if (image != null) {
 					if (image instanceof BufferedImage) {
-						BufferedImage bufImage = (BufferedImage)image;
-						int drawX = screenToModelCoord(e.getX());
-						int drawY = screenToModelCoord(e.getY());
-						if (drawX >= 0 && drawX < bufImage.getWidth() && drawY >= 0 && drawY < bufImage.getHeight()) {
-							bufImage.setRGB(drawX, drawY, 0xFF000000);
-						}
+						return (BufferedImage)image;
 					}
 				}
 			}
 		}
-		repaint();
-		e.consume();
+		return null;
 	}
-
+	
     
     /**
      * Zoom view.
