@@ -1,4 +1,5 @@
-package graphicsutils;
+package drawingtools;
+
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;

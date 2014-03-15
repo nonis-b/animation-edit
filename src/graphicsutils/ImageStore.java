@@ -24,6 +24,10 @@ public class ImageStore {
 		}
 	}
 	
+	public interface ImageStoreMaxSizeChangedListener {
+		public void maxSizeChanged(int maxX, int maxY);
+	}
+	
 	private Map<String, ImageRecord> images;
 	private final String imageDirectory;
 	private int maxImageWidth = 1;

@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +12,7 @@ import javax.swing.KeyStroke;
  * The application menu bar.
  * 
  */
-public class Menu extends JMenuBar {
+public class ApplicationMenu extends JMenuBar {
 
 	protected JMenuItem newItem;
 	protected JMenuItem saveItem;
@@ -71,7 +71,7 @@ public class Menu extends JMenuBar {
 		return item;
 	}
 
-	public Menu(ActionListener handler) {
+	public ApplicationMenu(ActionListener handler) {
 		super();
 
 		JMenu fileMenu = new JMenu("File");

@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import java.awt.Color;
 import java.io.IOException;

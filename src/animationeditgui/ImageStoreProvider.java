@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import graphicsutils.ImageStore;
 

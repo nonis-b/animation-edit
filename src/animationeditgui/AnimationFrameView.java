@@ -1,7 +1,6 @@
-package animationedit;
+package animationeditgui;
 
 import graphicsutils.CompatibleImageCreator;
-import graphicsutils.DrawingToolSelector;
 import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 
@@ -19,6 +18,11 @@ import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
+
+import drawingtools.DrawingToolSelector;
+
+import animationframesequence.AnimationFrame;
+import animationframesequence.AnimationFrameSequenceInfoProvider;
 
 /**
  * Panel showing the currently selected frame.

@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import graphicsutils.ImageStore;
 
@@ -9,6 +9,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
+
+import animationframesequence.AnimationFrame;
+import animationframesequence.AnimationFrameSequenceInfoProvider;
 
 /**
  * Shows the animation played back.

@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -18,25 +18,30 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import animationedit.DirectoryChangeWatcher.DirectoryChangedListener;
+import drawingtools.CurrentBrushSelector;
+import drawingtools.CurrentColorSelector;
+import drawingtools.DrawingTool;
+import drawingtools.DrawingToolSelector;
+import drawingtools.EraseDrawingTool;
+import drawingtools.PenDrawingTool;
+import drawingtools.PickupColorDrawingTool;
+
+import animationeditgui.DirectoryChangeWatcher.DirectoryChangedListener;
+import animationframesequence.AnimationFrame;
+import animationframesequence.AnimationFrameSequence;
+import animationframesequence.AnimationFrameSequenceFile;
+import animationframesequence.AnimationFrameSequenceInfoProvider;
 
 
-import graphicsutils.CurrentBrushSelector;
-import graphicsutils.CurrentColorSelector;
-import graphicsutils.DrawingTool;
-import graphicsutils.DrawingToolSelector;
-import graphicsutils.EraseDrawingTool;
 import graphicsutils.ImageStore;
-import graphicsutils.ImageStoreMaxSizeChangedListener;
-import graphicsutils.PenDrawingTool;
-import graphicsutils.PickupColorDrawingTool;
+import graphicsutils.ImageStore.ImageStoreMaxSizeChangedListener;
 
 
 /**
  * Main window.
  * 
  */
-public class AnimationEdit extends JFrame 
+public class LevelEditApplication extends JFrame 
 	implements ImageStoreProvider,
 				AnimationFrameSequenceInfoProvider,
 				ImageStoreMaxSizeChangedListener,
@@ -47,7 +52,7 @@ public class AnimationEdit extends JFrame
 	{
 
 	private AnimationFrameSelector animationFrameSelector;
-	private Menu menu;
+	private ApplicationMenu menu;
 	private ApplicationConfig config;
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
@@ -64,7 +69,7 @@ public class AnimationEdit extends JFrame
 	 * @param configFilePath Config file path.
 	 * @param animationSequenceFile File to open.
 	 */
-	public AnimationEdit(String configFilePath, String animationSequenceFile) {
+	public LevelEditApplication(String configFilePath, String animationSequenceFile) {
 		super("AnimationEdit");
 
 		config = new ApplicationConfig(configFilePath);	
@@ -101,7 +106,7 @@ public class AnimationEdit extends JFrame
 	private void createGui(Container container) {
 		AnimationEditHandler handler = new AnimationEditHandler();
 
-		menu = new Menu(handler);
+		menu = new ApplicationMenu(handler);
 		setJMenuBar(menu);
 
 		JPanel panel = new JPanel();
@@ -384,7 +389,7 @@ public class AnimationEdit extends JFrame
 		}
 		
 		try {
-			AnimationEdit app = new AnimationEdit(configFile, animationSequenceFile);
+			LevelEditApplication app = new LevelEditApplication(configFile, animationSequenceFile);
 			app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {

@@ -1,4 +1,5 @@
-package graphicsutils;
+package drawingtools;
+
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;

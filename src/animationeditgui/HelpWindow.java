@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import java.awt.Desktop;
 import java.io.IOException;

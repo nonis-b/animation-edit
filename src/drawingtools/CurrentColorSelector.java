@@ -1,4 +1,4 @@
-package graphicsutils;
+package drawingtools;
 
 import java.awt.Color;
 

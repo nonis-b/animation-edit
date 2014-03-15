@@ -1,4 +1,5 @@
-package graphicsutils;
+package drawingtools;
+
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

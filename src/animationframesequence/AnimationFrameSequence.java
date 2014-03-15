@@ -1,4 +1,4 @@
-package animationedit;
+package animationframesequence;
 
 import java.util.ArrayList;
 

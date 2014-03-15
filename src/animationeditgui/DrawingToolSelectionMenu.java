@@ -1,6 +1,5 @@
-package animationedit;
+package animationeditgui;
 
-import graphicsutils.DrawingTool;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+
+import drawingtools.DrawingTool;
 
 /**
  * Panel to select drawing tool.

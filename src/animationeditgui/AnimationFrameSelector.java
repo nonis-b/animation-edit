@@ -1,4 +1,4 @@
-package animationedit;
+package animationeditgui;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import animationframesequence.AnimationFrame;
+import animationframesequence.AnimationFrameSequenceChangedListener;
 
 
 /**
