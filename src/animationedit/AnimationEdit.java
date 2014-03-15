@@ -28,6 +28,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 
+import graphicsutils.CurrentBrushSelector;
 import graphicsutils.CurrentColorSelector;
 import graphicsutils.DrawingTool;
 import graphicsutils.DrawingToolSelector;
@@ -47,7 +48,8 @@ public class AnimationEdit extends JFrame
 				AnimationFrameSequenceInfoProvider,
 				ImageStoreMaxSizeChangedListener,
 				DrawingToolSelector,
-				CurrentColorSelector
+				CurrentColorSelector, 
+				CurrentBrushSelector
 	{
 
 	private AnimationFrameSelector animationFrameSelector;
@@ -61,6 +63,7 @@ public class AnimationEdit extends JFrame
 	private Timer filePollTimer;
 	private JColorChooser colorChooser;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
+	private SelectBrushSizeField selectBrushSizeField;
 	
 	/**
 	 * Setup app.
@@ -130,9 +133,14 @@ public class AnimationEdit extends JFrame
 		colorChooser = new JColorChooser();
 		drawingToolsPanel.add(colorChooser);
 
-		drawingToolSelectionMenu = new DrawingToolSelectionMenu(new PenDrawingTool(this), new EraseDrawingTool(), 
+		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
+				new PenDrawingTool(this, this), 
+				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this));
 		drawingToolsPanel.add(drawingToolSelectionMenu);
+		
+		selectBrushSizeField = new SelectBrushSizeField();
+		drawingToolsPanel.add(selectBrushSizeField);
 		
 		panel.add(drawingToolsPanel);
 		container.add(panel);
@@ -575,5 +583,11 @@ public class AnimationEdit extends JFrame
 	@Override
 	public void setColor(Color color) {
 		colorChooser.setColor(color);
+	}
+
+
+	@Override
+	public float getBrushWidth() {
+		return selectBrushSizeField.getBrushSize();
 	}
 }

@@ -1,6 +1,7 @@
 package graphicsutils;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -13,14 +14,17 @@ public class EraseDrawingTool implements DrawingTool {
 	private int lastMouseDownX = -1;
 	private int lastMouseDownY = -1;
 	private Color eraseColor = new Color(0, 0, 0, 0);
+	private CurrentBrushSelector brushSelector;
 	
-	public EraseDrawingTool() {
+	public EraseDrawingTool(CurrentBrushSelector brushSelector) {
+		this.brushSelector = brushSelector;
 	}
 	
 	@Override
 	public void onMouseDown(BufferedImage image, int x, int y) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
 		g.setColor(eraseColor);
+		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.setComposite(AlphaComposite.Clear);
 		image.getGraphics().drawLine(x, y, x, y);
 		g.setComposite(AlphaComposite.Src);
@@ -38,6 +42,7 @@ public class EraseDrawingTool implements DrawingTool {
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
 		Graphics2D g = (Graphics2D)image.getGraphics();
+		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.setColor(eraseColor);
 		g.setComposite(AlphaComposite.Clear);
 		g.drawLine(lastMouseDownX, lastMouseDownY, x, y);
