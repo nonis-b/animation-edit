@@ -40,11 +40,13 @@ public class DrawingToolSelectionMenu extends JToolBar {
 		add(button);
 	}
 
-	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool) {
+	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool, 
+			DrawingTool pickupColorDrawingTool) {
 		super();
 		this.tool = penDrawingTool;
 		createButton(penDrawingTool, "res/toolPen.png");
 		createButton(eraseDrawingTool, "res/toolErase.png");
+		createButton(pickupColorDrawingTool, "res/toolPickup.png");
 		setLayout(new GridLayout(3, 3));
 	}
 

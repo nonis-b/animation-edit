@@ -35,6 +35,7 @@ import graphicsutils.EraseDrawingTool;
 import graphicsutils.ImageStore;
 import graphicsutils.ImageStoreMaxSizeChangedListener;
 import graphicsutils.PenDrawingTool;
+import graphicsutils.PickupColorDrawingTool;
 
 
 /**
@@ -129,7 +130,8 @@ public class AnimationEdit extends JFrame
 		colorChooser = new JColorChooser();
 		drawingToolsPanel.add(colorChooser);
 
-		drawingToolSelectionMenu = new DrawingToolSelectionMenu(new PenDrawingTool(this), new EraseDrawingTool());
+		drawingToolSelectionMenu = new DrawingToolSelectionMenu(new PenDrawingTool(this), new EraseDrawingTool(), 
+				new PickupColorDrawingTool(this));
 		drawingToolsPanel.add(drawingToolSelectionMenu);
 		
 		panel.add(drawingToolsPanel);
@@ -567,5 +569,11 @@ public class AnimationEdit extends JFrame
 	@Override
 	public Color getColor() {
 		return colorChooser.getColor();
+	}
+
+
+	@Override
+	public void setColor(Color color) {
+		colorChooser.setColor(color);
 	}
 }
