@@ -55,6 +55,7 @@ public class AnimationFrameView
     public void mousePressed(MouseEvent e) {    
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
+			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
@@ -65,6 +66,7 @@ public class AnimationFrameView
     public void mouseReleased(MouseEvent e) {
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
+			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseRelease(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
@@ -97,10 +99,22 @@ public class AnimationFrameView
 		// called during motion with buttons down
 		BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
+			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
 		e.consume();
+	}
+	
+	
+	private void setCurrentFrameImageModified() {
+		ImageStore imageStore = componentsAccessor.getImageStore();
+		if (imageStore != null) {
+			AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+			if (frame != null) {
+				componentsAccessor.getImageStore().setImageWasModified(frame.getImage());
+			}
+		}
 	}
 
 	

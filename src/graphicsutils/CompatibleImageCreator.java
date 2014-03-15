@@ -14,7 +14,7 @@ public class CompatibleImageCreator {
 	 * @param oldImage Image to be optimized.
 	 * @return Optimized image.
 	 */
-	public static Image createCompatibleImage(Image oldImage) {
+	public static BufferedImage createCompatibleImage(Image oldImage) {
 
         GraphicsConfiguration graphicsConfiguration
                 = GraphicsEnvironment

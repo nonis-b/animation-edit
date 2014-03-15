@@ -13,7 +13,18 @@ import javax.imageio.ImageIO;
 
 public class ImageStore {
 	
-	private Map<String, Image> images;
+	private class ImageRecord {
+		public BufferedImage image;
+		public String imagePath;
+		public boolean wasModified;
+		public ImageRecord(BufferedImage image, String imagePath) {
+			this.image = image;
+			this.imagePath = imagePath;
+			wasModified = false;
+		}
+	}
+	
+	private Map<String, ImageRecord> images;
 	private final String imageDirectory;
 	private int maxImageWidth = 1;
 	private int maxImageHeight = 1;
@@ -24,7 +35,7 @@ public class ImageStore {
 			imageDirectory = imageDirectory + "/";
 		}
 		this.imageDirectory = imageDirectory;
-		images = new HashMap<String, Image>();
+		images = new HashMap<String, ImageRecord>();
 	}
 	
 	public void addMaxSizeChangedListener(ImageStoreMaxSizeChangedListener listener) {
@@ -51,15 +62,15 @@ public class ImageStore {
 	 * Force reloading of all resources.
 	 */
 	public void reloadAll() {
-		images = new HashMap<String, Image>();
+		images = new HashMap<String, ImageRecord>();
 	}
 	
 	private void calculateImageSizes() {
 		int oldMaxImageWidth = maxImageWidth;
 		maxImageWidth = 1;
-		for (Map.Entry<String, Image> entry : images.entrySet()) {
+		for (Map.Entry<String, ImageRecord> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
-				int val = entry.getValue().getWidth(null);
+				int val = entry.getValue().image.getWidth(null);
 				if (val > maxImageWidth) {
 					maxImageWidth = val;
 				}
@@ -67,9 +78,9 @@ public class ImageStore {
 		}
 		int oldMaxImageHeight = maxImageHeight;
 		maxImageHeight = 1;
-		for (Map.Entry<String, Image> entry : images.entrySet()) {
+		for (Map.Entry<String, ImageRecord> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
-				int val = entry.getValue().getHeight(null);
+				int val = entry.getValue().image.getHeight(null);
 				if (val > maxImageHeight) {
 					maxImageHeight = val;
 				}
@@ -90,6 +101,29 @@ public class ImageStore {
 		return maxImageHeight;
 	}
 	
+	public void writeModifiedImagesToDisk() {
+		for (Map.Entry<String, ImageRecord> entry : images.entrySet()) {
+			if (entry.getValue() != null) {
+				if (entry.getValue().wasModified) {
+					try {
+					    File outputfile = new File(entry.getValue().imagePath);
+					    ImageIO.write(entry.getValue().image, "png", outputfile);
+					    entry.getValue().wasModified = false;
+					    System.out.println("Wrote image to disk " + entry.getValue().imagePath);
+					} catch (IOException e) {
+					    System.out.println("Error writing to disk: " + entry.getValue().imagePath);
+					}
+				}
+			}
+		}
+	}
+	
+	public void setImageWasModified(String imageName) {
+		if (images.containsKey(imageName)) {
+			images.get(imageName).wasModified = true;
+		}
+	}
+	
 	private boolean loadImage(String imageName) {
 		String imageToLoad = imageDirectory + imageName + ".png";
 		if (imageName.endsWith(".png")) {
@@ -104,8 +138,8 @@ public class ImageStore {
 			System.out.println(" - fail.");
 			return false;
 		}
-		Image compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
-		images.put(imageName, compatibleImage);
+		BufferedImage compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
+		images.put(imageName, new ImageRecord(compatibleImage, imageToLoad));
 		System.out.println(" - OK.");
 		calculateImageSizes();
 		return true;
@@ -118,6 +152,6 @@ public class ImageStore {
 				return null;
 			}
 		}
-		return images.get(imageName);
+		return images.get(imageName).image;
 	}
 }

@@ -59,6 +59,7 @@ public class AnimationEdit extends JFrame
 	private Timer filePollTimer;
 	private JColorChooser colorChooser;
 	private PenDrawingTool penDrawingTool;
+	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	
 	/**
 	 * Setup app.
@@ -123,12 +124,17 @@ public class AnimationEdit extends JFrame
 		
 		panel.add(animationPreview);
 		
-		colorChooser = new JColorChooser();
-		panel.add(colorChooser);
+		JPanel drawingToolsPanel = new JPanel();
 		
-		container.add(panel);
+		colorChooser = new JColorChooser();
+		drawingToolsPanel.add(colorChooser);
 		
 		penDrawingTool = new PenDrawingTool(this);
+		drawingToolSelectionMenu = new DrawingToolSelectionMenu(penDrawingTool);
+		drawingToolsPanel.add(drawingToolSelectionMenu);
+		
+		panel.add(drawingToolsPanel);
+		container.add(panel);
 		
 		// init main window
 		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, Toolkit
@@ -389,6 +395,7 @@ public class AnimationEdit extends JFrame
 				String path = getSaveLevelPath(true, true);
 				animationSequence.writeToFile(path);
 				if (path != null) {
+					animationSequence.getImageStore().writeModifiedImagesToDisk();
 					setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath() 
 							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
 				}
@@ -554,7 +561,7 @@ public class AnimationEdit extends JFrame
 
 	@Override
 	public DrawingTool getTool() {
-		return penDrawingTool;
+		return drawingToolSelectionMenu.getTool();
 	}
 
 
