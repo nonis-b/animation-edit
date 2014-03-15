@@ -21,13 +21,13 @@ public class AnimationPreview extends JPanel {
     private int currentAnimationFrameIndex = 0;
     private int currentFrameTics = 1;
     
-    private AnimationEditComponentsAccessor componentsAccessor;
+    private ImageStoreProvider imageStoreProvider;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     
 
-    public AnimationPreview(AnimationEditComponentsAccessor componentsAccessor, 
+    public AnimationPreview(ImageStoreProvider imageStoreProvider, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
-    	this.componentsAccessor = componentsAccessor;
+    	this.imageStoreProvider = imageStoreProvider;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         setBackground(Color.LIGHT_GRAY);
         timer = new Timer();
@@ -104,7 +104,7 @@ public class AnimationPreview extends JPanel {
 
         super.paint(g);
 
-        ImageStore imageStore = componentsAccessor.getImageStore();
+        ImageStore imageStore = imageStoreProvider.getImageStore();
         if (imageStore != null) {
         	AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(currentAnimationFrameIndex);
         	if (frame != null) {

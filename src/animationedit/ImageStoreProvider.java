@@ -3,6 +3,6 @@ package animationedit;
 import graphicsutils.ImageStore;
 
 
-public interface AnimationEditComponentsAccessor {
+public interface ImageStoreProvider {
 	public ImageStore getImageStore();
 }

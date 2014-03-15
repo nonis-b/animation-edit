@@ -37,7 +37,7 @@ import graphicsutils.PickupColorDrawingTool;
  * 
  */
 public class AnimationEdit extends JFrame 
-	implements AnimationEditComponentsAccessor,
+	implements ImageStoreProvider,
 				AnimationFrameSequenceInfoProvider,
 				ImageStoreMaxSizeChangedListener,
 				DrawingToolSelector,

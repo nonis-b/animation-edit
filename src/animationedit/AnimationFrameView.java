@@ -4,7 +4,6 @@ import graphicsutils.CompatibleImageCreator;
 import graphicsutils.DrawingToolSelector;
 import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
-import graphicsutils.PenDrawingTool;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,14 +33,14 @@ public class AnimationFrameView
 	private Image offscreenBufferImage;
     private float scale = 1.0f;
     private int numOnionSkin = 0;
-    private AnimationEditComponentsAccessor componentsAccessor;
+    private ImageStoreProvider imageStoreProvider;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     private DrawingToolSelector drawingToolSelector;
     
-    public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
+    public AnimationFrameView(ImageStoreProvider imageStoreProvider, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider, 
     		DrawingToolSelector drawingToolSelector) {
-        this.componentsAccessor = componentsAccessor;
+        this.imageStoreProvider = imageStoreProvider;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         this.drawingToolSelector = drawingToolSelector;
         offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
@@ -108,18 +107,18 @@ public class AnimationFrameView
 	
 	
 	private void setCurrentFrameImageModified() {
-		ImageStore imageStore = componentsAccessor.getImageStore();
+		ImageStore imageStore = imageStoreProvider.getImageStore();
 		if (imageStore != null) {
 			AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
 			if (frame != null) {
-				componentsAccessor.getImageStore().setImageWasModified(frame.getImage());
+				imageStoreProvider.getImageStore().setImageWasModified(frame.getImage());
 			}
 		}
 	}
 
 	
 	private BufferedImage getCurrentFrameBufferedImage() {
-		ImageStore imageStore = componentsAccessor.getImageStore();
+		ImageStore imageStore = imageStoreProvider.getImageStore();
 		if (imageStore != null) {
 			AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
 			if (frame != null) {
@@ -198,7 +197,7 @@ public class AnimationFrameView
         offsetScreenBufferGraphics.clearRect(0, 0, offscreenBufferImage.getWidth(null), 
         		offscreenBufferImage.getHeight(null));
 
-        ImageStore imageStore = componentsAccessor.getImageStore();
+        ImageStore imageStore = imageStoreProvider.getImageStore();
         if (imageStore == null) return;
 
     	for (int i = -numOnionSkin; i < 0; i++) {
