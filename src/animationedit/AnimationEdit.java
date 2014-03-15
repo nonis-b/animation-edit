@@ -57,13 +57,14 @@ public class AnimationEdit extends JFrame
 	private ApplicationConfig config;
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
-	private File currentAnimationSequenceFile = null;
+	//private File currentAnimationSequenceFile = null;
 	private AnimationFrameSequence animationSequence = null;
 	private final int filePollInterval = 1000;
 	private Timer filePollTimer;
 	private JColorChooser colorChooser;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	private SelectBrushSizeField selectBrushSizeField;
+	private CurrentDocument currentDocument;
 	
 	/**
 	 * Setup app.
@@ -84,7 +85,8 @@ public class AnimationEdit extends JFrame
 			}
 		}, filePollInterval, filePollInterval);
 
-
+		currentDocument = new CurrentDocument(config.projectPath);
+		
 		animationFrameView = new AnimationFrameView(this, this, this);
 		animationPreview = new AnimationPreview(this, this);
 		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
@@ -92,7 +94,7 @@ public class AnimationEdit extends JFrame
 		Container container = getContentPane();
 		createGui(container);
 
-		loadAnimationSequence(animationSequenceFile);
+		animationSequence = loadAnimationSequence(animationSequenceFile);
 		
 		animationFrameView.revalidate();
 		animationFrameView.repaint();
@@ -154,113 +156,8 @@ public class AnimationEdit extends JFrame
 	}
 
 
-	/**
-	 * Show "export" dialog.
-	 * @return Path to export file to.
-	 */
-	private String getExportLevelPath() {
-		JFileChooser fc = new JFileChooser(new File(config.exportPath));
-		fc.showSaveDialog(this);
-		return fc.getSelectedFile().getAbsolutePath();
-	}
-
-	
-	/**
-	 * Show a "save" dialog to get path.
-	 * 
-	 * @param useCurrent If to use already opened level if any.
-	 * @param updateCurrent If to update the current file (We don't want that for export formats).
-	 * @return Path to save to.
-	 */
-	public String getSaveLevelPath(boolean useCurrent, boolean updateCurrent) {
-		
-		File selFile = null;
-		if (useCurrent) {
-			selFile = currentAnimationSequenceFile;
-		}
-		
-		if (!useCurrent || currentAnimationSequenceFile == null) {
-			
-			JFileChooser fc;
-			if (currentAnimationSequenceFile != null) {
-				fc = new JFileChooser(currentAnimationSequenceFile);
-			} else {
-				fc = new JFileChooser(new File(config.projectPath));
-			}
-			fc.showSaveDialog(this);
-			selFile = fc.getSelectedFile();			
-
-			if (selFile != null && updateCurrent) {
-				currentAnimationSequenceFile = selFile;				
-			}
-			
-		} else {
-			System.out.println("Save to file " + selFile.getAbsolutePath());
-		}
-
-		if (selFile == null) return null;
-		return selFile.getAbsolutePath();
-	}
-
-	/**
-	 * Show an "open" dialog to to get path.
-	 * 
-	 * @return Path to open.
-	 */
-	public String getOpenLevelPath() {
-
-		JFileChooser fc;
-		if (currentAnimationSequenceFile != null) {
-			fc = new JFileChooser(currentAnimationSequenceFile);
-		} else {
-			fc = new JFileChooser(new File(config.projectPath));
-		}
-		int returnVal = fc.showOpenDialog(this);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			return fc.getSelectedFile().getAbsolutePath();
-		}
-		return null;
-	}
-	
-	private void setCurrentAnimationSequenceFile(String path) {
-		currentAnimationSequenceFile = new File(path);
-		setTitle("AnimationEdit - " + path);
-	}
-	
-
-	/**
-	 * Shows help window.
-	 */
 	public void showHelp() {
-	    JEditorPane editorPane = new JEditorPane("text/html", "<html><body>"
-	    		+ "<p>Help content TODO.</p>"
-	    		+ "<p>This application is free software.</p>"
-	    		+ "<p>Get the source code: "
-	            + "<a href=\"https://github.com/jonath0000/animation-edit/\">" 
-	    		+ "https://github.com/jonath0000/animation-edit</a>"
-	            + "</body></html> </p>");
-
-		editorPane.addHyperlinkListener(new HyperlinkListener() {
-			@Override
-			public void hyperlinkUpdate(HyperlinkEvent event) {
-				
-				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED 
-						&& Desktop.isDesktopSupported()) {
-					try {
-						Desktop.getDesktop().browse(event.getURL().toURI());
-					} catch (IOException exception) { 
-						System.out.println("Couldn't open URL.");
-					} catch (URISyntaxException exception) {
-						System.out.println("Couldn't open URL.");
-					}
-				} else { 
-					System.out.println("Couldn't open URL.");
-				}
-			}
-		});
-	    editorPane.setEditable(false);
-	    JOptionPane.showMessageDialog(this, editorPane);
+		HelpWindow.show();
 	}
 
 	/**
@@ -401,29 +298,31 @@ public class AnimationEdit extends JFrame
 			
 			// MENU -> "Save" (AnimationEdit format)
 			if (event.getSource() == menu.saveItem) {
-				String path = getSaveLevelPath(true, true);
+				String path = currentDocument.saveDocument(true, true);
 				animationSequence.writeToFile(path);
 				if (path != null) {
 					animationSequence.getImageStore().writeModifiedImagesToDisk();
-					setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath() 
+					setTitle("AnimationEdit - " + currentDocument.getDocumentTitle()
 							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
 				}
 			}
 
 			// MENU -> "Save as" AnimationEdit format
 			if (event.getSource() == menu.saveAsItem) {
-				String path = getSaveLevelPath(false, true);
+				String path = currentDocument.saveDocument(false, true);
 				animationSequence.writeToFile(path);
 				if (path != null) {
-					setTitle("AnimationEdit - " + currentAnimationSequenceFile.getAbsolutePath() 
+					setTitle("AnimationEdit - " + currentDocument.getDocumentTitle()
 							+ " | Last save: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
 				}
 			}
 
 			// MENU -> New
 			if (event.getSource() == menu.newItem) {
-				String path = getSaveLevelPath(false, true);
-				loadAnimationSequence(path);
+				String path = currentDocument.saveDocument(false, true);
+				createNewAnimationSequenceFile(path);
+				animationSequence = loadAnimationSequence(path);
+				setTitle("AnimationEdit - " + path);
 			}
 
 			if (event.getSource() == menu.reloadImagesItem) {
@@ -439,18 +338,19 @@ public class AnimationEdit extends JFrame
 			}
 
 			if (event.getSource() == menu.openItem) {
-				String path = getOpenLevelPath();
-				loadAnimationSequence(path);
+				String path = currentDocument.openDocument();
+				animationSequence = loadAnimationSequence(path);
+				setTitle("AnimationEdit - " + path);
 			}
 
 			animationFrameView.repaint();
 		}
 	}
-
+	
 	
 	private void updateChangedImageFiles() {
-		if (currentAnimationSequenceFile == null) return;
-		File dir = currentAnimationSequenceFile.getParentFile();
+		if (!currentDocument.hasOpenDocument()) return;
+		File dir = currentDocument.getParentDirectoryOfOpenDocument();
 		for (File dirFileName : dir.listFiles()) {
 			// TODO: a bit ugly, using 1.5 times polling interval to find changed files.
 			if (dirFileName.getName().endsWith(".png") && 
@@ -462,30 +362,38 @@ public class AnimationEdit extends JFrame
 	}
 	
 	
-	private void loadAnimationSequence(String path) {
-		if (path != null) {
-			File file = new File(path);
-			if (!file.exists() && !file.isDirectory()) {
-				if (!path.endsWith(".xml")) {
-					path = path + ".xml";
-				}
-				file = new File(path);
-				ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
-				for (String dirFileName : file.getParentFile().list()) {
-					if (dirFileName.endsWith(".png")) {
-						System.out.println("Auto-included png file in directory: " + dirFileName);
-						createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
-					}
-				}
-				AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);
+	// create empty new file and create frames for all pngs in dir
+	private void createNewAnimationSequenceFile(String path) {
+		if (path == null) return;
+
+		File file = new File(path);
+		if (!file.exists() && !file.isDirectory()) {
+			if (!path.endsWith(".xml")) {
+				path = path + ".xml";
 			}
-			String dir = file.getParent();
-			animationSequence = new AnimationFrameSequence(dir, path);
-			animationSequence.addChangeListener(animationFrameSelector);
-			animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
-			animationSequence.getImageStore().addMaxSizeChangedListener(this);
-			setCurrentAnimationSequenceFile(path);
+			file = new File(path);
+			ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
+			for (String dirFileName : file.getParentFile().list()) {
+				if (dirFileName.endsWith(".png")) {
+					System.out.println("Auto-included png file in directory: " + dirFileName);
+					createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
+				}
+			}
+			AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);
 		}
+	}
+
+	
+	private AnimationFrameSequence loadAnimationSequence(String path) {
+		if (path == null) return null;
+		
+		File file = new File(path);
+		String dir = file.getParent();
+		AnimationFrameSequence animationSequence = new AnimationFrameSequence(dir, path);
+		animationSequence.addChangeListener(animationFrameSelector);
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+		animationSequence.getImageStore().addMaxSizeChangedListener(this);
+		return animationSequence;
 	}
  	
 	
