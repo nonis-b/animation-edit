@@ -1,11 +1,11 @@
 package animationedit;
 
 import graphicsutils.CompatibleImageCreator;
+import graphicsutils.DrawingToolSelector;
 import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 import graphicsutils.PenDrawingTool;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -36,12 +36,14 @@ public class AnimationFrameView
     private int numOnionSkin = 0;
     private AnimationEditComponentsAccessor componentsAccessor;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
-    private PenDrawingTool penDrawingTool = new PenDrawingTool();
+    private DrawingToolSelector drawingToolSelector;
     
     public AnimationFrameView(AnimationEditComponentsAccessor componentsAccessor, 
-    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
+    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider, 
+    		DrawingToolSelector drawingToolSelector) {
         this.componentsAccessor = componentsAccessor;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
+        this.drawingToolSelector = drawingToolSelector;
         offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
     }
     
@@ -53,7 +55,7 @@ public class AnimationFrameView
     public void mousePressed(MouseEvent e) {    
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			penDrawingTool.onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			drawingToolSelector.getTool().onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
         e.consume();
@@ -63,7 +65,7 @@ public class AnimationFrameView
     public void mouseReleased(MouseEvent e) {
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			penDrawingTool.onMouseRelease(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			drawingToolSelector.getTool().onMouseRelease(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
         e.consume();
@@ -95,7 +97,7 @@ public class AnimationFrameView
 		// called during motion with buttons down
 		BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			penDrawingTool.onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			drawingToolSelector.getTool().onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
 		e.consume();

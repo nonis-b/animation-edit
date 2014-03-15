@@ -3,7 +3,6 @@ package animationedit;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +16,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JColorChooser;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,10 +28,13 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 
+import graphicsutils.CurrentColorSelector;
+import graphicsutils.DrawingTool;
+import graphicsutils.DrawingToolSelector;
 import graphicsutils.ImageStore;
 import graphicsutils.ImageStoreMaxSizeChangedListener;
+import graphicsutils.PenDrawingTool;
 
-import animationedit.ToolSelector.Tool;
 
 /**
  * Main window.
@@ -40,10 +43,11 @@ import animationedit.ToolSelector.Tool;
 public class AnimationEdit extends JFrame 
 	implements AnimationEditComponentsAccessor,
 				AnimationFrameSequenceInfoProvider,
-				ImageStoreMaxSizeChangedListener
+				ImageStoreMaxSizeChangedListener,
+				DrawingToolSelector,
+				CurrentColorSelector
 	{
 
-	private ToolSelector toolSelector;
 	private AnimationFrameSelector animationFrameSelector;
 	private Menu menu;
 	private ApplicationConfig config;
@@ -53,6 +57,8 @@ public class AnimationEdit extends JFrame
 	private AnimationFrameSequence animationSequence = null;
 	private final int filePollInterval = 1000;
 	private Timer filePollTimer;
+	private JColorChooser colorChooser;
+	private PenDrawingTool penDrawingTool;
 	
 	/**
 	 * Setup app.
@@ -72,10 +78,9 @@ public class AnimationEdit extends JFrame
 				updateChangedImageFiles();
 			}
 		}, filePollInterval, filePollInterval);
-		
-		toolSelector = new ToolSelector();
 
-		animationFrameView = new AnimationFrameView(this, this);
+
+		animationFrameView = new AnimationFrameView(this, this, this);
 		animationPreview = new AnimationPreview(this, this);
 		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
 		
@@ -104,7 +109,7 @@ public class AnimationEdit extends JFrame
 		setJMenuBar(menu);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 3));
+		panel.setLayout(new GridLayout(2, 3));
 
 		JToolBar animationFrameSelectorToolBar = new JToolBar();
 		animationFrameSelectorToolBar.add(animationFrameSelector);
@@ -118,11 +123,16 @@ public class AnimationEdit extends JFrame
 		
 		panel.add(animationPreview);
 		
+		colorChooser = new JColorChooser();
+		panel.add(colorChooser);
+		
 		container.add(panel);
+		
+		penDrawingTool = new PenDrawingTool(this);
 		
 		// init main window
 		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, Toolkit
-				.getDefaultToolkit().getScreenSize().height/2 - 60);
+				.getDefaultToolkit().getScreenSize().height - 60);
 		setLocation(20, 20);
 		setVisible(true);
 		setResizable(true);
@@ -499,12 +509,6 @@ public class AnimationEdit extends JFrame
 	}
 
 
-
-	@Override
-	public Tool getSelectedTool() {
-		return toolSelector.getTool();
-	}
-
 	@Override
 	public ImageStore getImageStore() {
 		if (animationSequence == null) return null;
@@ -545,5 +549,17 @@ public class AnimationEdit extends JFrame
 	@Override
 	public void maxSizeChanged(int maxX, int maxY) {
 		animationFrameView.maxSizeChanged(maxX, maxY);
+	}
+
+
+	@Override
+	public DrawingTool getTool() {
+		return penDrawingTool;
+	}
+
+
+	@Override
+	public Color getColor() {
+		return colorChooser.getColor();
 	}
 }

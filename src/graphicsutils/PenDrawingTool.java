@@ -11,11 +11,16 @@ public class PenDrawingTool implements DrawingTool {
 
 	private int lastMouseDownX = -1;
 	private int lastMouseDownY = -1;
-
+	private CurrentColorSelector colorSelector;
+	
+	public PenDrawingTool(CurrentColorSelector colorSelector) {
+		this.colorSelector = colorSelector;
+	}
+	
 	@Override
 	public void onMouseDown(BufferedImage image, int x, int y) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
-		g.setColor(Color.RED);
+		g.setColor(colorSelector.getColor());
 		image.getGraphics().drawLine(x, y, x, y);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
@@ -31,7 +36,7 @@ public class PenDrawingTool implements DrawingTool {
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
 		Graphics2D g = (Graphics2D)image.getGraphics();
-		g.setColor(Color.RED);
+		g.setColor(colorSelector.getColor());
 		g.drawLine(lastMouseDownX, lastMouseDownY, x, y);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
