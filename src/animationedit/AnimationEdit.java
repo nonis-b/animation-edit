@@ -320,7 +320,7 @@ public class AnimationEdit extends JFrame
 			// MENU -> New
 			if (event.getSource() == menu.newItem) {
 				String path = currentDocument.saveDocument(false, true);
-				createNewAnimationSequenceFile(path);
+				AnimationFrameSequenceFile.generateNewAnimtionFrameSequenceXmlFile(path);
 				animationSequence = loadAnimationSequence(path);
 				setTitle("AnimationEdit - " + path);
 			}
@@ -361,29 +361,7 @@ public class AnimationEdit extends JFrame
 		}
 	}
 	
-	
-	// create empty new file and create frames for all pngs in dir
-	private void createNewAnimationSequenceFile(String path) {
-		if (path == null) return;
 
-		File file = new File(path);
-		if (!file.exists() && !file.isDirectory()) {
-			if (!path.endsWith(".xml")) {
-				path = path + ".xml";
-			}
-			file = new File(path);
-			ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
-			for (String dirFileName : file.getParentFile().list()) {
-				if (dirFileName.endsWith(".png")) {
-					System.out.println("Auto-included png file in directory: " + dirFileName);
-					createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
-				}
-			}
-			AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, createdFrames);
-		}
-	}
-
-	
 	private AnimationFrameSequence loadAnimationSequence(String path) {
 		if (path == null) return null;
 		

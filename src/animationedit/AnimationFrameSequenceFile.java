@@ -24,7 +24,32 @@ import org.xml.sax.SAXException;
 
 public class AnimationFrameSequenceFile {
 	
-	public static ArrayList<AnimationFrame> createAnimtionFrameSequenceFromXml(String path) {
+	/**
+	 * Create empty new file and create frames for all .png's in directory.
+	 * @param path Path to create file.
+	 */
+	public static void generateNewAnimtionFrameSequenceXmlFile(String path) {
+		if (path == null) return;
+
+		File file = new File(path);
+		if (!file.exists() && !file.isDirectory()) {
+			if (!path.endsWith(".xml")) {
+				path = path + ".xml";
+			}
+			file = new File(path);
+			ArrayList<AnimationFrame> createdFrames = new ArrayList<AnimationFrame>();
+			for (String dirFileName : file.getParentFile().list()) {
+				if (dirFileName.endsWith(".png")) {
+					System.out.println("Auto-included png file in directory: " + dirFileName);
+					createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
+				}
+			}
+			AnimationFrameSequenceFile.writeAnimationFrameSequenceToXml(path, createdFrames);
+		}
+	}
+	
+	
+	public static ArrayList<AnimationFrame> createAnimationFrameSequenceFromXml(String path) {
 
         ArrayList<AnimationFrame> frames = new ArrayList<AnimationFrame>();
 		
@@ -79,7 +104,7 @@ public class AnimationFrameSequenceFile {
         return frames;
 	}
 	
-	public static boolean writeAnimtionFrameSequenceToXml(String path, final ArrayList<AnimationFrame> animationFrames) {
+	public static boolean writeAnimationFrameSequenceToXml(String path, final ArrayList<AnimationFrame> animationFrames) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();

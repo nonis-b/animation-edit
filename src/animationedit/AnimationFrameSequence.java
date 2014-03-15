@@ -15,7 +15,7 @@ public class AnimationFrameSequence {
 	
 	public AnimationFrameSequence(String workingDirectory, String animationSequenceFile) {
 		imageStore = new ImageStore(workingDirectory);
-		animationFrames = AnimationFrameSequenceFile.createAnimtionFrameSequenceFromXml(animationSequenceFile);
+		animationFrames = AnimationFrameSequenceFile.createAnimationFrameSequenceFromXml(animationSequenceFile);
 	}
 	
 	public void addChangeListener(AnimationFrameSequenceChangedListener listener) {
@@ -23,7 +23,7 @@ public class AnimationFrameSequence {
 	}
 
 	public boolean writeToFile(String path) {
-		return AnimationFrameSequenceFile.writeAnimtionFrameSequenceToXml(path, animationFrames);
+		return AnimationFrameSequenceFile.writeAnimationFrameSequenceToXml(path, animationFrames);
 	}
 	
 	public ImageStore getImageStore() {
