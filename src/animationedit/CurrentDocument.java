@@ -108,4 +108,9 @@ public class CurrentDocument {
 		}
 		return null;
 	}
+	
+	public String openDocument(String path) {
+		currentFile = new File(path);
+		return currentFile.getAbsolutePath();
+	}
 }

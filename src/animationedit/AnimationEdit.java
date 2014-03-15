@@ -2,30 +2,23 @@ package animationedit;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JColorChooser;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
+
+import animationedit.DirectoryChangeWatcher.DirectoryChangedListener;
 
 
 import graphicsutils.CurrentBrushSelector;
@@ -49,7 +42,8 @@ public class AnimationEdit extends JFrame
 				ImageStoreMaxSizeChangedListener,
 				DrawingToolSelector,
 				CurrentColorSelector, 
-				CurrentBrushSelector
+				CurrentBrushSelector,
+				DirectoryChangedListener
 	{
 
 	private AnimationFrameSelector animationFrameSelector;
@@ -57,14 +51,12 @@ public class AnimationEdit extends JFrame
 	private ApplicationConfig config;
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
-	//private File currentAnimationSequenceFile = null;
 	private AnimationFrameSequence animationSequence = null;
-	private final int filePollInterval = 1000;
-	private Timer filePollTimer;
 	private JColorChooser colorChooser;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	private SelectBrushSizeField selectBrushSizeField;
 	private CurrentDocument currentDocument;
+	private DirectoryChangeWatcher directoryChangeWatcher;
 	
 	/**
 	 * Setup app.
@@ -76,15 +68,9 @@ public class AnimationEdit extends JFrame
 		super("AnimationEdit");
 
 		config = new ApplicationConfig(configFilePath);	
-		
-		filePollTimer = new Timer();
-		filePollTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				updateChangedImageFiles();
-			}
-		}, filePollInterval, filePollInterval);
 
+		directoryChangeWatcher = new DirectoryChangeWatcher(this, ".png");
+		
 		currentDocument = new CurrentDocument(config.projectPath);
 		
 		animationFrameView = new AnimationFrameView(this, this, this);
@@ -94,7 +80,10 @@ public class AnimationEdit extends JFrame
 		Container container = getContentPane();
 		createGui(container);
 
-		animationSequence = loadAnimationSequence(animationSequenceFile);
+		if (animationSequenceFile != null) {
+			currentDocument.openDocument(animationSequenceFile);
+			animationSequence = loadAnimationSequence(animationSequenceFile);
+		}
 		
 		animationFrameView.revalidate();
 		animationFrameView.repaint();
@@ -347,30 +336,25 @@ public class AnimationEdit extends JFrame
 		}
 	}
 	
-	
-	private void updateChangedImageFiles() {
-		if (!currentDocument.hasOpenDocument()) return;
-		File dir = currentDocument.getParentDirectoryOfOpenDocument();
-		for (File dirFileName : dir.listFiles()) {
-			// TODO: a bit ugly, using 1.5 times polling interval to find changed files.
-			if (dirFileName.getName().endsWith(".png") && 
-					dirFileName.lastModified() > System.currentTimeMillis() - (filePollInterval+filePollInterval/2)) {
-				animationSequence.getImageStore().reloadImage(dirFileName.getName());
-				System.out.println("Found changed file " + dirFileName.getName() + ". Reloading.");
-			}
+	@Override
+	public void onDirectoryChanged(ArrayList<String> changedFiles) {
+		for (String fileName : changedFiles) {
+			animationSequence.getImageStore().reloadImage(fileName);
 		}
 	}
 	
 
 	private AnimationFrameSequence loadAnimationSequence(String path) {
 		if (path == null) return null;
-		
 		File file = new File(path);
 		String dir = file.getParent();
 		AnimationFrameSequence animationSequence = new AnimationFrameSequence(dir, path);
 		animationSequence.addChangeListener(animationFrameSelector);
 		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 		animationSequence.getImageStore().addMaxSizeChangedListener(this);
+		if (currentDocument.hasOpenDocument()) {
+			directoryChangeWatcher.setCurrentDirectory(currentDocument.getParentDirectoryOfOpenDocument());
+		}
 		return animationSequence;
 	}
  	
