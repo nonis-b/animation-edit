@@ -1,7 +1,6 @@
 package animationedit;
 
 import graphicsutils.DrawingTool;
-import graphicsutils.PenDrawingTool;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,8 @@ import javax.swing.JToolBar;
 public class DrawingToolSelectionMenu extends JToolBar {
 
 	private DrawingTool tool;
-
+	private ButtonHandler buttonHandler = new ButtonHandler();
+	
 	private class ToolButton extends JButton {
 		public DrawingTool tool;
 
@@ -28,14 +28,11 @@ public class DrawingToolSelectionMenu extends JToolBar {
 	}
 
 	private class ButtonHandler implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			tool = ((ToolButton) event.getSource()).tool;
 		}
 	}
-
-	private ButtonHandler buttonHandler = new ButtonHandler();
 
 	private void createButton(DrawingTool tool, String image) {
 		ToolButton button = new ToolButton(new ImageIcon(image), tool);
@@ -43,10 +40,11 @@ public class DrawingToolSelectionMenu extends JToolBar {
 		add(button);
 	}
 
-	public DrawingToolSelectionMenu(PenDrawingTool penDrawingTool) {
+	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool) {
 		super();
-		tool = penDrawingTool;
+		this.tool = penDrawingTool;
 		createButton(penDrawingTool, "res/toolPen.png");
+		createButton(eraseDrawingTool, "res/toolErase.png");
 		setLayout(new GridLayout(3, 3));
 	}
 

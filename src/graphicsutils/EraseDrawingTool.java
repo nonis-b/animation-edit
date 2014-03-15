@@ -1,26 +1,29 @@
 package graphicsutils;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- * Draws 1 pixel wide.
+ * Erase 1 pixel wide.
  */
-public class PenDrawingTool implements DrawingTool {
+public class EraseDrawingTool implements DrawingTool {
 
 	private int lastMouseDownX = -1;
 	private int lastMouseDownY = -1;
-	private CurrentColorSelector colorSelector;
+	private Color eraseColor = new Color(0, 0, 0, 0);
 	
-	public PenDrawingTool(CurrentColorSelector colorSelector) {
-		this.colorSelector = colorSelector;
+	public EraseDrawingTool() {
 	}
 	
 	@Override
 	public void onMouseDown(BufferedImage image, int x, int y) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
-		g.setColor(colorSelector.getColor());
+		g.setColor(eraseColor);
+		g.setComposite(AlphaComposite.Clear);
 		image.getGraphics().drawLine(x, y, x, y);
+		g.setComposite(AlphaComposite.Src);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
 	}
@@ -35,8 +38,10 @@ public class PenDrawingTool implements DrawingTool {
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
 		Graphics2D g = (Graphics2D)image.getGraphics();
-		g.setColor(colorSelector.getColor());
+		g.setColor(eraseColor);
+		g.setComposite(AlphaComposite.Clear);
 		g.drawLine(lastMouseDownX, lastMouseDownY, x, y);
+		g.setComposite(AlphaComposite.Src);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
 	}

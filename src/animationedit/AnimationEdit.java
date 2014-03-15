@@ -31,6 +31,7 @@ import javax.swing.event.HyperlinkListener;
 import graphicsutils.CurrentColorSelector;
 import graphicsutils.DrawingTool;
 import graphicsutils.DrawingToolSelector;
+import graphicsutils.EraseDrawingTool;
 import graphicsutils.ImageStore;
 import graphicsutils.ImageStoreMaxSizeChangedListener;
 import graphicsutils.PenDrawingTool;
@@ -58,7 +59,6 @@ public class AnimationEdit extends JFrame
 	private final int filePollInterval = 1000;
 	private Timer filePollTimer;
 	private JColorChooser colorChooser;
-	private PenDrawingTool penDrawingTool;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	
 	/**
@@ -128,9 +128,8 @@ public class AnimationEdit extends JFrame
 		
 		colorChooser = new JColorChooser();
 		drawingToolsPanel.add(colorChooser);
-		
-		penDrawingTool = new PenDrawingTool(this);
-		drawingToolSelectionMenu = new DrawingToolSelectionMenu(penDrawingTool);
+
+		drawingToolSelectionMenu = new DrawingToolSelectionMenu(new PenDrawingTool(this), new EraseDrawingTool());
 		drawingToolsPanel.add(drawingToolSelectionMenu);
 		
 		panel.add(drawingToolsPanel);
