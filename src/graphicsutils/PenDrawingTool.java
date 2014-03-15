@@ -1,6 +1,7 @@
 	package graphicsutils;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -10,10 +11,11 @@ public class PenDrawingTool implements DrawingTool {
 
 	private int lastMouseDownX = -1;
 	private int lastMouseDownY = -1;
-	
+
 	@Override
 	public void onMouseDown(BufferedImage image, int x, int y) {
-		image.getGraphics().setColor(Color.BLACK);
+		Graphics2D g = (Graphics2D)image.getGraphics();
+		g.setColor(Color.RED);
 		image.getGraphics().drawLine(x, y, x, y);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
@@ -28,8 +30,9 @@ public class PenDrawingTool implements DrawingTool {
 	@Override
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
-		image.getGraphics().setColor(Color.BLACK);
-		image.getGraphics().drawLine(lastMouseDownX, lastMouseDownY, x, y);
+		Graphics2D g = (Graphics2D)image.getGraphics();
+		g.setColor(Color.RED);
+		g.drawLine(lastMouseDownX, lastMouseDownY, x, y);
 		lastMouseDownX = x;
 		lastMouseDownY = y;
 	}

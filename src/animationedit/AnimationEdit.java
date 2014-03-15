@@ -1,5 +1,6 @@
 package animationedit;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;

@@ -5,6 +5,7 @@ import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 import graphicsutils.PenDrawingTool;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -152,7 +153,7 @@ public class AnimationFrameView
     private void drawImage(Graphics g, Image image, int x, int y, float alpha, String failName) {
     	if (image != null) {
     		if (alpha < 0.00001f) alpha = 0.01f;
-    		float[] scales = { alpha, alpha, alpha, 1.0f };
+    		float[] scales = { alpha, alpha, alpha, alpha };
 			float[] offsets = new float[4];
 			RescaleOp rop = new RescaleOp(scales, offsets, null);
 			((Graphics2D)(offscreenBufferImage.getGraphics())).drawImage((BufferedImage)image, rop, x, y);
@@ -173,8 +174,12 @@ public class AnimationFrameView
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        ((Graphics2D)(offscreenBufferImage.getGraphics())).setColor(Color.BLACK);
-        ((Graphics2D)(offscreenBufferImage.getGraphics())).clearRect(0, 0, offscreenBufferImage.getWidth(null), 
+        setBackground(Color.DARK_GRAY);
+        
+        // clear to transparent
+        Graphics2D offsetScreenBufferGraphics = (Graphics2D)offscreenBufferImage.getGraphics();
+        offsetScreenBufferGraphics.setBackground(new Color(0, 0, 0, 0));
+        offsetScreenBufferGraphics.clearRect(0, 0, offscreenBufferImage.getWidth(null), 
         		offscreenBufferImage.getHeight(null));
 
         ImageStore imageStore = componentsAccessor.getImageStore();
