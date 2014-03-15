@@ -1,6 +1,7 @@
 package animationedit;
 
 import graphicsutils.CompatibleImageCreator;
+import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 import graphicsutils.PenDrawingTool;
 
@@ -122,15 +123,23 @@ public class AnimationFrameView
      * @param scaleFactor Positive will zoom in, negative out.
      */
     public void zoom(float scaleFactor) {
+    	if (scale <= 0.5f && scaleFactor < 1.0f) return;
     	scale *= scaleFactor;
-    	setPreferredSize(new Dimension((int)(getWidth()*scale), (int)(getHeight()*scale)));
-    	revalidate();
+    	Image image = getCurrentFrameBufferedImage();
+    	if (image != null) {
+    		setPreferredSize(new Dimension((int)(image.getWidth(null)*scale), (int)(image.getHeight(null)*scale)));
+    		revalidate();
+    	}
     	System.out.println("Change zoom to " + scale);
     }
     
     
     private int screenToModelCoord(int screenCoord) {
     	return (int)(screenCoord / scale);
+    }
+    
+    private int modelToScreenCoord(int modelCoord) {
+    	return (int)(modelCoord * scale);
     }
 
     
@@ -164,8 +173,9 @@ public class AnimationFrameView
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        ((Graphics2D)(offscreenBufferImage.getGraphics())).setColor(Color.BLACK);
+        ((Graphics2D)(offscreenBufferImage.getGraphics())).clearRect(0, 0, offscreenBufferImage.getWidth(null), 
+        		offscreenBufferImage.getHeight(null));
 
         ImageStore imageStore = componentsAccessor.getImageStore();
         if (imageStore == null) return;
@@ -193,8 +203,9 @@ public class AnimationFrameView
     	if (frame != null) {
     		Image image = imageStore.getImage(frame.getImage());
     		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
+    		GridDrawingUtil.drawBoundingBox(Color.BLUE, g, 0, 0, modelToScreenCoord(image.getWidth(null)), 
+    				modelToScreenCoord(image.getHeight(null)));
     	}
-    
     }
 
 	@Override
