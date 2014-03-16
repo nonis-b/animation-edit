@@ -41,7 +41,7 @@ import graphicsutils.ImageStore.ImageStoreMaxSizeChangedListener;
  * Main window.
  * 
  */
-public class LevelEditApplication extends JFrame 
+public class AinmationEditApplication extends JFrame 
 	implements ImageStoreProvider,
 				AnimationFrameSequenceInfoProvider,
 				ImageStoreMaxSizeChangedListener,
@@ -69,7 +69,7 @@ public class LevelEditApplication extends JFrame
 	 * @param configFilePath Config file path.
 	 * @param animationSequenceFile File to open.
 	 */
-	public LevelEditApplication(String configFilePath, String animationSequenceFile) {
+	public AinmationEditApplication(String configFilePath, String animationSequenceFile) {
 		super("AnimationEdit");
 
 		config = new ApplicationConfig(configFilePath);	
@@ -389,7 +389,7 @@ public class LevelEditApplication extends JFrame
 		}
 		
 		try {
-			LevelEditApplication app = new LevelEditApplication(configFile, animationSequenceFile);
+			AinmationEditApplication app = new AinmationEditApplication(configFile, animationSequenceFile);
 			app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {
