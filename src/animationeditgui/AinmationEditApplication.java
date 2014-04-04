@@ -57,7 +57,7 @@ public class AinmationEditApplication extends JFrame
 	private AnimationFrameView animationFrameView;
 	private AnimationPreview animationPreview;
 	private AnimationFrameSequence animationSequence = null;
-	private JColorChooser colorChooser;
+	private ColorSelector colorSelector;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	private SelectBrushSizeField selectBrushSizeField;
 	private CurrentDocument currentDocument;
@@ -125,9 +125,9 @@ public class AinmationEditApplication extends JFrame
 		panel.add(animationPreview);
 		
 		JPanel drawingToolsPanel = new JPanel();
-		
-		colorChooser = new JColorChooser();
-		drawingToolsPanel.add(colorChooser);
+		colorSelector = new ColorSelector(60, 40);
+		colorSelector.addMouseListener(colorSelector);
+		drawingToolsPanel.add(colorSelector);
 
 		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
 				new PenDrawingTool(this, this), 
@@ -451,13 +451,13 @@ public class AinmationEditApplication extends JFrame
 
 	@Override
 	public Color getColor() {
-		return colorChooser.getColor();
+		return colorSelector.getColor();
 	}
 
 
 	@Override
 	public void setColor(Color color) {
-		colorChooser.setColor(color);
+		colorSelector.setColor(color);
 	}
 
 
