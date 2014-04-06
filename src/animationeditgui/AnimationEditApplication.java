@@ -1,7 +1,9 @@
 package animationeditgui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,7 +42,7 @@ import graphicsutils.ImageStore.ImageStoreMaxSizeChangedListener;
  * Main window.
  * 
  */
-public class AinmationEditApplication extends JFrame 
+public class AnimationEditApplication extends JFrame 
 	implements ImageStoreProvider,
 				AnimationFrameSequenceInfoProvider,
 				ImageStoreMaxSizeChangedListener,
@@ -69,7 +70,7 @@ public class AinmationEditApplication extends JFrame
 	 * @param configFilePath Config file path.
 	 * @param animationSequenceFile File to open.
 	 */
-	public AinmationEditApplication(String configFilePath, String animationSequenceFile) {
+	public AnimationEditApplication(String configFilePath, String animationSequenceFile) {
 		super("AnimationEdit");
 
 		config = new ApplicationConfig(configFilePath);	
@@ -109,36 +110,36 @@ public class AinmationEditApplication extends JFrame
 		menu = new ApplicationMenu(handler);
 		setJMenuBar(menu);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(2, 3));
+		JPanel panel = new JPanel(new BorderLayout());
 
 		JToolBar animationFrameSelectorToolBar = new JToolBar();
 		animationFrameSelectorToolBar.add(animationFrameSelector);
-		panel.add(animationFrameSelectorToolBar);
+		panel.add(animationFrameSelectorToolBar, BorderLayout.WEST);
+		
+		JPanel editFramePanel = new JPanel(new BorderLayout());
 		
 		animationFrameView.addMouseListener(animationFrameView);
 		animationFrameView.addMouseMotionListener(animationFrameView);
 		
-		JScrollPane scrollPane = new JScrollPane(animationFrameView);
-		panel.add(scrollPane);
-		
-		panel.add(animationPreview);
-		
-		JPanel drawingToolsPanel = new JPanel();
+		JScrollPane editFrameScrollPane = new JScrollPane(animationFrameView);
+		editFramePanel.add(editFrameScrollPane, BorderLayout.CENTER);
+
+		JToolBar drawingToolsToolBar = new JToolBar();
 		colorSelector = new ColorSelector(60, 40);
 		colorSelector.addMouseListener(colorSelector);
-		drawingToolsPanel.add(colorSelector);
-
+		drawingToolsToolBar.add(colorSelector);
 		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
 				new PenDrawingTool(this, this), 
 				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this));
-		drawingToolsPanel.add(drawingToolSelectionMenu);
-		
+		drawingToolsToolBar.add(drawingToolSelectionMenu);
 		selectBrushSizeField = new SelectBrushSizeField();
-		drawingToolsPanel.add(selectBrushSizeField);
+		drawingToolsToolBar.add(selectBrushSizeField);
+		panel.add(drawingToolsToolBar, BorderLayout.NORTH);
 		
-		panel.add(drawingToolsPanel);
+		panel.add(editFramePanel, BorderLayout.CENTER);
+		
+		panel.add(animationPreview, BorderLayout.EAST);
 		container.add(panel);
 		
 		// init main window
@@ -147,6 +148,8 @@ public class AinmationEditApplication extends JFrame
 		setLocation(20, 20);
 		setVisible(true);
 		setResizable(true);
+		
+		animationPreview.setPreferredSize(new Dimension(getWidth()/4, getHeight()));
 	}
 
 
@@ -389,7 +392,7 @@ public class AinmationEditApplication extends JFrame
 		}
 		
 		try {
-			AinmationEditApplication app = new AinmationEditApplication(configFile, animationSequenceFile);
+			AnimationEditApplication app = new AnimationEditApplication(configFile, animationSequenceFile);
 			app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		} catch (Exception e) {

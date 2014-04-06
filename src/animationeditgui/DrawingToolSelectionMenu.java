@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JToolBar;
+import javax.swing.JPanel;
 
 import drawingtools.DrawingTool;
 
@@ -14,7 +14,7 @@ import drawingtools.DrawingTool;
  * Panel to select drawing tool.
  * 
  */
-public class DrawingToolSelectionMenu extends JToolBar {
+public class DrawingToolSelectionMenu extends JPanel {
 
 	private DrawingTool tool;
 	private ButtonHandler buttonHandler = new ButtonHandler();
@@ -48,7 +48,7 @@ public class DrawingToolSelectionMenu extends JToolBar {
 		createButton(penDrawingTool, "res/toolPen.png");
 		createButton(eraseDrawingTool, "res/toolErase.png");
 		createButton(pickupColorDrawingTool, "res/toolPickup.png");
-		setLayout(new GridLayout(3, 3));
+		setLayout(new GridLayout(1, 3));
 	}
 
 	public DrawingTool getTool() {
