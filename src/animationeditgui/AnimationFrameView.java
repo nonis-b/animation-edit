@@ -61,7 +61,6 @@ public class AnimationFrameView
     public void mousePressed(MouseEvent e) {    
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
@@ -72,8 +71,8 @@ public class AnimationFrameView
     public void mouseReleased(MouseEvent e) {
     	BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseRelease(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+			setCurrentFrameImageModified();
 			repaint();
 		}
         e.consume();
@@ -105,7 +104,6 @@ public class AnimationFrameView
 		// called during motion with buttons down
 		BufferedImage image = getCurrentFrameBufferedImage();
 		if (image != null) {
-			setCurrentFrameImageModified();
 			drawingToolSelector.getTool().onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
 		}
@@ -263,5 +261,16 @@ public class AnimationFrameView
 	@Override
 	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
 		return 5;
+	}
+
+	public void undo() {
+		ImageStore imageStore = imageStoreProvider.getImageStore();
+		if (imageStore != null) {
+			AnimationFrame frame = animationFrameSequenceInfoProvider.getAnimationFrame(
+					animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex());
+			if (frame != null) {
+				imageStore.undoLastImageModification(frame.getImage());
+			}
+		}
 	}
 }

@@ -164,6 +164,10 @@ public class AnimationEditApplication extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
+			if (event.getSource() == menu.undoItem) {
+				animationFrameView.undo();
+			}
+			
 			if (event.getSource() == menu.zoomInItem) {
 				animationFrameView.zoom(2.0f);
 			}
@@ -317,7 +321,7 @@ public class AnimationEditApplication extends JFrame
 			// MENU -> New
 			if (event.getSource() == menu.newItem) {
 				String path = currentDocument.saveDocument(false, true);
-				AnimationFrameSequenceFile.generateNewAnimtionFrameSequenceXmlFile(path);
+				AnimationFrameSequenceFile.generateNewAnimationFrameSequenceXmlFile(path);
 				animationSequence = loadAnimationSequence(path);
 				setTitle("AnimationEdit - " + path);
 			}

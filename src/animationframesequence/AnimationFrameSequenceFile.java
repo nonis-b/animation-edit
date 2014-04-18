@@ -28,7 +28,7 @@ public class AnimationFrameSequenceFile {
 	 * Create empty new file and create frames for all .png's in directory.
 	 * @param path Path to create file.
 	 */
-	public static void generateNewAnimtionFrameSequenceXmlFile(String path) {
+	public static void generateNewAnimationFrameSequenceXmlFile(String path) {
 		if (path == null) return;
 
 		File file = new File(path);

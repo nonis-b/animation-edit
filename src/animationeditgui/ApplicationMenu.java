@@ -129,7 +129,7 @@ public class ApplicationMenu extends JMenuBar {
 		onionSkin5DepthItem = addMenuItem(imageMenu, handler, "Onion skin 5 frame", KeyEvent.VK_5, KeyEvent.ALT_MASK);
 		
 		add(fileMenu);
-		//add(editMenu);
+		add(editMenu);
 		add(framesMenu);
 		add(imageMenu);
 		add(previewMenu);

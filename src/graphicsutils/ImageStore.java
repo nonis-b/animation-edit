@@ -14,10 +14,10 @@ import javax.imageio.ImageIO;
 public class ImageStore {
 	
 	private class ImageRecord {
-		public BufferedImage image;
+		public ImageWithHistory image;
 		public String imagePath;
 		public boolean wasModified;
-		public ImageRecord(BufferedImage image, String imagePath) {
+		public ImageRecord(ImageWithHistory image, String imagePath) {
 			this.image = image;
 			this.imagePath = imagePath;
 			wasModified = false;
@@ -33,6 +33,7 @@ public class ImageStore {
 	private int maxImageWidth = 1;
 	private int maxImageHeight = 1;
 	private ArrayList<ImageStoreMaxSizeChangedListener> listeners = new ArrayList<ImageStoreMaxSizeChangedListener>();
+	private static final int maxUndoSteps = 10;
 	
 	public ImageStore(String imageDirectory) {
 		if (!imageDirectory.endsWith("/")) {
@@ -74,7 +75,7 @@ public class ImageStore {
 		maxImageWidth = 1;
 		for (Map.Entry<String, ImageRecord> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
-				int val = entry.getValue().image.getWidth(null);
+				int val = entry.getValue().image.getAsBufferedImage().getWidth(null);
 				if (val > maxImageWidth) {
 					maxImageWidth = val;
 				}
@@ -84,7 +85,7 @@ public class ImageStore {
 		maxImageHeight = 1;
 		for (Map.Entry<String, ImageRecord> entry : images.entrySet()) {
 			if (entry.getValue() != null) {
-				int val = entry.getValue().image.getHeight(null);
+				int val = entry.getValue().image.getAsBufferedImage().getHeight(null);
 				if (val > maxImageHeight) {
 					maxImageHeight = val;
 				}
@@ -111,7 +112,7 @@ public class ImageStore {
 				if (entry.getValue().wasModified) {
 					try {
 					    File outputfile = new File(entry.getValue().imagePath);
-					    ImageIO.write(entry.getValue().image, "png", outputfile);
+					    ImageIO.write(entry.getValue().image.getAsBufferedImage(), "png", outputfile);
 					    entry.getValue().wasModified = false;
 					    System.out.println("Wrote image to disk " + entry.getValue().imagePath);
 					} catch (IOException e) {
@@ -125,6 +126,13 @@ public class ImageStore {
 	public void setImageWasModified(String imageName) {
 		if (images.containsKey(imageName)) {
 			images.get(imageName).wasModified = true;
+			images.get(imageName).image.wasModified();
+		}
+	}
+	
+	public void undoLastImageModification(String imageName) {
+		if (images.containsKey(imageName)) {
+			images.get(imageName).image.undoLastModification();
 		}
 	}
 	
@@ -143,7 +151,7 @@ public class ImageStore {
 			return false;
 		}
 		BufferedImage compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
-		images.put(imageName, new ImageRecord(compatibleImage, imageToLoad));
+		images.put(imageName, new ImageRecord(new ImageWithHistory(compatibleImage, maxUndoSteps), imageToLoad));
 		System.out.println(" - OK.");
 		calculateImageSizes();
 		return true;
@@ -156,6 +164,6 @@ public class ImageStore {
 				return null;
 			}
 		}
-		return images.get(imageName).image;
+		return images.get(imageName).image.getAsBufferedImage();
 	}
 }
