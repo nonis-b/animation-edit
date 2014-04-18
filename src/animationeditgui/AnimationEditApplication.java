@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,8 +78,9 @@ public class AnimationEditApplication extends JFrame
 		
 		currentDocument = new CurrentDocument(config.projectPath);
 		
-		animationFrameView = new AnimationFrameView(this, this, this);
-		animationPreview = new AnimationPreview(this, this);
+		animationFrameView = new AnimationFrameView(this, this, this, 
+				config.frameViewTransperentAlphaColor);
+		animationPreview = new AnimationPreview(this, this, config.previewBackgroundColor);
 		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
 		
 		Container container = getContentPane();
@@ -123,7 +123,7 @@ public class AnimationEditApplication extends JFrame
 		
 		JScrollPane editFrameScrollPane = new JScrollPane(animationFrameView);
 		editFramePanel.add(editFrameScrollPane, BorderLayout.CENTER);
-
+		
 		JToolBar drawingToolsToolBar = new JToolBar();
 		colorSelector = new ColorSelector(60, 40);
 		colorSelector.addMouseListener(colorSelector);

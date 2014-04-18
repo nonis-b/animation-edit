@@ -26,13 +26,13 @@ public class AnimationPreview extends JPanel {
     
     private ImageStoreProvider imageStoreProvider;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
-    
 
     public AnimationPreview(ImageStoreProvider imageStoreProvider, 
-    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider) {
+    		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider,
+    		Color bgColor) {
     	this.imageStoreProvider = imageStoreProvider;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(bgColor);
         timer = new Timer();
         setUpdateSpeed(1000, 100);
     }

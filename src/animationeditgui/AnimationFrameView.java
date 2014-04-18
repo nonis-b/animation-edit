@@ -40,13 +40,16 @@ public class AnimationFrameView
     private ImageStoreProvider imageStoreProvider;
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     private DrawingToolSelector drawingToolSelector;
+    private Color transparentAlphaColor;
     
     public AnimationFrameView(ImageStoreProvider imageStoreProvider, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider, 
-    		DrawingToolSelector drawingToolSelector) {
+    		DrawingToolSelector drawingToolSelector, 
+    		Color transparentAlphaColor) {
         this.imageStoreProvider = imageStoreProvider;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         this.drawingToolSelector = drawingToolSelector;
+        this.transparentAlphaColor = transparentAlphaColor;
         offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
     }
     
@@ -181,7 +184,7 @@ public class AnimationFrameView
 					0, 0, image.getWidth(null), image.getHeight(null), null);
 			
         } else {
-			g.setColor(Color.WHITE);
+			g.setColor(transparentAlphaColor);
 			String failText = "No image with found with name " + failName;
 			g.drawString(failText,
 					getWidth()/2 - (int)g.getFontMetrics().getStringBounds(failText, g).getWidth()/2, 
@@ -193,7 +196,7 @@ public class AnimationFrameView
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        setBackground(Color.DARK_GRAY);
+        setBackground(transparentAlphaColor);
         
         // clear to transparent
         Graphics2D offsetScreenBufferGraphics = (Graphics2D)offscreenBufferImage.getGraphics();

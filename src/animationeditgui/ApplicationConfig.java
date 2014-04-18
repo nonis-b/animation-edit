@@ -16,7 +16,8 @@ import org.xml.sax.SAXException;
 public class ApplicationConfig {
 
 	// Values read from file.
-	public Color bgCol;
+	public Color frameViewTransperentAlphaColor;
+	public Color previewBackgroundColor;
 	public String projectPath = ".";
 	public String exportPath = ".";
 
@@ -51,7 +52,8 @@ public class ApplicationConfig {
             Element doc = dom.getDocumentElement();
             projectPath = getTextValueOfElement(projectPath, doc, "projectPath");
             exportPath = getTextValueOfElement(exportPath, doc, "exportPath");
-            bgCol = new Color(Integer.parseInt(getTextValueOfElement("AABBCC", doc, "editorBackgroundColor"), 16));
+            frameViewTransperentAlphaColor = new Color(Integer.parseInt(getTextValueOfElement("aaaaaa", doc, "frameViewTransperentAlphaColor"), 16));
+            previewBackgroundColor = new Color(Integer.parseInt(getTextValueOfElement("555555", doc, "previewBackgroundColor"), 16));
         } catch (ParserConfigurationException pce) {
             System.out.println(pce.getMessage());
         } catch (SAXException se) {
