@@ -1,6 +1,5 @@
 package graphicsutils;
 
-
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,6 +33,17 @@ public class ImageStore {
 	private int maxImageHeight = 1;
 	private ArrayList<ImageStoreMaxSizeChangedListener> listeners = new ArrayList<ImageStoreMaxSizeChangedListener>();
 	private static final int maxUndoSteps = 10;
+	private static final String imageSuffix = ".png";
+	
+	private static String makeSurePathHasSuffix(String path, String suffix) {
+		if (suffix.charAt(0) != '.') {
+			suffix = "." + suffix;
+		}
+		if (path.endsWith(suffix)) {
+			return path;
+		}
+		return path + suffix;
+	}
 	
 	public ImageStore(String imageDirectory) {
 		if (!imageDirectory.endsWith("/")) {
@@ -56,10 +66,9 @@ public class ImageStore {
 	 * @param imageToReload File name of image, eg. "myimage.png".
 	 */
 	public void reloadImage(String imageToReload) {
+		imageToReload = makeSurePathHasSuffix(imageToReload, imageSuffix);
 		if (images.containsKey(imageToReload)) {
 			images.remove(imageToReload);
-		} else if (imageToReload.contains(imageToReload + ".png")) {
-			images.remove(imageToReload + ".png");
 		}
 	}
 	
@@ -124,6 +133,7 @@ public class ImageStore {
 	}
 	
 	public void setImageWasModified(String imageName) {
+		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
 		if (images.containsKey(imageName)) {
 			images.get(imageName).wasModified = true;
 			images.get(imageName).image.wasModified();
@@ -131,16 +141,15 @@ public class ImageStore {
 	}
 	
 	public void undoLastImageModification(String imageName) {
+		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
 		if (images.containsKey(imageName)) {
 			images.get(imageName).image.undoLastModification();
 		}
 	}
 	
 	private boolean loadImage(String imageName) {
-		String imageToLoad = imageDirectory + imageName + ".png";
-		if (imageName.endsWith(".png")) {
-			imageToLoad = imageDirectory + imageName;
-		}
+		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
+		String imageToLoad = imageDirectory + imageName;
 		System.out.print("Load image " + imageToLoad);
 		BufferedImage loadedImage = null;
 		try {
@@ -158,6 +167,7 @@ public class ImageStore {
 	}
 	
 	public Image getImage(String imageName) {
+		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
 		if (!images.containsKey(imageName)) {
 			if (!loadImage(imageName)) {
 				System.out.println("Couldn't find image " + imageName);
