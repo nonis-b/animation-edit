@@ -52,7 +52,7 @@ public class ApplicationMenu extends JMenuBar {
 	protected JMenuItem offsetXMinus10PixItem;
 	protected JMenuItem offsetYPlus10PixItem;
 	protected JMenuItem offsetYMinus10PixItem;
-	protected JMenuItem editFrameTicsItem;
+	protected JMenuItem editFrameItem;
 	protected JMenuItem editFrameTagItem;
 	protected JMenuItem editFrameNextItem;
 	
@@ -114,9 +114,7 @@ public class ApplicationMenu extends JMenuBar {
 		offsetXMinus10PixItem = addMenuItem(imageMenu, handler, "Offset X -10", KeyEvent.VK_J, KeyEvent.CTRL_MASK);
 		offsetYPlus10PixItem = addMenuItem(imageMenu, handler, "Offset Y +10", KeyEvent.VK_K, KeyEvent.CTRL_MASK);
 		offsetYMinus10PixItem = addMenuItem(imageMenu, handler, "Offset Y -10", KeyEvent.VK_I, KeyEvent.CTRL_MASK);
-		editFrameTicsItem = addMenuItem(imageMenu, handler, "Edit frame tics", KeyEvent.VK_T, KeyEvent.CTRL_MASK);
-		editFrameTagItem = addMenuItem(imageMenu, handler, "Edit frame tag", KeyEvent.VK_G, KeyEvent.CTRL_MASK);
-		editFrameNextItem = addMenuItem(imageMenu, handler, "Edit frame next tag", KeyEvent.VK_F, KeyEvent.CTRL_MASK);
+		editFrameItem = addMenuItem(imageMenu, handler, "Edit frame properties", KeyEvent.VK_F, KeyEvent.CTRL_MASK);
 		
 		zoomInItem = addMenuItem(imageMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
 		zoomOutItem = addMenuItem(imageMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);

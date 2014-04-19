@@ -156,6 +156,43 @@ public class AnimationEditApplication extends JFrame
 	public void showHelp() {
 		HelpWindow.show();
 	}
+	
+	public void editCurrentFrame() {
+		ArrayList<PropertiesInputDialog.PropertyItem> propertyList = new ArrayList<PropertiesInputDialog.PropertyItem>();
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Tics", 
+				Integer.toString(animationFrameSelector.getSelected().getTics())));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Tag", animationFrameSelector.getSelected().getTag()));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Next tag", animationFrameSelector.getSelected().getNext()));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Offset x", 
+				Integer.toString(animationFrameSelector.getSelected().getOffsetX())));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Offset y", 
+				Integer.toString(animationFrameSelector.getSelected().getOffsetY())));
+		
+		new PropertiesInputDialog(this, "Edit frame " + animationFrameSelector.getSelected().getImage(), propertyList);
+		
+		for (PropertiesInputDialog.PropertyItem property : propertyList) {
+			int intValue = 0;
+			try {
+				intValue = Integer.parseInt(property.value);
+			} catch (Exception e) {}
+			
+			if (property.name.equals("Tics")) {
+				animationFrameSelector.getSelected().setTics(intValue);
+			}
+			if (property.name.equals("Tag")) {
+				animationFrameSelector.getSelected().setTag(property.value);
+			}
+			if (property.name.equals("Next tag")) {
+				animationFrameSelector.getSelected().setNext(property.value);
+			}
+			if (property.name.equals("Offset x")) {
+				animationFrameSelector.getSelected().setOffsetX(intValue);
+			}
+			if (property.name.equals("Offset y")) {
+				animationFrameSelector.getSelected().setOffsetY(intValue);
+			}
+		}
+	}
 
 	/**
 	 * Handle all actions in main window.
@@ -273,28 +310,8 @@ public class AnimationEditApplication extends JFrame
 				animationFrameView.setOnionSkinDepth(5);
 			}
 			
-			if (event.getSource() == menu.editFrameTicsItem) {
-				String val = JOptionPane.showInputDialog("Set tics for frame",
-						animationFrameSelector.getSelected().getTics());
-				if (val != null) {
-					animationFrameSelector.getSelected().setTics(Integer.parseInt(val));
-				}
-			}
-			
-			if (event.getSource() == menu.editFrameTagItem) {
-				String val = JOptionPane.showInputDialog("Set tag for frame",
-						animationFrameSelector.getSelected().getTag());
-				if (val != null) {
-					animationFrameSelector.getSelected().setTag(val);
-				}
-			}
-			
-			if (event.getSource() == menu.editFrameNextItem) {
-				String val = JOptionPane.showInputDialog("Set next tag for frame",
-						animationFrameSelector.getSelected().getNext());
-				if (val != null) {
-					animationFrameSelector.getSelected().setNext(val);
-				}
+			if (event.getSource() == menu.editFrameItem) {
+				editCurrentFrame();
 			}
 			
 			// MENU -> "Save" (AnimationEdit format)

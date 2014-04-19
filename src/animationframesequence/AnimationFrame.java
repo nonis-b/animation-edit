@@ -67,6 +67,14 @@ public class AnimationFrame {
 		this.tag = tag;
 	}
 	
+	public void setOffsetX(int offset) {
+		offsetX = offset;
+	}
+	
+	public void setOffsetY(int offset) {
+		offsetY = offset;
+	}
+	
 	public void addToOffsetX(int delta) {
 		offsetX += delta;
 	}
