@@ -211,7 +211,7 @@ public class AnimationFrameView
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
 	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
-	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
+	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
     	for (int i = numOnionSkin; i > 0; i--) {
@@ -220,7 +220,7 @@ public class AnimationFrameView
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
 	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
-	    				0.7f - ((float)Math.abs(i))/(5), frame.getImage());
+	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
     	
