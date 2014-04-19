@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import java.awt.Toolkit;
 
 /**
  * The application menu bar.
@@ -81,16 +82,16 @@ public class ApplicationMenu extends JMenuBar {
 		JMenu imageMenu = new JMenu("Image");
 		JMenu helpMenu = new JMenu("Help");
 
-		newItem = addMenuItem(fileMenu, handler, "New", KeyEvent.VK_N, ActionEvent.CTRL_MASK);
-		openItem = addMenuItem(fileMenu, handler, "Open", KeyEvent.VK_O, ActionEvent.CTRL_MASK);
-		saveItem = addMenuItem(fileMenu, handler, "Save", KeyEvent.VK_S, ActionEvent.CTRL_MASK);
+		newItem = addMenuItem(fileMenu, handler, "New", KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		openItem = addMenuItem(fileMenu, handler, "Open", KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		saveItem = addMenuItem(fileMenu, handler, "Save", KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 		saveAsItem = addMenuItem(fileMenu, handler, "Save as...");
-		reloadImagesItem = addMenuItem(fileMenu, handler, "Reload images", KeyEvent.VK_R, ActionEvent.CTRL_MASK);
-		quitItem = addMenuItem(fileMenu, handler, "Quit");
+		reloadImagesItem = addMenuItem(fileMenu, handler, "Reload images", KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		quitItem = addMenuItem(fileMenu, handler, "Quit", KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 
 		helpItem = addMenuItem(helpMenu, handler, "Help");
 
-		undoItem = addMenuItem(editMenu, handler, "Undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK);
+		undoItem = addMenuItem(editMenu, handler, "Undo", KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 
 		preview1FpsItem = addMenuItem(previewMenu, handler, "1 FPS", KeyEvent.VK_1, 0);
 		preview2FpsItem = addMenuItem(previewMenu, handler, "2 FPS", KeyEvent.VK_2, 0);
@@ -114,7 +115,7 @@ public class ApplicationMenu extends JMenuBar {
 		offsetXMinus10PixItem = addMenuItem(imageMenu, handler, "Offset X -10", KeyEvent.VK_J, KeyEvent.CTRL_MASK);
 		offsetYPlus10PixItem = addMenuItem(imageMenu, handler, "Offset Y +10", KeyEvent.VK_K, KeyEvent.CTRL_MASK);
 		offsetYMinus10PixItem = addMenuItem(imageMenu, handler, "Offset Y -10", KeyEvent.VK_I, KeyEvent.CTRL_MASK);
-		editFrameItem = addMenuItem(imageMenu, handler, "Edit frame properties", KeyEvent.VK_F, KeyEvent.CTRL_MASK);
+		editFrameItem = addMenuItem(imageMenu, handler, "Edit frame properties", KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
 		
 		zoomInItem = addMenuItem(imageMenu, handler, "Zoom in", KeyEvent.VK_PERIOD, 0);
 		zoomOutItem = addMenuItem(imageMenu, handler, "Zoom out", KeyEvent.VK_COMMA, 0);
