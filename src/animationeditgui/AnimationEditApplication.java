@@ -194,6 +194,80 @@ public class AnimationEditApplication extends JFrame
 		}
 	}
 
+	private void newFrameUseCurrentImage() {
+		String name = animationFrameSelector.getSelected().getImage();
+		if (animationSequence.getImageStore().getImage(name) == null) {
+			JOptionPane.showMessageDialog(null, "No png file named " + name, "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		animationSequence.addAnimationFrame(name);
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+	
+	private void newFrameCopyImage() {
+		String newImageName = JOptionPane.showInputDialog(
+				"File name for copied image? \n(png image in the working directory, example \"myimagecopy\", \"myimagecopy.png\")",
+				"");
+		if (animationSequence.getImageStore().getImage(newImageName) != null) {
+			JOptionPane.showMessageDialog(null, "png file named " + newImageName + " already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if (!animationSequence.getImageStore().copyImage(animationFrameSelector.getSelected().getImage(), newImageName)) {
+			JOptionPane.showMessageDialog(null, "Error copying image.", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		animationSequence.addAnimationFrame(newImageName);
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+
+	private void newFrameNewImage() {
+		ArrayList<PropertiesInputDialog.PropertyItem> propertyList = new ArrayList<PropertiesInputDialog.PropertyItem>();
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Name (example \"mynewimage\", \"mynewimage.png\")", ""));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Width (pixels)", "100"));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Height (pixels)", "100"));
+		new PropertiesInputDialog(this, "Create new image", propertyList);
+		String newImageName = null;
+		int width = 100;
+		int height = 100;
+		for (PropertiesInputDialog.PropertyItem property : propertyList) {
+			int intValue = 0;
+			try {
+				intValue = Integer.parseInt(property.value);
+			} catch (Exception e) {}
+			
+			if (property.name.equals("Name (example \"mynewimage\", \"mynewimage.png\")")) {
+				newImageName = property.value;
+			}
+			if (property.name.equals("Width (pixels)")) {
+				width = intValue;
+			}
+			if (property.name.equals("Height (pixels)")) {
+				height = intValue;
+			}
+		}
+		
+		if (animationSequence.getImageStore().getImage(newImageName) != null) {
+			JOptionPane.showMessageDialog(null, "png file named " + newImageName + " already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		animationSequence.getImageStore().createNewImage(newImageName, width, height);
+		animationSequence.addAnimationFrame(newImageName);
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+
+	private void newFrameFromWorkingDirectory() {
+		String name = JOptionPane.showInputDialog(
+				"Image for frame? \n(Should be a png image in the working directory, example \"myimage\", \"myimage.png\")",
+				"");
+		if (animationSequence.getImageStore().getImage(name) == null) {
+			JOptionPane.showMessageDialog(null, "No png file named " + name, "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		animationSequence.addAnimationFrame(name);
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+	
 	/**
 	 * Handle all actions in main window.
 	 */
@@ -212,12 +286,22 @@ public class AnimationEditApplication extends JFrame
 				animationFrameView.zoom(0.5f);
 			}
 
-			if (event.getSource() == menu.newFrameItem) {
-				animationSequence.addAnimationFrame(JOptionPane.showInputDialog(
-						"Image for frame? (Should be a png image in the working directory)",
-						""));
-				animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+			if (event.getSource() == menu.newFrameUseCurrentImageItem) {
+				newFrameUseCurrentImage();
 			}
+			
+			if (event.getSource() == menu.newFrameCopyImageItem) {
+				newFrameCopyImage();
+			}
+			
+			if (event.getSource() == menu.newFrameNewImageItem) {
+				newFrameNewImage();
+			}
+			
+			if (event.getSource() == menu.newFrameFromWorkingDirectoryItem) {
+				newFrameFromWorkingDirectory();
+			}
+			
 			if (event.getSource() == menu.deleteFrameItem) {
 				animationSequence.deleteAnimationFrame(animationFrameSelector.getSelected());
 			}

@@ -35,12 +35,8 @@ public class AnimationFrameSequence {
 	}
 	
 	public void deleteAnimationFrame(AnimationFrame frameToDelete) {
-		for (AnimationFrame frame : animationFrames) {
-			if (frame.equals(frameToDelete)) {
-				animationFrames.remove(frameToDelete);
-				notifyChangeListeners();
-			}
-		}
+		animationFrames.remove(frameToDelete);
+		notifyChangeListeners();
 	}
 	
 	private void notifyChangeListeners() {

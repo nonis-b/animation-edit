@@ -147,26 +147,48 @@ public class ImageStore {
 		}
 	}
 	
+	public void createNewImage(String imageName, int x, int y) {
+		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
+		String imagePath = imageDirectory + imageName;
+		BufferedImage compatibleImage = CompatibleImageCreator.createCompatibleImage(x, y);
+		putNewImage(imageName, imagePath, compatibleImage);
+	}
+	
+	public boolean copyImage(String originalImageName, String newImageName) {
+		newImageName = makeSurePathHasSuffix(newImageName, imageSuffix);
+		String newImagePath = imageDirectory + newImageName;
+		ImageRecord originalImageRecord = getImageRecord(originalImageName);
+		if (originalImageRecord == null) return false;
+		BufferedImage compatibleImage = CompatibleImageCreator.createCompatibleImage(originalImageRecord.image.getAsBufferedImage());
+		putNewImage(newImageName, newImagePath, compatibleImage);
+		return true;
+	}
+	
+	private void putNewImage(String imageName, String imagePath, BufferedImage image) {
+		images.put(imageName, new ImageRecord(new ImageWithHistory(image, maxUndoSteps), imagePath));
+		calculateImageSizes();
+	}
+	
 	private boolean loadImage(String imageName) {
 		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
-		String imageToLoad = imageDirectory + imageName;
-		System.out.print("Load image " + imageToLoad);
+		String imagePath = imageDirectory + imageName;
+		System.out.print("Load image " + imagePath);
 		BufferedImage loadedImage = null;
 		try {
-		    loadedImage = ImageIO.read(new File(imageToLoad));
+		    loadedImage = ImageIO.read(new File(imagePath));
 		} catch (IOException e) {
 			images.put(imageName, null);
 			System.out.println(" - fail.");
 			return false;
 		}
 		BufferedImage compatibleImage = CompatibleImageCreator.createCompatibleImage(loadedImage);
-		images.put(imageName, new ImageRecord(new ImageWithHistory(compatibleImage, maxUndoSteps), imageToLoad));
+		putNewImage(imageName, imagePath, compatibleImage);
 		System.out.println(" - OK.");
-		calculateImageSizes();
 		return true;
 	}
 	
-	public Image getImage(String imageName) {
+	private ImageRecord getImageRecord(String imageName) {
+		if (imageName == null) return null;
 		imageName = makeSurePathHasSuffix(imageName, imageSuffix);
 		if (!images.containsKey(imageName)) {
 			if (!loadImage(imageName)) {
@@ -174,6 +196,14 @@ public class ImageStore {
 				return null;
 			}
 		}
-		return images.get(imageName).image.getAsBufferedImage();
+		return images.get(imageName);
+	}
+	
+	public Image getImage(String imageName) {
+		ImageRecord imageRecord = getImageRecord(imageName);
+		if (imageRecord == null) {
+			return null;
+		}
+		return imageRecord.image.getAsBufferedImage();
 	}
 }

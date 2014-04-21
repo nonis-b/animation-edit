@@ -1,6 +1,5 @@
 package animationeditgui;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
@@ -33,7 +32,12 @@ public class ApplicationMenu extends JMenuBar {
 	protected JMenuItem previewStopItem;
 	protected JMenuItem previewNextFrameItem;
 	protected JMenuItem previewPreviousFrameItem;
-	protected JMenuItem newFrameItem;
+	
+	protected JMenuItem newFrameUseCurrentImageItem;
+	protected JMenuItem newFrameCopyImageItem;
+	protected JMenuItem newFrameNewImageItem;
+	protected JMenuItem newFrameFromWorkingDirectoryItem;
+	
 	protected JMenuItem deleteFrameItem;
 	protected JMenuItem moveFrameUpItem;
 	protected JMenuItem moveFrameDownItem;
@@ -102,7 +106,11 @@ public class ApplicationMenu extends JMenuBar {
 		previewNextFrameItem = addMenuItem(previewMenu, handler, "Next frame", KeyEvent.VK_N, 0);
 		previewPreviousFrameItem = addMenuItem(previewMenu, handler, "Previous frame", KeyEvent.VK_B, 0);
 		
-		newFrameItem = addMenuItem(framesMenu, handler, "New frame", KeyEvent.VK_N, KeyEvent.ALT_MASK);
+		newFrameUseCurrentImageItem = addMenuItem(framesMenu, handler, "New frame, use currently selected image", KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		newFrameCopyImageItem = addMenuItem(framesMenu, handler, "New frame, copy currently selected image", KeyEvent.VK_D, KeyEvent.ALT_MASK);
+		newFrameNewImageItem = addMenuItem(framesMenu, handler, "New frame, create new image", KeyEvent.VK_N, KeyEvent.ALT_MASK);
+		newFrameFromWorkingDirectoryItem = addMenuItem(framesMenu, handler, "New frame, select image from working directory");
+		
 		deleteFrameItem = addMenuItem(framesMenu, handler, "Delete frame", KeyEvent.VK_BACK_SPACE, 0);
 		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);;
 		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);;

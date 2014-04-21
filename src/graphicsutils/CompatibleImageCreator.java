@@ -41,7 +41,7 @@ public class CompatibleImageCreator {
 	 * @param h Height.
 	 * @return Optimized image.
 	 */
-	public static Image createCompatibleImage(int w, int h) {
+	public static BufferedImage createCompatibleImage(int w, int h) {
 
         GraphicsConfiguration graphicsConfiguration
                 = GraphicsEnvironment
