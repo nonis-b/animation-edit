@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -170,13 +171,16 @@ public class AnimationFrameView
     }
     
     
-    private void drawImage(Graphics g, Image image, int x, int y, float alpha, String failName) {
+    private void drawImage(Graphics2D g, Image image, int x, int y, float alpha, String failName) {
     	if (image != null) {
     		if (alpha < 0.00001f) alpha = 0.01f;
     		float[] scales = { alpha, alpha, alpha, alpha };
 			float[] offsets = new float[4];
 			RescaleOp rop = new RescaleOp(scales, offsets, null);
-			((Graphics2D)(offscreenBufferImage.getGraphics())).drawImage((BufferedImage)image, rop, x, y);
+			Graphics2D offsetScreenBufferGraphics = (Graphics2D)offscreenBufferImage.getGraphics();
+			offsetScreenBufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			offsetScreenBufferGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+			offsetScreenBufferGraphics.drawImage((BufferedImage)image, rop, x, y);
 			g.drawImage(offscreenBufferImage, (int)(x*scale), (int)(y*scale), 
 					(int)(image.getWidth(null)*scale), (int)(image.getHeight(null)*scale), 
 					0, 0, image.getWidth(null), image.getHeight(null), null);
@@ -194,6 +198,9 @@ public class AnimationFrameView
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         setBackground(transparentAlphaColor);
         
         // clear to transparent
@@ -210,7 +217,7 @@ public class AnimationFrameView
 		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
+	    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
@@ -219,7 +226,7 @@ public class AnimationFrameView
 	    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 
+	    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
@@ -227,7 +234,7 @@ public class AnimationFrameView
     	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
     	if (frame != null) {
     		Image image = imageStore.getImage(frame.getImage());
-    		drawImage(g, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
+    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
     		GridDrawingUtil.drawBoundingBox(Color.BLUE, g, 0, 0, modelToScreenCoord(image.getWidth(null)), 
     				modelToScreenCoord(image.getHeight(null)));
     	}

@@ -5,6 +5,7 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
@@ -25,6 +26,7 @@ public class EraseDrawingTool implements DrawingTool {
 	public void onMouseDown(BufferedImage image, int x, int y) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
 		g.setColor(eraseColor);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.setComposite(AlphaComposite.Clear);
 		image.getGraphics().drawLine(x, y, x, y);
@@ -43,6 +45,7 @@ public class EraseDrawingTool implements DrawingTool {
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
 		Graphics2D g = (Graphics2D)image.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.setColor(eraseColor);
 		g.setComposite(AlphaComposite.Clear);
