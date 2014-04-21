@@ -27,6 +27,7 @@ import drawingtools.PenDrawingTool;
 import drawingtools.PickupColorDrawingTool;
 
 import animationeditgui.DirectoryChangeWatcher.DirectoryChangedListener;
+import animationeditgui.FrameListButtonBar.FrameListButtonBarListener;
 import animationframesequence.AnimationFrame;
 import animationframesequence.AnimationFrameSequence;
 import animationframesequence.AnimationFrameSequenceFile;
@@ -48,7 +49,8 @@ public class AnimationEditApplication extends JFrame
 				DrawingToolSelector,
 				CurrentColorSelector, 
 				CurrentBrushSelector,
-				DirectoryChangedListener
+				DirectoryChangedListener,
+				FrameListButtonBarListener
 	{
 
 	private AnimationFrameSelector animationFrameSelector;
@@ -112,8 +114,11 @@ public class AnimationEditApplication extends JFrame
 
 		JPanel panel = new JPanel(new BorderLayout());
 
+		JPanel animationFrameListPanel = new JPanel(new BorderLayout());
 		JToolBar animationFrameSelectorToolBar = new JToolBar();
-		animationFrameSelectorToolBar.add(animationFrameSelector);
+		animationFrameListPanel.add(animationFrameSelector, BorderLayout.CENTER);
+		animationFrameListPanel.add(new FrameListButtonBar(this), BorderLayout.NORTH);
+		animationFrameSelectorToolBar.add(animationFrameListPanel);
 		panel.add(animationFrameSelectorToolBar, BorderLayout.WEST);
 		
 		JPanel editFramePanel = new JPanel(new BorderLayout());
@@ -562,15 +567,46 @@ public class AnimationEditApplication extends JFrame
 		return colorSelector.getColor();
 	}
 
-
 	@Override
 	public void setColor(Color color) {
 		colorSelector.setColor(color);
 	}
 
-
 	@Override
 	public float getBrushWidth() {
 		return selectBrushSizeField.getBrushSize();
+	}
+
+	@Override
+	public void onMoveFrameUpButton() {
+		animationSequence.moveAnimationFrameEarlier(animationFrameSelector.getSelected());
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+
+	@Override
+	public void onMoveFrameDownButton() {
+		animationSequence.moveAnimationFrameLater(animationFrameSelector.getSelected());
+		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
+	}
+
+	@Override
+	public void onEditFrameInfoButton() {
+		editCurrentFrame();
+	}
+
+	@Override
+	public void onDeleteFrameButton() {
+		animationSequence.deleteAnimationFrame(animationFrameSelector.getSelected());
+	}
+
+	@Override
+	public void onCopyFrameNewImageButton() {
+		newFrameCopyImage();
+
+	}
+
+	@Override
+	public void onCopyFrameSameImageButton() {
+		newFrameUseCurrentImage();
 	}
 }
