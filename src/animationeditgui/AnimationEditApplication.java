@@ -61,7 +61,7 @@ public class AnimationEditApplication extends JFrame
 	private AnimationFrameSequence animationSequence = null;
 	private ColorSelector colorSelector;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
-	private SelectBrushSizeField selectBrushSizeField;
+	private BrushPropertiesMenu selectBrushSizeField;
 	private CurrentDocument currentDocument;
 	private DirectoryChangeWatcher directoryChangeWatcher;
 	
@@ -142,7 +142,7 @@ public class AnimationEditApplication extends JFrame
 				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this));
 		drawingToolsToolBar.add(drawingToolSelectionMenu);
-		selectBrushSizeField = new SelectBrushSizeField();
+		selectBrushSizeField = new BrushPropertiesMenu();
 		drawingToolsToolBar.add(selectBrushSizeField);
 		panel.add(drawingToolsToolBar, BorderLayout.NORTH);
 		
@@ -152,8 +152,8 @@ public class AnimationEditApplication extends JFrame
 		container.add(panel);
 		
 		// init main window
-		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, Toolkit
-				.getDefaultToolkit().getScreenSize().height - 60);
+		setSize(Toolkit.getDefaultToolkit().getScreenSize().width - 40, 
+				Toolkit.getDefaultToolkit().getScreenSize().height - 60);
 		setLocation(20, 20);
 		setVisible(true);
 		setResizable(true);
@@ -574,6 +574,11 @@ public class AnimationEditApplication extends JFrame
 	@Override
 	public void setColor(Color color) {
 		colorSelector.setColor(color);
+	}
+	
+	@Override
+	public boolean getBrushIsSmooth() {
+		return selectBrushSizeField.isSmooth();
 	}
 
 	@Override

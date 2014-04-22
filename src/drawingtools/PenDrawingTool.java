@@ -25,7 +25,11 @@ public class PenDrawingTool implements DrawingTool {
 	public void onMouseDown(BufferedImage image, int x, int y) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
 		g.setColor(colorSelector.getColor());
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		if (brushSelector.getBrushIsSmooth()) {
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		} else {
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		}
 		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.drawLine(x, y, x, y);
 		lastMouseDownX = x;
@@ -43,7 +47,11 @@ public class PenDrawingTool implements DrawingTool {
 		if (lastMouseDownX < 0 || lastMouseDownY < 0) return;
 		Graphics2D g = (Graphics2D)image.getGraphics();
 		g.setColor(colorSelector.getColor());
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		if (brushSelector.getBrushIsSmooth()) {
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		} else {
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		}
 		g.setStroke(new BasicStroke(brushSelector.getBrushWidth()));
 		g.drawLine(lastMouseDownX, lastMouseDownY, x, y);
 		lastMouseDownX = x;
