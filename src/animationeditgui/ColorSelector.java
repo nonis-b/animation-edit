@@ -24,7 +24,9 @@ public class ColorSelector extends JPanel implements MouseListener {
                 this,
                 "Choose Color",
                 getBackground());
-		setColor(color);
+		if (color != null) {
+			setColor(color);
+		}
 		e.consume();
 	}
 	

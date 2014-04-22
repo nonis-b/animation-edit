@@ -130,9 +130,13 @@ public class AnimationEditApplication extends JFrame
 		editFramePanel.add(editFrameScrollPane, BorderLayout.CENTER);
 		
 		JToolBar drawingToolsToolBar = new JToolBar();
+		
+		JPanel colorSelectorPanel = new JPanel();
 		colorSelector = new ColorSelector(60, 40);
 		colorSelector.addMouseListener(colorSelector);
-		drawingToolsToolBar.add(colorSelector);
+		colorSelectorPanel.add(colorSelector);
+		drawingToolsToolBar.add(colorSelectorPanel);
+		
 		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
 				new PenDrawingTool(this, this), 
 				new EraseDrawingTool(this), 
