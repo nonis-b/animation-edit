@@ -17,6 +17,7 @@ public class ApplicationConfig {
 
 	// Values read from file.
 	public Color frameViewTransperentAlphaColor;
+	public Color frameViewBackgroundColor;
 	public Color previewBackgroundColor;
 	public String projectPath = ".";
 	public String exportPath = ".";
@@ -52,7 +53,8 @@ public class ApplicationConfig {
             Element doc = dom.getDocumentElement();
             projectPath = getTextValueOfElement(projectPath, doc, "projectPath");
             exportPath = getTextValueOfElement(exportPath, doc, "exportPath");
-            frameViewTransperentAlphaColor = new Color(Integer.parseInt(getTextValueOfElement("aaaaaa", doc, "frameViewTransperentAlphaColor"), 16));
+            frameViewTransperentAlphaColor = new Color(Integer.parseInt(getTextValueOfElement("bbbbbb", doc, "frameViewTransperentAlphaColor"), 16));
+            frameViewBackgroundColor = new Color(Integer.parseInt(getTextValueOfElement("777777", doc, "frameViewBackgroundColor"), 16));
             previewBackgroundColor = new Color(Integer.parseInt(getTextValueOfElement("555555", doc, "previewBackgroundColor"), 16));
         } catch (ParserConfigurationException pce) {
             System.out.println(pce.getMessage());

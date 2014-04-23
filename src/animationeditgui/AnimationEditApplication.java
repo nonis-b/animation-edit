@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.ScrollPaneLayout;
 
 import drawingtools.CurrentBrushSelector;
 import drawingtools.CurrentColorSelector;
@@ -126,8 +127,12 @@ public class AnimationEditApplication extends JFrame
 		
 		animationFrameView.addMouseListener(animationFrameView);
 		animationFrameView.addMouseMotionListener(animationFrameView);
-		
+
 		JScrollPane editFrameScrollPane = new JScrollPane(animationFrameView);
+		editFrameScrollPane.setBackground(config.frameViewBackgroundColor);
+		editFrameScrollPane.setLayout(new CenteringScrollPaneLayout());
+		
+		editFrameScrollPane.getViewport().setBackground(config.frameViewBackgroundColor);
 		editFramePanel.add(editFrameScrollPane, BorderLayout.CENTER);
 		
 		JToolBar drawingToolsToolBar = new JToolBar();
