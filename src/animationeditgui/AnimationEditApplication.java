@@ -2,6 +2,7 @@ package animationeditgui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -61,7 +62,7 @@ public class AnimationEditApplication extends JFrame
 	private AnimationFrameSequence animationSequence = null;
 	private ColorSelector colorSelector;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
-	private BrushPropertiesMenu selectBrushSizeField;
+	private BrushPropertiesMenu brushPropertiesMenu;
 	private CurrentDocument currentDocument;
 	private DirectoryChangeWatcher directoryChangeWatcher;
 	
@@ -142,8 +143,19 @@ public class AnimationEditApplication extends JFrame
 				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this));
 		drawingToolsToolBar.add(drawingToolSelectionMenu);
-		selectBrushSizeField = new BrushPropertiesMenu();
-		drawingToolsToolBar.add(selectBrushSizeField);
+		brushPropertiesMenu = new BrushPropertiesMenu();
+		drawingToolsToolBar.add(brushPropertiesMenu);
+		drawingToolsToolBar.add(new ZoomButtonBar(new ZoomButtonBar.ZoomChangeListener() {
+			@Override
+			public void onZoomOut() {
+				zoomOut();
+			}
+			
+			@Override
+			public void onZoomIn() {
+				zoomIn();
+			}
+		}));
 		panel.add(drawingToolsToolBar, BorderLayout.NORTH);
 		
 		panel.add(editFramePanel, BorderLayout.CENTER);
@@ -277,6 +289,14 @@ public class AnimationEditApplication extends JFrame
 		animationFrameSelector.setAnimationFrames(animationSequence.getAnimationFrames());
 	}
 	
+	void zoomIn() {
+		animationFrameView.zoom(2.0f);
+	}
+	
+	void zoomOut() {
+		animationFrameView.zoom(0.5f);
+	}
+	
 	/**
 	 * Handle all actions in main window.
 	 */
@@ -289,10 +309,10 @@ public class AnimationEditApplication extends JFrame
 			}
 			
 			if (event.getSource() == menu.zoomInItem) {
-				animationFrameView.zoom(2.0f);
+				zoomIn();
 			}
 			if (event.getSource() == menu.zoomOutItem) {
-				animationFrameView.zoom(0.5f);
+				zoomOut();
 			}
 
 			if (event.getSource() == menu.newFrameUseCurrentImageItem) {
@@ -578,12 +598,12 @@ public class AnimationEditApplication extends JFrame
 	
 	@Override
 	public boolean getBrushIsSmooth() {
-		return selectBrushSizeField.isSmooth();
+		return brushPropertiesMenu.isSmooth();
 	}
 
 	@Override
 	public float getBrushWidth() {
-		return selectBrushSizeField.getBrushSize();
+		return brushPropertiesMenu.getBrushSize();
 	}
 
 	@Override
