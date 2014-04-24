@@ -2,7 +2,6 @@ package animationeditgui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -18,8 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.ScrollPaneLayout;
 
+import drawingtools.BucketDrawingTool;
+import drawingtools.ColorToleranceSelector;
 import drawingtools.CurrentBrushSelector;
 import drawingtools.CurrentColorSelector;
 import drawingtools.DrawingTool;
@@ -51,6 +51,7 @@ public class AnimationEditApplication extends JFrame
 				DrawingToolSelector,
 				CurrentColorSelector, 
 				CurrentBrushSelector,
+				ColorToleranceSelector,
 				DirectoryChangedListener,
 				FrameListButtonBarListener
 	{
@@ -146,7 +147,8 @@ public class AnimationEditApplication extends JFrame
 		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
 				new PenDrawingTool(this, this), 
 				new EraseDrawingTool(this), 
-				new PickupColorDrawingTool(this));
+				new PickupColorDrawingTool(this),
+				new BucketDrawingTool(this, this));
 		drawingToolsToolBar.add(drawingToolSelectionMenu);
 		brushPropertiesMenu = new BrushPropertiesMenu();
 		drawingToolsToolBar.add(brushPropertiesMenu);
@@ -642,5 +644,10 @@ public class AnimationEditApplication extends JFrame
 	@Override
 	public void onCopyFrameSameImageButton() {
 		newFrameUseCurrentImage();
+	}
+
+	@Override
+	public float getColorTolerance() {
+		return 0.3f;
 	}
 }

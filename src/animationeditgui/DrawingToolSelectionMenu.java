@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import drawingtools.BucketDrawingTool;
 import drawingtools.DrawingTool;
 
 /**
@@ -42,12 +43,13 @@ public class DrawingToolSelectionMenu extends JPanel {
 	}
 
 	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool, 
-			DrawingTool pickupColorDrawingTool) {
+			DrawingTool pickupColorDrawingTool, BucketDrawingTool bucketDrawingTool) {
 		super();
 		this.tool = penDrawingTool;
 		createButton(penDrawingTool, "res/toolPen.png");
 		createButton(eraseDrawingTool, "res/toolErase.png");
 		createButton(pickupColorDrawingTool, "res/toolPickup.png");
+		createButton(bucketDrawingTool, "res/toolBucket.png");
 		setLayout(new GridLayout(1, 3));
 	}
 
