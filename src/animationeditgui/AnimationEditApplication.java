@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +67,7 @@ public class AnimationEditApplication extends JFrame
 	private ColorSelector colorSelector;
 	private DrawingToolSelectionMenu drawingToolSelectionMenu;
 	private BrushPropertiesMenu brushPropertiesMenu;
+	private ColorTolerancePropertiesMenu colorToleranePropertiesMenu;
 	private CurrentDocument currentDocument;
 	private DirectoryChangeWatcher directoryChangeWatcher;
 	
@@ -137,6 +140,7 @@ public class AnimationEditApplication extends JFrame
 		editFramePanel.add(editFrameScrollPane, BorderLayout.CENTER);
 		
 		JToolBar drawingToolsToolBar = new JToolBar();
+		drawingToolsToolBar.setLayout(new GridLayout(1,4));
 		
 		JPanel colorSelectorPanel = new JPanel();
 		colorSelector = new ColorSelector(60, 40);
@@ -144,14 +148,21 @@ public class AnimationEditApplication extends JFrame
 		colorSelectorPanel.add(colorSelector);
 		drawingToolsToolBar.add(colorSelectorPanel);
 		
+		brushPropertiesMenu = new BrushPropertiesMenu();
+		colorToleranePropertiesMenu = new ColorTolerancePropertiesMenu();
 		drawingToolSelectionMenu = new DrawingToolSelectionMenu(
 				new PenDrawingTool(this, this), 
 				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this),
-				new BucketDrawingTool(this, this));
-		drawingToolsToolBar.add(drawingToolSelectionMenu);
-		brushPropertiesMenu = new BrushPropertiesMenu();
-		drawingToolsToolBar.add(brushPropertiesMenu);
+				new BucketDrawingTool(this, this), 
+				brushPropertiesMenu, 
+				colorToleranePropertiesMenu);
+		JPanel drawingToolSelectionMenuContainer = new JPanel();
+		drawingToolSelectionMenuContainer.setLayout(new FlowLayout(FlowLayout.CENTER));
+		drawingToolSelectionMenuContainer.add(drawingToolSelectionMenu);
+		drawingToolsToolBar.add(drawingToolSelectionMenuContainer);
+		drawingToolsToolBar.add(drawingToolSelectionMenu.getToolPropertiesPanel());
+		
 		drawingToolsToolBar.add(new ZoomButtonBar(new ZoomButtonBar.ZoomChangeListener() {
 			@Override
 			public void onZoomOut() {
@@ -163,6 +174,7 @@ public class AnimationEditApplication extends JFrame
 				zoomIn();
 			}
 		}));
+		drawingToolsToolBar.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 100));
 		panel.add(drawingToolsToolBar, BorderLayout.NORTH);
 		
 		panel.add(editFramePanel, BorderLayout.CENTER);
@@ -648,6 +660,6 @@ public class AnimationEditApplication extends JFrame
 
 	@Override
 	public float getColorTolerance() {
-		return 0.3f;
+		return colorToleranePropertiesMenu.getColorTolerance();
 	}
 }

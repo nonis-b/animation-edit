@@ -1,5 +1,6 @@
 package animationeditgui;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -12,6 +13,7 @@ class BrushPropertiesMenu extends JPanel {
 	private JCheckBox smoothCheckBox;
 	
 	public BrushPropertiesMenu() {
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		smoothCheckBox = new JCheckBox("Smooth");
 		brushSizeSlider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
 		brushSizeSlider.setMajorTickSpacing(1);

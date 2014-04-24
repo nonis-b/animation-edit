@@ -1,9 +1,13 @@
 package animationeditgui;
 
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,41 +23,71 @@ public class DrawingToolSelectionMenu extends JPanel {
 
 	private DrawingTool tool;
 	private ButtonHandler buttonHandler = new ButtonHandler();
+	private JPanel toolPropertiesPanel = new JPanel(); 
+	private ArrayList<ToolButton> buttonList = new ArrayList<ToolButton>();
 	
 	private class ToolButton extends JButton {
 		public DrawingTool tool;
+		public JPanel propertiesPanel;
 
-		public ToolButton(ImageIcon image, DrawingTool tool) {
+		public ToolButton(ImageIcon image, DrawingTool tool, JPanel propertiesPanel) {
 			super(image);
 			this.tool = tool;
+			this.propertiesPanel = propertiesPanel;
 		}
 	}
 
+	private void setTool(ToolButton toolButtonToSet) {
+		tool = toolButtonToSet.tool;
+		toolPropertiesPanel.removeAll();
+		toolPropertiesPanel.revalidate();
+		toolPropertiesPanel.repaint();
+		toolPropertiesPanel.add(toolButtonToSet.propertiesPanel);
+		toolPropertiesPanel.revalidate();
+		toolPropertiesPanel.repaint();
+		
+		for (ToolButton button : buttonList) {
+			button.setSelected(false);
+		}
+		toolButtonToSet.setSelected(true);
+		toolPropertiesPanel.revalidate();
+		toolPropertiesPanel.repaint();
+	}
+	
 	private class ButtonHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			tool = ((ToolButton) event.getSource()).tool;
+			setTool(((ToolButton) event.getSource()));
 		}
 	}
 
-	private void createButton(DrawingTool tool, String image) {
-		ToolButton button = new ToolButton(new ImageIcon(image), tool);
+	private ToolButton createButton(DrawingTool tool, String image, JPanel propertiesPanel) {
+		ToolButton button = new ToolButton(new ImageIcon(image), tool, propertiesPanel);
 		button.addActionListener(buttonHandler);
-		add(button);
+		button.setPreferredSize(new Dimension(30, 30));
+		buttonList.add(button);
+		return button;
 	}
 
 	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool, 
-			DrawingTool pickupColorDrawingTool, BucketDrawingTool bucketDrawingTool) {
+			DrawingTool pickupColorDrawingTool, BucketDrawingTool bucketDrawingTool,
+			JPanel brushPropertiesPanel, JPanel colorTolerancePropertiesPanel) {
 		super();
-		this.tool = penDrawingTool;
-		createButton(penDrawingTool, "res/toolPen.png");
-		createButton(eraseDrawingTool, "res/toolErase.png");
-		createButton(pickupColorDrawingTool, "res/toolPickup.png");
-		createButton(bucketDrawingTool, "res/toolBucket.png");
-		setLayout(new GridLayout(1, 3));
+		ToolButton initialToolButton = createButton(penDrawingTool, "res/toolPen.png", brushPropertiesPanel);
+		setTool(initialToolButton);
+		add(initialToolButton);
+		add(createButton(eraseDrawingTool, "res/toolErase.png", brushPropertiesPanel));
+		add(createButton(pickupColorDrawingTool, "res/toolPickup.png", new JPanel()));
+		add(createButton(bucketDrawingTool, "res/toolBucket.png", colorTolerancePropertiesPanel));
+		setLayout(new GridLayout(1, 4));
+		toolPropertiesPanel.setLayout(new FlowLayout());
 	}
 
 	public DrawingTool getTool() {
 		return tool;
+	}
+	
+	public JPanel getToolPropertiesPanel() {
+		return toolPropertiesPanel;
 	}
 }
