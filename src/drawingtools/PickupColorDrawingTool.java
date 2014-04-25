@@ -29,4 +29,7 @@ public class PickupColorDrawingTool implements DrawingTool {
 		colorSelector.setColor(new Color(image.getRGB(x, y)));
 	}
 
+	@Override
+	public void onSelectAnotherTool() {
+	}
 }

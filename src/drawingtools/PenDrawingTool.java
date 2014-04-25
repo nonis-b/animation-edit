@@ -57,5 +57,9 @@ public class PenDrawingTool implements DrawingTool {
 		lastMouseDownX = x;
 		lastMouseDownY = y;
 	}
+	
+	@Override
+	public void onSelectAnotherTool() {
+	}
 
 }

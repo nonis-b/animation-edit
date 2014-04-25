@@ -45,5 +45,11 @@ public class LineDrawingTool implements DrawingTool {
 	@Override
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 	}
+	
+	@Override
+	public void onSelectAnotherTool() {
+		lastMouseDownX = -1;
+		lastMouseDownY = -1;
+	}
 
 }

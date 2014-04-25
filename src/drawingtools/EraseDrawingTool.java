@@ -63,4 +63,8 @@ public class EraseDrawingTool implements DrawingTool {
 		lastMouseDownY = y;
 	}
 
+	@Override
+	public void onSelectAnotherTool() {
+	}
+
 }

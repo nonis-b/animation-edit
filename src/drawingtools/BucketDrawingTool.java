@@ -91,4 +91,7 @@ public class BucketDrawingTool implements DrawingTool {
 	public void onMouseMoveWhileDown(BufferedImage image, int x, int y) {
 	}
 
+	@Override
+	public void onSelectAnotherTool() {
+	}
 }

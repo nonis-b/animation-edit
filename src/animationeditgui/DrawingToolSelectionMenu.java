@@ -39,6 +39,9 @@ public class DrawingToolSelectionMenu extends JPanel {
 	}
 
 	private void setTool(ToolButton toolButtonToSet) {
+		if (tool != null) {
+			tool.onSelectAnotherTool();
+		}
 		tool = toolButtonToSet.tool;
 		toolPropertiesPanel.removeAll();
 		toolPropertiesPanel.revalidate();
