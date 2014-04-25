@@ -27,6 +27,7 @@ import drawingtools.CurrentColorSelector;
 import drawingtools.DrawingTool;
 import drawingtools.DrawingToolSelector;
 import drawingtools.EraseDrawingTool;
+import drawingtools.LineDrawingTool;
 import drawingtools.PenDrawingTool;
 import drawingtools.PickupColorDrawingTool;
 
@@ -155,6 +156,7 @@ public class AnimationEditApplication extends JFrame
 				new EraseDrawingTool(this), 
 				new PickupColorDrawingTool(this),
 				new BucketDrawingTool(this, this), 
+				new LineDrawingTool(this, this),
 				brushPropertiesMenu, 
 				colorToleranePropertiesMenu);
 		JPanel drawingToolSelectionMenuContainer = new JPanel();
