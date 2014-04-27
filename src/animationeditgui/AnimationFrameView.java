@@ -1,6 +1,7 @@
 package animationeditgui;
 
 import graphicsutils.CompatibleImageCreator;
+import graphicsutils.GeometryUtil;
 import graphicsutils.GridDrawingUtil;
 import graphicsutils.ImageStore;
 
@@ -43,6 +44,8 @@ public class AnimationFrameView
     private DrawingToolSelector drawingToolSelector;
     private Color transparentAlphaColor;
     private AnimationEditClipBoard clipBoard;
+	private int maxImageSizeX = 0;
+	private int maxImageSizeY = 0;
     
     public AnimationFrameView(ImageStoreProvider imageStoreProvider, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider, 
@@ -54,7 +57,7 @@ public class AnimationFrameView
         this.drawingToolSelector = drawingToolSelector;
         this.transparentAlphaColor = transparentAlphaColor;
         this.clipBoard = clipBoard;
-        offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
+        offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000); // TODO: magic numbers
     }
     
     public void setOnionSkinDepth(int depth) {
@@ -67,6 +70,15 @@ public class AnimationFrameView
 		if (image != null) {
 			drawingToolSelector.getTool().onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
+		}
+		if (clipBoard.hasFloatingLayer()) {
+			FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
+			if (!GeometryUtil.isPointInRect(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), 
+					floatingLayer.getPosX(), floatingLayer.getPosY(), 
+					floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
+				clipBoard.anchorFloatingLayer();
+				repaint();
+			}
 		}
         e.consume();
     }
@@ -110,6 +122,15 @@ public class AnimationFrameView
 		if (image != null) {
 			drawingToolSelector.getTool().onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
 			repaint();
+		}
+		if (clipBoard.hasFloatingLayer()) {
+			FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
+			if (GeometryUtil.isPointInRect(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), 
+					floatingLayer.getPosX(), floatingLayer.getPosY(), 
+					floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
+				floatingLayer.setCenter(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+				repaint();
+			}
 		}
 		e.consume();
 	}
@@ -163,18 +184,21 @@ public class AnimationFrameView
     	return (int)(screenCoord / scale);
     }
     
+    
     private int modelToScreenCoord(int modelCoord) {
     	return (int)(modelCoord * scale);
     }
 
     
     public void maxSizeChanged(int maxX, int maxY) {
+    	this.maxImageSizeX = maxX;
+    	this.maxImageSizeY = maxY;
     	setPreferredSize(new Dimension((int)(maxX*scale), (int)(maxY*scale)));
     	revalidate();
     }
     
     
-    private void drawImage(Graphics2D g, Image image, int x, int y, float alpha, String failName) {
+    private void drawImageToOffscreenBuffer(Graphics2D g, Image image, int x, int y, float alpha, String failName) {
     	if (image != null) {
     		if (alpha < 0.00001f) alpha = 0.01f;
     		float[] scales = { alpha, alpha, alpha, alpha };
@@ -184,10 +208,6 @@ public class AnimationFrameView
 			offsetScreenBufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			offsetScreenBufferGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 			offsetScreenBufferGraphics.drawImage((BufferedImage)image, rop, x, y);
-			g.drawImage(offscreenBufferImage, (int)(x*scale), (int)(y*scale), 
-					(int)(image.getWidth(null)*scale), (int)(image.getHeight(null)*scale), 
-					0, 0, image.getWidth(null), image.getHeight(null), null);
-			
         } else {
 			g.setColor(transparentAlphaColor);
 			String failText = "No image with found with name " + failName;
@@ -220,7 +240,7 @@ public class AnimationFrameView
 		    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
+	    		drawImageToOffscreenBuffer(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
@@ -229,7 +249,7 @@ public class AnimationFrameView
 	    			animationFrameSequenceInfoProvider.getSelectedAnimationFrameIndex() + i);
 	    	if (frame != null) {
 	    		Image image = imageStore.getImage(frame.getImage());
-	    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
+	    		drawImageToOffscreenBuffer(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 
 	    				0.3f - ((float)Math.abs(i))/(8), frame.getImage());
 	    	}
     	}
@@ -237,17 +257,31 @@ public class AnimationFrameView
     	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
     	if (frame != null) {
     		Image image = imageStore.getImage(frame.getImage());
-    		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
-    		GridDrawingUtil.drawBoundingBox(Color.BLUE, g, 0, 0, modelToScreenCoord(image.getWidth(null)), 
-    				modelToScreenCoord(image.getHeight(null)));
+    		drawImageToOffscreenBuffer(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
+    		GridDrawingUtil.drawBoundingBox(Color.BLUE, offsetScreenBufferGraphics, 0, 0, image.getWidth(null), 
+    				image.getHeight(null));
     	}
     	
     	if (clipBoard.hasSelection()) {
-    		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, g, modelToScreenCoord(clipBoard.getSelectionX()), 
-    				modelToScreenCoord(clipBoard.getSelectionY()),
-    				modelToScreenCoord(clipBoard.getSelectionX() + clipBoard.getSelectionWidth()),
-    				modelToScreenCoord(clipBoard.getSelectionY() + clipBoard.getSelectionHeight()));
+    		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, offsetScreenBufferGraphics, clipBoard.getSelectionX(), 
+    				clipBoard.getSelectionY(),
+    				clipBoard.getSelectionX() + clipBoard.getSelectionWidth(),
+    				clipBoard.getSelectionY() + clipBoard.getSelectionHeight());
     	}
+    	
+    	if (clipBoard.hasFloatingLayer()) {
+    		drawImageToOffscreenBuffer(g2d, clipBoard.getFloatingLayer().getImage(), 
+    				clipBoard.getFloatingLayer().getPosX(), clipBoard.getFloatingLayer().getPosY(), 1.0f, "-");
+    		GridDrawingUtil.drawDashedBoundingBox(Color.GREEN, offsetScreenBufferGraphics, clipBoard.getFloatingLayer().getPosX(), 
+    				clipBoard.getFloatingLayer().getPosY(),
+    				clipBoard.getFloatingLayer().getPosX() + clipBoard.getFloatingLayer().getImage().getWidth(),
+    				clipBoard.getFloatingLayer().getPosY() + clipBoard.getFloatingLayer().getImage().getHeight());
+    	}
+    	
+    	// buffer -> screen
+    	g.drawImage(offscreenBufferImage, 0, 0, 
+				modelToScreenCoord(maxImageSizeX), modelToScreenCoord(maxImageSizeY), 
+				0, 0, maxImageSizeX, maxImageSizeY, null);
     }
 
 	@Override

@@ -27,6 +27,7 @@ public class AnimationEditClipBoard implements ClipboardOwner, SelectRectListene
 	private int selectW;
 	private int selectH;
 	private boolean hasSelection = false;
+	private FloatingLayer floatingLayer = null;
 	private ImageStoreProvider imageStoreProvider;
 	private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
 
@@ -105,9 +106,8 @@ public class AnimationEditClipBoard implements ClipboardOwner, SelectRectListene
 		}
 		if (!(transferObject instanceof Image)) return;
 		BufferedImage imageToPaste = CompatibleImageCreator.createCompatibleImage((Image)transferObject);
-		BufferedImage frameImage = getCurrentFrameBufferedImage();
-		if (frameImage == null) return;
-		frameImage.createGraphics().drawImage(imageToPaste, 0, 0, null);
+		floatingLayer = new FloatingLayer(imageToPaste, selectX, selectY);
+		hasSelection = false;
 	}
 	
 	public void selectAll() {
@@ -124,6 +124,11 @@ public class AnimationEditClipBoard implements ClipboardOwner, SelectRectListene
 		hasSelection = false;
 	}
 
+	/**
+	 * Indicate that there is an active selection, that should be
+	 * drawn at the getSelection*() coordinates.
+	 * @return True if selection.
+	 */
 	public boolean hasSelection() {
 		return hasSelection;
 	}
@@ -143,9 +148,37 @@ public class AnimationEditClipBoard implements ClipboardOwner, SelectRectListene
 	public int getSelectionHeight() {
 		return selectH;
 	}
+	
+	/**
+	 * Indicate that there is a floating layer, that should be drawn
+	 * on top of the regular image, at coordinates x,y.
+	 * @return
+	 */
+	public boolean hasFloatingLayer() {
+		if (floatingLayer == null) return false;
+		return true;
+	}
 
+	/**
+	 * Apply the floating layer to the image.
+	 */
+	public void anchorFloatingLayer() {
+		if (floatingLayer == null)
+			return;
+		BufferedImage frameImage = getCurrentFrameBufferedImage();
+		if (frameImage == null)
+			return;
+		frameImage.createGraphics().drawImage(floatingLayer.getImage(), floatingLayer.getPosX(), floatingLayer.getPosY(), null);
+		floatingLayer = null;
+	}
+
+	public FloatingLayer getFloatingLayer() {
+		return floatingLayer;
+	}
+	
 	@Override
 	public void onSelectRect(int x, int y, int width, int height) {
+		if (hasFloatingLayer()) return;
 		hasSelection = true;
 		selectX = x;
 		selectY = y;

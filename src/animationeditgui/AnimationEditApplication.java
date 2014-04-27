@@ -345,8 +345,6 @@ public class AnimationEditApplication extends JFrame
 			
 			if (event.getSource() == menu.pasteItem) {
 				clipBoard.pasteImage();
-				animationSequence.getImageStore().setImageWasModified(
-						animationSequence.getAnimationFrame(getSelectedAnimationFrameIndex()).getImage());
 			}
 			
 			if (event.getSource() == menu.deleteItem) {
