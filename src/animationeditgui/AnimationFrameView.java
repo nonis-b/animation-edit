@@ -63,25 +63,29 @@ public class AnimationFrameView
     public void setOnionSkinDepth(int depth) {
     	numOnionSkin = depth;
     }
-    
-    @Override
-    public void mousePressed(MouseEvent e) {    
-    	BufferedImage image = getCurrentFrameBufferedImage();
-		if (image != null) {
-			drawingToolSelector.getTool().onMouseDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
-			repaint();
-		}
-		if (clipBoard.hasFloatingLayer()) {
-			FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
-			if (!GeometryUtil.isPointInRect(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), 
-					floatingLayer.getPosX(), floatingLayer.getPosY(), 
-					floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
-				clipBoard.anchorFloatingLayer();
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+		if (frame != null) {
+			int mouseX = screenToModelCoord(e.getX()) - frame.getOffsetX();
+			int mouseY = screenToModelCoord(e.getY()) - frame.getOffsetY();
+			BufferedImage image = getCurrentFrameBufferedImage();
+			if (image != null) {
+				drawingToolSelector.getTool().onMouseDown(image, mouseX, mouseY);
 				repaint();
 			}
+			if (clipBoard.hasFloatingLayer()) {
+				FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
+				if (!GeometryUtil.isPointInRect(mouseX, mouseY, floatingLayer.getPosX(),
+						floatingLayer.getPosY(), floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
+					clipBoard.anchorFloatingLayer();
+					repaint();
+				}
+			}
 		}
-        e.consume();
-    }
+		e.consume();
+	}
 
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -118,18 +122,23 @@ public class AnimationFrameView
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// called during motion with buttons down
-		BufferedImage image = getCurrentFrameBufferedImage();
-		if (image != null) {
-			drawingToolSelector.getTool().onMouseMoveWhileDown(image, screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
-			repaint();
-		}
-		if (clipBoard.hasFloatingLayer()) {
-			FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
-			if (GeometryUtil.isPointInRect(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()), 
-					floatingLayer.getPosX(), floatingLayer.getPosY(), 
-					floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
-				floatingLayer.setCenter(screenToModelCoord(e.getX()), screenToModelCoord(e.getY()));
+		AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
+		if (frame != null) {
+			int mouseX = screenToModelCoord(e.getX()) - frame.getOffsetX();
+			int mouseY = screenToModelCoord(e.getY()) - frame.getOffsetY();
+			BufferedImage image = getCurrentFrameBufferedImage();
+			if (image != null) {
+				drawingToolSelector.getTool().onMouseMoveWhileDown(image, mouseX, mouseY);
 				repaint();
+			}
+			if (clipBoard.hasFloatingLayer()) {
+				FloatingLayer floatingLayer = clipBoard.getFloatingLayer();
+				if (GeometryUtil.isPointInRect(mouseX, mouseY, 
+						floatingLayer.getPosX(), floatingLayer.getPosY(), 
+						floatingLayer.getImage().getWidth(), floatingLayer.getImage().getHeight())) {
+					floatingLayer.setCenter(mouseX, mouseY);
+					repaint();
+				}
 			}
 		}
 		e.consume();
@@ -262,20 +271,23 @@ public class AnimationFrameView
     				image.getHeight(null));
     	}
     	
-    	if (clipBoard.hasSelection()) {
-    		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, offsetScreenBufferGraphics, clipBoard.getSelectionX(), 
-    				clipBoard.getSelectionY(),
-    				clipBoard.getSelectionX() + clipBoard.getSelectionWidth(),
-    				clipBoard.getSelectionY() + clipBoard.getSelectionHeight());
+    	if (clipBoard.hasSelection() && frame != null) {
+    		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, offsetScreenBufferGraphics, 
+    				clipBoard.getSelectionX() + frame.getOffsetX(), 
+    				clipBoard.getSelectionY() + frame.getOffsetY(),
+    				clipBoard.getSelectionX() + frame.getOffsetX() + clipBoard.getSelectionWidth(),
+    				clipBoard.getSelectionY() + frame.getOffsetY() + clipBoard.getSelectionHeight());
     	}
     	
-    	if (clipBoard.hasFloatingLayer()) {
-    		drawImageToOffscreenBuffer(g2d, clipBoard.getFloatingLayer().getImage(), 
-    				clipBoard.getFloatingLayer().getPosX(), clipBoard.getFloatingLayer().getPosY(), 1.0f, "-");
-    		GridDrawingUtil.drawDashedBoundingBox(Color.GREEN, offsetScreenBufferGraphics, clipBoard.getFloatingLayer().getPosX(), 
-    				clipBoard.getFloatingLayer().getPosY(),
-    				clipBoard.getFloatingLayer().getPosX() + clipBoard.getFloatingLayer().getImage().getWidth(),
-    				clipBoard.getFloatingLayer().getPosY() + clipBoard.getFloatingLayer().getImage().getHeight());
+    	if (clipBoard.hasFloatingLayer() && frame != null) {
+    		FloatingLayer layer = clipBoard.getFloatingLayer();
+    		drawImageToOffscreenBuffer(g2d, layer.getImage(), 
+    				layer.getPosX() + frame.getOffsetX(), layer.getPosY() + frame.getOffsetY(), 1.0f, "-");
+    		GridDrawingUtil.drawDashedBoundingBox(Color.GREEN, offsetScreenBufferGraphics, 
+    				layer.getPosX() + frame.getOffsetX(), 
+    				layer.getPosY() + frame.getOffsetY(),
+    				layer.getPosX() + frame.getOffsetX() + layer.getImage().getWidth(),
+    				layer.getPosY() + frame.getOffsetY() + layer.getImage().getHeight());
     	}
     	
     	// buffer -> screen
