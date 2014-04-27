@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import drawingtools.BucketDrawingTool;
 import drawingtools.DrawingTool;
 import drawingtools.LineDrawingTool;
+import drawingtools.SelectRectDrawingTool;
 
 /**
  * Panel to select drawing tool.
@@ -75,7 +76,7 @@ public class DrawingToolSelectionMenu extends JPanel {
 
 	public DrawingToolSelectionMenu(DrawingTool penDrawingTool, DrawingTool eraseDrawingTool, 
 			DrawingTool pickupColorDrawingTool, BucketDrawingTool bucketDrawingTool,
-			LineDrawingTool lineDrawingTool,
+			LineDrawingTool lineDrawingTool, SelectRectDrawingTool selectRectDrawingTool,
 			JPanel brushPropertiesPanel, JPanel colorTolerancePropertiesPanel) {
 		super();
 		ToolButton initialToolButton = createButton(penDrawingTool, "res/toolPen.png", brushPropertiesPanel);
@@ -84,6 +85,7 @@ public class DrawingToolSelectionMenu extends JPanel {
 		add(createButton(lineDrawingTool, "res/toolLine.png", brushPropertiesPanel));
 		add(createButton(eraseDrawingTool, "res/toolErase.png", brushPropertiesPanel));
 		add(createButton(pickupColorDrawingTool, "res/toolPickup.png", new JPanel()));
+		add(createButton(selectRectDrawingTool, "res/toolSelectRect.png", new JPanel()));
 		add(createButton(bucketDrawingTool, "res/toolBucket.png", colorTolerancePropertiesPanel));
 		setLayout(new GridLayout(1, 4));
 		toolPropertiesPanel.setLayout(new FlowLayout());

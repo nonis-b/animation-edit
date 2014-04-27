@@ -30,6 +30,7 @@ import drawingtools.EraseDrawingTool;
 import drawingtools.LineDrawingTool;
 import drawingtools.PenDrawingTool;
 import drawingtools.PickupColorDrawingTool;
+import drawingtools.SelectRectDrawingTool;
 
 import animationeditgui.DirectoryChangeWatcher.DirectoryChangedListener;
 import animationeditgui.FrameListButtonBar.FrameListButtonBarListener;
@@ -71,6 +72,7 @@ public class AnimationEditApplication extends JFrame
 	private ColorTolerancePropertiesMenu colorToleranePropertiesMenu;
 	private CurrentDocument currentDocument;
 	private DirectoryChangeWatcher directoryChangeWatcher;
+	private AnimationEditClipBoard clipBoard;
 	
 	/**
 	 * Setup app.
@@ -83,12 +85,13 @@ public class AnimationEditApplication extends JFrame
 
 		config = new ApplicationConfig(configFilePath);	
 
-		directoryChangeWatcher = new DirectoryChangeWatcher(this, ".png");
-		
+		directoryChangeWatcher = new DirectoryChangeWatcher(this, ".png");		
 		currentDocument = new CurrentDocument(config.projectPath);
+
+		clipBoard = new AnimationEditClipBoard(this, this);
 		
 		animationFrameView = new AnimationFrameView(this, this, this, 
-				config.frameViewTransperentAlphaColor);
+				config.frameViewTransperentAlphaColor, clipBoard);
 		animationPreview = new AnimationPreview(this, this, config.previewBackgroundColor);
 		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
 		
@@ -157,6 +160,7 @@ public class AnimationEditApplication extends JFrame
 				new PickupColorDrawingTool(this),
 				new BucketDrawingTool(this, this), 
 				new LineDrawingTool(this, this),
+				new SelectRectDrawingTool(clipBoard),
 				brushPropertiesMenu, 
 				colorToleranePropertiesMenu);
 		JPanel drawingToolSelectionMenuContainer = new JPanel();
@@ -327,6 +331,36 @@ public class AnimationEditApplication extends JFrame
 			
 			if (event.getSource() == menu.undoItem) {
 				animationFrameView.undo();
+			}
+			
+			if (event.getSource() == menu.copyItem) {
+				clipBoard.copySelectedImage();
+			}
+			
+			if (event.getSource() == menu.cutItem) {
+				clipBoard.cutSelectedImage();
+				animationSequence.getImageStore().setImageWasModified(
+						animationSequence.getAnimationFrame(getSelectedAnimationFrameIndex()).getImage());
+			}
+			
+			if (event.getSource() == menu.pasteItem) {
+				clipBoard.pasteImage();
+				animationSequence.getImageStore().setImageWasModified(
+						animationSequence.getAnimationFrame(getSelectedAnimationFrameIndex()).getImage());
+			}
+			
+			if (event.getSource() == menu.deleteItem) {
+				clipBoard.deleteSelectedImage();
+				animationSequence.getImageStore().setImageWasModified(
+						animationSequence.getAnimationFrame(getSelectedAnimationFrameIndex()).getImage());
+			}
+			
+			if (event.getSource() == menu.selectAllItem) {
+				clipBoard.selectAll();
+			}
+			
+			if (event.getSource() == menu.selectNoneItem) {
+				clipBoard.selectNone();
 			}
 			
 			if (event.getSource() == menu.zoomInItem) {

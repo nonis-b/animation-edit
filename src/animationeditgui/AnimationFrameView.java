@@ -42,15 +42,18 @@ public class AnimationFrameView
     private AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider;
     private DrawingToolSelector drawingToolSelector;
     private Color transparentAlphaColor;
+    private AnimationEditClipBoard clipBoard;
     
     public AnimationFrameView(ImageStoreProvider imageStoreProvider, 
     		AnimationFrameSequenceInfoProvider animationFrameSequenceInfoProvider, 
     		DrawingToolSelector drawingToolSelector, 
-    		Color transparentAlphaColor) {
+    		Color transparentAlphaColor,
+    		AnimationEditClipBoard clipBoard) {
         this.imageStoreProvider = imageStoreProvider;
         this.animationFrameSequenceInfoProvider = animationFrameSequenceInfoProvider;
         this.drawingToolSelector = drawingToolSelector;
         this.transparentAlphaColor = transparentAlphaColor;
+        this.clipBoard = clipBoard;
         offscreenBufferImage = CompatibleImageCreator.createCompatibleImage(1000, 1000);
     }
     
@@ -237,6 +240,13 @@ public class AnimationFrameView
     		drawImage(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
     		GridDrawingUtil.drawBoundingBox(Color.BLUE, g, 0, 0, modelToScreenCoord(image.getWidth(null)), 
     				modelToScreenCoord(image.getHeight(null)));
+    	}
+    	
+    	if (clipBoard.hasSelection()) {
+    		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, g, modelToScreenCoord(clipBoard.getSelectionX()), 
+    				modelToScreenCoord(clipBoard.getSelectionY()),
+    				modelToScreenCoord(clipBoard.getSelectionX() + clipBoard.getSelectionWidth()),
+    				modelToScreenCoord(clipBoard.getSelectionY() + clipBoard.getSelectionHeight()));
     	}
     }
 

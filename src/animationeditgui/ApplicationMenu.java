@@ -21,7 +21,15 @@ public class ApplicationMenu extends JMenuBar {
 	protected JMenuItem reloadImagesItem;
 	protected JMenuItem quitItem;
 	protected JMenuItem helpItem;
+	
 	protected JMenuItem undoItem;
+	protected JMenuItem copyItem;
+	protected JMenuItem cutItem;
+	protected JMenuItem pasteItem;
+	protected JMenuItem deleteItem;
+	protected JMenuItem selectAllItem;
+	protected JMenuItem selectNoneItem;
+	
 	protected JMenuItem zoomInItem;
 	protected JMenuItem zoomOutItem;
 	protected JMenuItem preview1FpsItem;
@@ -96,7 +104,13 @@ public class ApplicationMenu extends JMenuBar {
 		helpItem = addMenuItem(helpMenu, handler, "Help");
 
 		undoItem = addMenuItem(editMenu, handler, "Undo", KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
-
+		copyItem = addMenuItem(editMenu, handler, "Copy", KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		cutItem = addMenuItem(editMenu, handler, "Cut", KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		pasteItem = addMenuItem(editMenu, handler, "Paste", KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		deleteItem = addMenuItem(editMenu, handler, "Delete", KeyEvent.VK_DELETE, 0);
+		selectAllItem = addMenuItem(editMenu, handler, "Select all", KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		selectNoneItem = addMenuItem(editMenu, handler, "Select none", KeyEvent.VK_ESCAPE, 0);
+		
 		preview1FpsItem = addMenuItem(previewMenu, handler, "1 FPS", KeyEvent.VK_1, 0);
 		preview2FpsItem = addMenuItem(previewMenu, handler, "2 FPS", KeyEvent.VK_2, 0);
 		preview10FpsItem = addMenuItem(previewMenu, handler, "10 FPS", KeyEvent.VK_3, 0);
@@ -112,8 +126,8 @@ public class ApplicationMenu extends JMenuBar {
 		newFrameFromWorkingDirectoryItem = addMenuItem(framesMenu, handler, "New frame, select image from working directory");
 		
 		deleteFrameItem = addMenuItem(framesMenu, handler, "Delete frame", KeyEvent.VK_BACK_SPACE, 0);
-		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);;
-		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);;
+		moveFrameUpItem = addMenuItem(framesMenu, handler, "Move frame up", KeyEvent.VK_UP, KeyEvent.ALT_MASK);
+		moveFrameDownItem = addMenuItem(framesMenu, handler, "Move frame down", KeyEvent.VK_DOWN, KeyEvent.ALT_MASK);
 		
 		offsetXPlus1PixItem = addMenuItem(imageMenu, handler, "Offset X +1", KeyEvent.VK_L, 0);
 		offsetXMinus1PixItem = addMenuItem(imageMenu, handler, "Offset X -1", KeyEvent.VK_J, 0);
