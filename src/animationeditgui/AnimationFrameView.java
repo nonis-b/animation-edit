@@ -269,7 +269,10 @@ public class AnimationFrameView
     		drawImageToOffscreenBuffer(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
     		GridDrawingUtil.drawBoundingBox(Color.BLUE, offsetScreenBufferGraphics, 0, 0, image.getWidth(null), 
     				image.getHeight(null));
-    	}
+			if (!frame.getEvent().isEmpty()) {
+				GridDrawingUtil.drawCrossHair(Color.MAGENTA, offsetScreenBufferGraphics, frame.getEventX(), frame.getEventY(), 20);
+			}
+		}
     	
     	if (clipBoard.hasSelection() && frame != null) {
     		GridDrawingUtil.drawDashedBoundingBox(Color.BLACK, offsetScreenBufferGraphics, 

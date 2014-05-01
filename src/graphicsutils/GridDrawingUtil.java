@@ -23,5 +23,12 @@ public class GridDrawingUtil {
 		g2d.setStroke(dashed);
 		g2d.draw(new Rectangle2D.Double(x1, y1, x2 - x1, y2 - y1));
 	}
+	
+	public static void drawCrossHair(Color c, Graphics g, int x, int y, int size) {
+		g.setColor(c);
+		int l = size/2;
+		g.drawLine(x - l, y - l, x + l, y + l);
+		g.drawLine(x - l, y + l, x + l, y - l);
+	}
 }
 

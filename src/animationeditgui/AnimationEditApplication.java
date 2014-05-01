@@ -213,6 +213,11 @@ public class AnimationEditApplication extends JFrame
 				Integer.toString(animationFrameSelector.getSelected().getOffsetX())));
 		propertyList.add(new PropertiesInputDialog.PropertyItem("Offset y", 
 				Integer.toString(animationFrameSelector.getSelected().getOffsetY())));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Event", animationFrameSelector.getSelected().getEvent()));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Event x coordinate", 
+				Integer.toString(animationFrameSelector.getSelected().getEventX())));
+		propertyList.add(new PropertiesInputDialog.PropertyItem("Event y coordinate", 
+				Integer.toString(animationFrameSelector.getSelected().getEventY())));
 		
 		new PropertiesInputDialog(this, "Edit frame " + animationFrameSelector.getSelected().getImage(), propertyList);
 		
@@ -236,6 +241,15 @@ public class AnimationEditApplication extends JFrame
 			}
 			if (property.name.equals("Offset y")) {
 				animationFrameSelector.getSelected().setOffsetY(intValue);
+			}
+			if (property.name.equals("Event")) {
+				animationFrameSelector.getSelected().setEvent(property.value);
+			}
+			if (property.name.equals("Event x coordinate")) {
+				animationFrameSelector.getSelected().setEventX(intValue);
+			}
+			if (property.name.equals("Event y coordinate")) {
+				animationFrameSelector.getSelected().setEventY(intValue);
 			}
 		}
 	}

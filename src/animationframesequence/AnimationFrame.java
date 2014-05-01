@@ -6,18 +6,25 @@ public class AnimationFrame {
 	private int offsetY;
 	private int tics;
 	private String next = "";
+	private String event = "";
+	private int eventX = 0;
+	private int eventY = 0;
 
 	private String tag = "";
 	
-	public AnimationFrame(String image, int offsetX, int offsetY, int tics, String tag, String next) {
+	public AnimationFrame(String image, int offsetX, int offsetY, int tics, String tag, String next, String event, int eventX, int eventY) {
 		this.image = image;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.tics = tics;
 		this.tag = tag;
 		this.next = next;
+		this.event = event;
+		this.eventX = eventX;
+		this.eventY = eventY;
 		if (tag == null) tag = "";
 		if (next == null) next = "";
+		if (event == null) event = "";
 	}
 	
 	@Override
@@ -28,6 +35,7 @@ public class AnimationFrame {
 		if (!next.isEmpty()) ret += " (next: " + next + ")";
 		if (offsetX != 0) ret += " (offsetX: " + offsetX + ")";
 		if (offsetY != 0) ret += " (offsetY: " + offsetY + ")";
+		if (!event.isEmpty()) ret += " (event: " + event + ")";
 		return ret;
 	}
 	
@@ -81,5 +89,29 @@ public class AnimationFrame {
 	
 	public void addToOffsetY(int delta) {
 		offsetY += delta;
+	}
+	
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+	
+	public int getEventX() {
+		return eventX;
+	}
+
+	public void setEventX(int eventX) {
+		this.eventX = eventX;
+	}
+	
+	public int getEventY() {
+		return eventY;
+	}
+
+	public void setEventY(int eventY) {
+		this.eventY = eventY;
 	}
 }

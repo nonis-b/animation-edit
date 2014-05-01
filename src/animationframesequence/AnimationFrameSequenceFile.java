@@ -41,7 +41,7 @@ public class AnimationFrameSequenceFile {
 			for (String dirFileName : file.getParentFile().list()) {
 				if (dirFileName.endsWith(".png")) {
 					System.out.println("Auto-included png file in directory: " + dirFileName);
-					createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", ""));
+					createdFrames.add(new AnimationFrame(dirFileName, 0, 0, 1, "", "", "", 0, 0));
 				}
 			}
 			AnimationFrameSequenceFile.writeAnimationFrameSequenceToXml(path, createdFrames);
@@ -72,7 +72,10 @@ public class AnimationFrameSequenceFile {
     	    	int tics = 1;
     	    	String tag = "";
     	    	String next = "";
-	    		
+	    		String event = "";
+	    		int eventX = 0;
+	    		int eventY = 0;
+    	    	
     	    	for (int j = 0; j < attributes.getLength(); j++) {
     	    		String attribute = attributes.item(j).getNodeName();
     	    		String value = attributes.item(j).getNodeValue();
@@ -89,9 +92,16 @@ public class AnimationFrameSequenceFile {
     	    			tag = value;
     	    		} else if (attribute.equals("next")) {
     	    			next = value;
-    	    		} 
+    	    		} else if (attribute.equals("event")) {
+    	    			event = value;
+    	    		} else if (attribute.equals("eventX")) {
+    	    			eventX = Integer.parseInt(value);
+    	    		} else if (attribute.equals("eventY")) {
+    	    			eventY = Integer.parseInt(value);
+    	    		}
+    	    		
     	    	}
-    	    	frames.add(new AnimationFrame(image, offsetX, offsetY, tics, tag, next));
+    	    	frames.add(new AnimationFrame(image, offsetX, offsetY, tics, tag, next, event, eventX, eventY));
     	    }
     	    
         } catch (ParserConfigurationException pce) {
@@ -145,6 +155,20 @@ public class AnimationFrameSequenceFile {
 					Attr nextAttr = doc.createAttribute("next");
 					nextAttr.setValue(animationFrame.getNext());
 					frameElement.setAttributeNode(nextAttr);
+				}
+				
+				if (!animationFrame.getEvent().isEmpty()) {
+					Attr eventAttr = doc.createAttribute("event");
+					eventAttr.setValue(animationFrame.getEvent());
+					frameElement.setAttributeNode(eventAttr);
+					
+					Attr eventXAttr = doc.createAttribute("eventX");
+					eventXAttr.setValue(new Integer(animationFrame.getEventX()).toString());
+					frameElement.setAttributeNode(eventXAttr);
+					
+					Attr eventYAttr = doc.createAttribute("eventY");
+					eventYAttr.setValue(new Integer(animationFrame.getEventY()).toString());
+					frameElement.setAttributeNode(eventYAttr);
 				}
 			}
 
