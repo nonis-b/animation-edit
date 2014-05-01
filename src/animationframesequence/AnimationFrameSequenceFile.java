@@ -110,12 +110,14 @@ public class AnimationFrameSequenceFile {
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("frames");
+			Element rootElement = doc.createElement("AnimationEditFile");
+			Element framesElement = doc.createElement("frames");
 			doc.appendChild(rootElement);
+			rootElement.appendChild(framesElement);
 
 			for (AnimationFrame animationFrame : animationFrames) {
 				Element frameElement = doc.createElement("AnimationFrame");
-				rootElement.appendChild(frameElement);
+				framesElement.appendChild(frameElement);
 				
 				Attr imageAttr = doc.createAttribute("image");
 				imageAttr.setValue(animationFrame.getImage());
