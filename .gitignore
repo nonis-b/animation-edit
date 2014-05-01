@@ -1,6 +1,13 @@
 # Class Files #
 *.class
 
+# Eclipse files #
+.classpath
+.project
+.settings/
+bin
+.DS_Store
+
 # Package Files #
 *.jar
 *.war
