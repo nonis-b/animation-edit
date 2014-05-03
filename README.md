@@ -54,6 +54,11 @@ This is useful to create different animations for a game, eg. Walk, Jump, Shoot 
 * Now select another frame and again edit the properties, input the previously created tag as *next*.
 * Now the preview will use the *next* property to jump to the tag specified.
 
+To copy existing frames:
+------------------------
+* If you want to copy a frame and share the image file with the old frame, select Frames->"New frame, use currently selected image". Any change to either of the frames image will affect both since they share the image file.
+* If you want to copy a frame and also copy the image file, select Frames->"New frame, copy currently selected image".
+
 To adjust the position of a frame:
 ----------------------------------
 * Use the *frame offset* to adjust the position of one frame. 
