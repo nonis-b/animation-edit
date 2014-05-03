@@ -2,6 +2,7 @@ package animationeditgui;
 
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -43,7 +44,8 @@ public class FrameListButtonBar extends JPanel {
 	}
 
 	private void createButton(String imagePath, Runnable action) {
-		Image image = new ImageIcon(imagePath).getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH); // TODO: magic numbers
+		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource(
+				"/"+imagePath)).getScaledInstance(24, 24, Image.SCALE_SMOOTH); // TODO: magic numbers
 		ActionButton button = new ActionButton(new ImageIcon(image), action);
 		button.addActionListener(buttonHandler);
 		add(button);

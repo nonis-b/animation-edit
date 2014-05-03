@@ -1,5 +1,5 @@
 <animationEditConfig>
-	<projectPath>./sandbox_anim</projectPath>
+	<projectPath>./</projectPath>
 	<exportPath>./..</exportPath>
 	<frameViewTransperentAlphaColor>eeeeee</frameViewTransperentAlphaColor>
 	<frameViewBackgroundColor>444444</frameViewBackgroundColor>

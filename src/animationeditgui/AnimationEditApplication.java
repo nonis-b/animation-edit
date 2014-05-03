@@ -95,13 +95,13 @@ public class AnimationEditApplication extends JFrame
 		animationPreview = new AnimationPreview(this, this, config.previewBackgroundColor);
 		animationFrameSelector = new AnimationFrameSelector(animationFrameView);
 		
-		Container container = getContentPane();
-		createGui(container);
-
 		if (animationSequenceFile != null) {
 			currentDocument.openDocument(animationSequenceFile);
 			animationSequence = loadAnimationSequence(animationSequenceFile);
 		}
+		
+		Container container = getContentPane();
+		createGui(container);
 		
 		animationFrameView.revalidate();
 		animationFrameView.repaint();
@@ -579,7 +579,7 @@ public class AnimationEditApplication extends JFrame
 	 */
 	public static void main(String[] args) {
 		String configFile;
-		String animationSequenceFile = null;
+		String animationSequenceFile = "./sample/sample_animation.xml";
 		
 		if (args.length < 1) {
 			System.out.println("No config specified, using default.");
@@ -618,6 +618,7 @@ public class AnimationEditApplication extends JFrame
 
 	@Override
 	public int getNumAnimationFrames() {
+		if (animationSequence == null) return 0;
 		if (animationSequence.getAnimationFrames() == null) return 0;
 		return animationSequence.getAnimationFrames().size();
 	}
@@ -625,12 +626,14 @@ public class AnimationEditApplication extends JFrame
 
 	@Override
 	public AnimationFrame getAnimationFrame(int i) {
+		if (animationSequence == null) return null;
 		return animationSequence.getAnimationFrame(i);
 	}
 
 
 	@Override
 	public int getIndexOfAnimationFrameWithTag(String tag) {
+		if (animationSequence == null) return -1;
 		return animationSequence.getFrameIndexOfTag(tag);
 	}
 

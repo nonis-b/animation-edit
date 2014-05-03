@@ -264,8 +264,8 @@ public class AnimationFrameView
     	}
     	
     	AnimationFrame frame = animationFrameSequenceInfoProvider.getSelectedAnimationFrame();
-    	if (frame != null) {
-    		Image image = imageStore.getImage(frame.getImage());
+    	Image image = imageStore.getImage(frame.getImage());
+    	if (frame != null && image != null) {
     		drawImageToOffscreenBuffer(g2d, image, frame.getOffsetX(), frame.getOffsetY(), 1.0f, frame.getImage());
     		GridDrawingUtil.drawBoundingBox(Color.BLUE, offsetScreenBufferGraphics, 0, 0, image.getWidth(null), 
     				image.getHeight(null));

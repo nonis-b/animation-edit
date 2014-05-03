@@ -4,6 +4,7 @@ package animationeditgui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -67,7 +68,10 @@ public class DrawingToolSelectionMenu extends JPanel {
 	}
 
 	private ToolButton createButton(DrawingTool tool, String image, JPanel propertiesPanel) {
-		ToolButton button = new ToolButton(new ImageIcon(image), tool, propertiesPanel);
+		ToolButton button = new ToolButton(
+				new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/"+image))), 
+				tool, 
+				propertiesPanel);
 		button.addActionListener(buttonHandler);
 		button.setPreferredSize(new Dimension(30, 30));
 		buttonList.add(button);
