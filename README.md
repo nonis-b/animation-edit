@@ -32,7 +32,7 @@ To edit the image of a frame:
 * Use the drawing tools available to edit the image in the center of the window.
 * Alternatively, edit the image in another drawing application, and it will be updated automatically in Animation-edit.
 
-To show severeal frame images overlayed:
+To show several frame images overlayed:
 ----------------------------------------
 This feature is useful when sketching animations, it is a virtual "lightboard" or "onion skin view" that shows frames overlayed on top of each other.
 * Use keys ALT + 0, 1, 2, 3... to select the number of layers that are shown.
