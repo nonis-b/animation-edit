@@ -15,6 +15,8 @@ Features:
 * "Lightboard" feature to draw several frames on top of each other.
 * Runs on Windows, Linux, Mac etc.
 
+![Screen shot](https://raw.github.com/jonath0000/animation-edit/master/tutorial/overview.png)
+
 To install and start:
 ---------------------
 * Download a release from [the release page](https://github.com/jonath0000/animation-edit/releases)
@@ -26,16 +28,28 @@ To create a new animation file with some frames:
 * To create a blank new image: Choose Frames->"New frame, create new image". A new png file will be created in the working directory.
 * To import an existing png file placed in the working directory: Choose Frames->"New frame, select image in working directory". Input the file name (".png" can be omitted.)
 
+![Screen shot](https://raw.github.com/jonath0000/animation-edit/master/tutorial/framelist.png)
+
+*The frame list. The buttons edit a frames properties, copies and moves frames.*
+
 To edit the image of a frame:
 -----------------------------
 * Use the *Animation frame list* to the left of the window to select the current image.
 * Use the drawing tools available to edit the image in the center of the window.
 * Alternatively, edit the image in another drawing application, and it will be updated automatically in Animation-edit.
 
+![Screen shot](https://raw.github.com/jonath0000/animation-edit/master/tutorial/tools.png)
+
+*The drawing tools.*
+
 To show several frame images overlayed:
 ----------------------------------------
 This feature is useful when sketching animations, it is a virtual "lightboard" or "onion skin view" that shows frames overlayed on top of each other.
 * Use keys ALT + 0, 1, 2, 3... to select the number of layers that are shown.
+
+![Screen shot](https://raw.github.com/jonath0000/animation-edit/master/tutorial/overlayed.png)
+
+*Example of using the overlayed view to create a jump animation.*
 
 To select the speed of the preview playback:
 --------------------------------------------
