@@ -19,7 +19,7 @@ public class ImageStore {
 		public ImageRecord(ImageWithHistory image, String imagePath) {
 			this.image = image;
 			this.imagePath = imagePath;
-			wasModified = false;
+			wasModified = true;
 		}
 	}
 	
