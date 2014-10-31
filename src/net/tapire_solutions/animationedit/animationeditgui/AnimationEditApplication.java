@@ -31,15 +31,14 @@ import net.tapire_solutions.animationedit.drawingtools.LineDrawingTool;
 import net.tapire_solutions.animationedit.drawingtools.PenDrawingTool;
 import net.tapire_solutions.animationedit.drawingtools.PickupColorDrawingTool;
 import net.tapire_solutions.animationedit.drawingtools.SelectRectDrawingTool;
-
 import net.tapire_solutions.animationedit.animationeditgui.DirectoryChangeWatcher.DirectoryChangedListener;
 import net.tapire_solutions.animationedit.animationeditgui.FrameListButtonBar.FrameListButtonBarListener;
+import net.tapire_solutions.animationedit.animationeditgui.ZoomButtonBar;
+import net.tapire_solutions.animationedit.animationeditgui.ZoomButtonBar.ZoomChangeListener;
 import net.tapire_solutions.animationedit.animationframesequence.AnimationFrame;
 import net.tapire_solutions.animationedit.animationframesequence.AnimationFrameSequence;
 import net.tapire_solutions.animationedit.animationframesequence.AnimationFrameSequenceFile;
 import net.tapire_solutions.animationedit.animationframesequence.AnimationFrameSequenceInfoProvider;
-
-
 import net.tapire_solutions.animationedit.graphicsutils.ImageStore;
 import net.tapire_solutions.animationedit.graphicsutils.ImageStore.ImageStoreMaxSizeChangedListener;
 
@@ -583,7 +582,7 @@ public class AnimationEditApplication extends JFrame
 		
 		if (args.length < 1) {
 			System.out.println("No config specified, using default.");
-			configFile = "config.xml";
+			configFile = "./config.xml";
 		} else {
 			configFile = args[0];
 		}
